@@ -115,7 +115,7 @@ window.runCounters = function() {
                 const followers = new Odometer(followersContainer, { duration: 3000 });
                 const following = new Odometer(followingContainer, { duration: 3000 });
                 
-                followers.set(1200);
+                followers.set(100);
                 following.set(3);
                 
                 followersContainer.dataset.odometerInitialized = true;
