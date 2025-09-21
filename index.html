@@ -16,30 +16,35 @@
     <button class="sidebar-close" onclick="closeSidebar()"><i data-lucide="x"></i></button>
     
     <div class="sidebar-header">
-
-      
       <div class="sidebar-subtitle">
         <span>@aryta</span>
         <br />
         <div class="flex-row diff2">
-                  <span class="flex-row diff1">
-           <span class="bold">500</span>
-           <span class="muted">followers</span></span>
-                <span class="flex-row diff1">
-           <span class="bold">3</span>
-           <span class="muted">following</span></span>
+          <span class="flex-row diff1">
+            <span id="followersCounter" class="counter"></span>
+            <span class="muted">followers</span>
+          </span>
+          <span class="flex-row diff1">
+            <span id="followingCounter" class="counter"></span>
+            <span class="muted">following</span>
+          </span>
         </div>
-
-        </div>
+      </div>
     </div>
     
     <nav class="sidebar-menu">
       <div class="menu-section">
         <div class="menu-section-title">Main</div>
-        <a href="" class="menu-item active">
-          <i data-lucide="home" class="menu-icon"></i>
-          Home
-        </a>
+        <div class="flex-row diff4">
+          <div class="menu-item active diff4 diff5">
+            <div class="ai-c">
+              <i data-lucide="home" class="menu-icon"></i>
+              <span>Home</span>
+            </div>
+            <span class="smallInfoDiv">5 unread</span>
+          </div>
+        </div>
+
         <a href="" class="menu-item">
           <i data-lucide="search" class="menu-icon"></i>
           Explore
@@ -72,10 +77,15 @@
       
       <div class="menu-section">
         <div class="menu-section-title">Account</div>
-        <a href="" class="menu-item">
-          <i data-lucide="user" class="menu-icon"></i>
-          Profile
-        </a>
+        <div class="flex-row ai-c diff4">
+          <div class="menu-item ai-c diff4 diff5">
+            <div class="ai-c">
+              <i data-lucide="user" class="menu-icon"></i>
+              <span>Profile</span>
+            </div>
+            <span class="ai-c">@aryta</span>
+          </div>
+        </div>
         <a href="" class="menu-item">
           <i data-lucide="settings" class="menu-icon"></i>
           Settings
@@ -85,28 +95,25 @@
           Help
         </a>
       </div>
+
+      <div class="as-fe menu-item">
+        <span class="privacy">Privacy, Terms and Conditions</span>
+      </div>
     </nav>
   </div>
   
-  <div class="prntAppPic">
-
+  <div class="prntAppPic diff3">
     <img src="/twitter-new-2023-x-logo-white-background-vector.png" alt="App Logo">
   </div>
   
-  <nav class="nav">
-  </nav>
-  
   <main class="mainBody">
-
+    <nav class="nav"></nav>
   </main>
 
-  <script src="main.js" defer></script>
-  <!--
-  <script src="https://unpkg.com/lucide@latest" defer></script>--
-
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.lordicon.com/lordicon.js" defer></script> 
-  -->
-  <script src="https://unpkg.com/lucide@latest" defer></script>
+<script src="main.js"></script>
+<script src="counters.js"></script>
+<script src="gestures.js"></script>
+<script src="slider.js"></script>
+<script src="https://unpkg.com/lucide@latest" defer></script>
 </body>
 </html>
