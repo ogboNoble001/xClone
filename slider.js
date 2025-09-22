@@ -1,9 +1,19 @@
+ let firstOpenNav= true
  function toggleSidebar() {
         const sidebar = document.getElementById('sidebar');
         const overlay = document.querySelector('.sidebar-overlay');
         sidebar.classList.toggle('active');
         overlay.classList.toggle('active');
         if (sidebar.classList.contains('active')) runCounters();
+        if (!firstOpenNav) {
+                return
+        }
+        else {
+      document.querySelectorAll('.menu-item').forEach(item => {
+       item.classList.add('')
+      })
+                firstOpenNav= !firstOpenNav
+        }
 }
  function openSidebar() {
         const sidebar = document.getElementById('sidebar');

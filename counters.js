@@ -39,7 +39,7 @@ class Odometer {
                 this.container.innerHTML = '';
                 const slots = [];
                 
-                for (let i = 0; i < maxLen; i++) {
+       for (let i = 0; i < maxLen; i++) {
                         const chP = p[i];
                         const chT = t[i];
                         
@@ -76,8 +76,8 @@ class Odometer {
                         }
                 }
                 
-                requestAnimationFrame(() => {
-                        slots.forEach(({ inner, prevDigit }) => {
+       requestAnimationFrame(() => {
+  slots.forEach(({ inner, prevDigit }) => {
                                 const h = inner.querySelector('span').getBoundingClientRect().height;
                                 inner.style.transform = `translateY(-${prevDigit * h}px)`;
                         });
@@ -90,7 +90,7 @@ class Odometer {
                                 let to = targetDigit;
                                 
                                 if (this.direction === 'up') {
-                                        if (to <= from) to += 10;
+             if (to <= from) to += 10;
                                 } else {
                                         if (to >= from) to -= 10;
                                 }
@@ -115,8 +115,8 @@ window.runCounters = function() {
                 const followers = new Odometer(followersContainer, { duration: 3000 });
                 const following = new Odometer(followingContainer, { duration: 3000 });
                 
-                followers.set(100);
-                following.set(3);
+                followers.set(10000000);
+                following.set(390);
                 
                 followersContainer.dataset.odometerInitialized = true;
                 followingContainer.dataset.odometerInitialized = true;

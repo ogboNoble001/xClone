@@ -14,6 +14,6 @@ window.addEventListener('DOMContentLoaded', () => {
                 sidebar.style.display = 'block';
                 sidebarOverlay.style.display = 'block';
                 
-                initSwipeGestures(); // call from gestures.js
+
         }, 1200);
 });

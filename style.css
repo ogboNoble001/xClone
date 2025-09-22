@@ -27,7 +27,7 @@ html, body {
   justify-content: center;
   font-size: large;
   color: gray;
-  background: #fff;
+  background: #0f1419;
   z-index: 1000;
 }
 
@@ -207,7 +207,7 @@ nav.nav,
   background-color: #0f1419;
 }
 .ai-c{ display: flex; align-items: center; }
-.as-fe{ align-self: flex-end; margin-top: auto; }
+.as-fe{ margin-top: auto;  }
 .privacy{
   text-decoration: underline;
   text-decoration-thickness: .5px;
@@ -241,4 +241,9 @@ nav.nav,
   height:1em; 
   line-height:1; 
   text-align:center; 
+}
+.underAppPic{
+  font-weight: 800;
+  font-size: larger;
+  margin-bottom: 2em;
 }
