@@ -318,7 +318,7 @@ nav.mainNav{
   position: relative;
 }
 .topNav div:not(.active) span{
-  font-weight: 600;
+  font-weight: 500;
   color: #536471;
 }
 .topNav div.active::after{
