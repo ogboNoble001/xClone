@@ -9,7 +9,7 @@
 }
 
 html, body {
-  height: 100vh;
+  height: 100%;
   font-family: "Ysabeau Office", sans-serif;
   overflow-x: hidden;
   -ms-overflow-style: none;
@@ -187,6 +187,51 @@ nav.nav,
 .sidebar,
 .sidebar-overlay {
   display: none;
+}
+.mainBody{
+  height: 100%;
+}
+nav{
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1em 1.6em;
+  border-top: 1px solid #CFD9DE;
+  flex-direction: row;
+  gap: 1em;
+  margin-top: auto;
+  position: relative;
+ 
+}
+.icns.active {
+  position: relative;
+}
+.icns.active svg{
+      fill: #0f1419 ;
+}
+.icns.active::after {
+  position: absolute;
+  content: "";
+  background-color: #ffffff;
+  width: 5px;
+  
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  top: 50%;
+  left: 40%;
+  height: 8px;
+}
+.icns.active::before {
+  position: absolute;
+  content: "";
+  background-color: #1D9BF0;
+  width: 9px;
+  border: 2px solid #ffffff ;
+  border-radius: 50%;
+  flex: 0 0 auto;
+  top: -7%;
+  right: -15%;
+  height: 9px;
 }
 
 .bold{ font-weight: 700; }

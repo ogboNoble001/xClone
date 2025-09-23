@@ -15,5 +15,5 @@ window.addEventListener('DOMContentLoaded', () => {
                 sidebarOverlay.style.display = 'block';
                 
 
-        }, 1200);
+        }, 1050);
 });

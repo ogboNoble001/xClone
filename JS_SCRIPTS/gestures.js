@@ -8,6 +8,7 @@ window.initSwipeGestures = function(openSidebarFn) {
     document.addEventListener('touchstart', (e) => {
         startX = e.touches[0].clientX;
         startY = e.touches[0].clientY;
+        
         if (startX < 50) isSwipeActive = true;
     });
     
