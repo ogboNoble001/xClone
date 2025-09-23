@@ -209,6 +209,7 @@ nav.mainNav{
   position: relative;
 }
 .icns.active:not(:has(.house)) svg{
+      
       stroke-width: 3;
 }
 .icns.active:has(.house) svg{
@@ -303,11 +304,12 @@ nav.mainNav{
   display: flex;
   gap: 1em;
   overflow-x: scroll;
+  border-bottom: 1px solid #CFD9DE;
   flex-direction: row;
   
 }
 .topNav div {
-  padding: .8em .8em .6em .8em;
+  padding: .8em .8em .9em .8em;
   position: relative;
   flex: 0 0 auto;
 }
@@ -325,7 +327,7 @@ nav.mainNav{
   width: 80%;
   left: 10%;
   bottom: 0;
-  border-radius: 32px;
+  border-radius: 37px;
   position: absolute;
   background-color:#1D9BF0 ;
 }
