@@ -115,7 +115,7 @@ window.runCounters = function() {
                 const followers = new Odometer(followersContainer, { duration: 3000 });
                 const following = new Odometer(followingContainer, { duration: 3000 });
                 
-                followers.set(10000000);
+                followers.set(10680000);
                 following.set(390);
                 
                 followersContainer.dataset.odometerInitialized = true;
@@ -166,7 +166,7 @@ window.addEventListener('DOMContentLoaded', () => {
         lucide.createIcons();
         
         const splash = document.querySelector('.prntAppPic');
-        const nav = document.querySelector('.nav');
+        const nav = document.querySelector('nav.mainNav');
         const mainBody = document.querySelector('.mainBody');
         const sidebar = document.getElementById('sidebar');
         const sidebarOverlay = document.querySelector('.sidebar-overlay');

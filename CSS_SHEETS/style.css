@@ -6,6 +6,8 @@
 
 *::-webkit-scrollbar {
   display: none;
+  scrollbar-width: none;
+ -ms-overflow-style: none;
 }
 
 html, body {
@@ -182,7 +184,7 @@ html, body {
   color: inherit;
 }
 
-nav.nav,
+nav.mainNav,
 .mainBody,
 .sidebar,
 .sidebar-overlay {
@@ -191,7 +193,7 @@ nav.nav,
 .mainBody{
   height: 100%;
 }
-nav{
+nav.mainNav{
   width: 100%;
   justify-content: space-between;
   align-items: center;
@@ -199,17 +201,20 @@ nav{
   border-top: 1px solid #CFD9DE;
   flex-direction: row;
   gap: 1em;
-  margin-top: auto;
-  position: relative;
+  position: fixed;
+  bottom: 0;
  
 }
 .icns.active {
   position: relative;
 }
-.icns.active svg{
-      fill: #0f1419 ;
+.icns.active:not(:has(.house)) svg{
+      stroke-width: 3;
 }
-.icns.active::after {
+.icns.active:has(.house) svg{
+  fill: #0f1419;
+}
+.icns.active:has(.house)::after {
   position: absolute;
   content: "";
   background-color: #ffffff;
@@ -221,7 +226,7 @@ nav{
   left: 40%;
   height: 8px;
 }
-.icns.active::before {
+.icns:has(.house)::before {
   position: absolute;
   content: "";
   background-color: #1D9BF0;
@@ -291,4 +296,39 @@ nav{
   font-weight: 800;
   font-size: larger;
   margin-bottom: 2em;
+}
+.topNav{
+  margin-bottom: auto;
+  width: 100%;
+  display: flex;
+  gap: 1em;
+  overflow-x: scroll;
+  flex-direction: row;
+  
+}
+.topNav div {
+  padding: .8em .8em .6em .8em;
+  position: relative;
+  flex: 0 0 auto;
+}
+.topNav div span{
+  font-size: larger;
+  position: relative;
+}
+.topNav div:not(.active) span{
+  font-weight: 600;
+  color: #536471;
+}
+.topNav div.active::after{
+  content: "";
+  height: 3px;
+  width: 80%;
+  left: 10%;
+  bottom: 0;
+  border-radius: 32px;
+  position: absolute;
+  background-color:#1D9BF0 ;
+}
+.topNav div.active span{
+  font-weight: 700;
 }
