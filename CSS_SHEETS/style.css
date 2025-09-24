@@ -308,29 +308,44 @@ nav.mainNav{
   flex-direction: row;
   
 }
+
 .topNav div {
   padding: .8em .8em .9em .8em;
   position: relative;
   flex: 0 0 auto;
 }
-.topNav div span{
+
+.topNav div span {
   font-size: larger;
   position: relative;
 }
-.topNav div:not(.active) span{
+
+.topNav div:not(.active) span {
   font-weight: 500;
   color: #536471;
 }
-.topNav div.active::after{
+
+.topNav div::after {
   content: "";
   height: 3px;
-  width: 80%;
-  left: 10%;
+  width: 0%; 
+  left: 17%;
   bottom: 0;
   border-radius: 37px;
   position: absolute;
-  background-color:#1D9BF0 ;
+  background-color: #1D9BF0;
+  transition: width 0.3s ease-in-out; /* Smooth transition */
 }
-.topNav div.active span{
+
+.topNav div.active::after {
+  width: 60%; 
+}
+
+.topNav div.active span {
   font-weight: 700;
+}
+
+.topNav div.animateAfterForBefore::after {
+  width: 60%;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }

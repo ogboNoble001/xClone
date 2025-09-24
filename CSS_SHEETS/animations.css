@@ -53,3 +53,7 @@
     .animate-menu-item:nth-of-type(6) { animation-delay: 0.8s; }
     .animate-menu-item:nth-of-type(7) { animation-delay: 0.9s; }
     .animate-menu-item:nth-of-type(8) { animation-delay: 1.0s; }
+
+.animateAfterForBefore{
+  
+}
