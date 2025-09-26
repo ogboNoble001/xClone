@@ -9,13 +9,20 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// MongoDB connection test
+// Test MongoDB connection when server starts (not during build)
 const testConnection = async () => {
+        // Only try to connect if we're actually running the server (not building)
+        if (!process.env.MONGODB_URI) {
+                console.log("⚠️ MONGODB_URI not found - skipping MongoDB connection test");
+                return;
+        }
+        
         try {
+                console.log("🚀 Testing MongoDB connection...");
                 await mongoose.connect(process.env.MONGODB_URI);
                 console.log("✅ MongoDB connected successfully");
         } catch (error) {
-                console.error("❌ MongoDB connection error:", error);
+                console.error("❌ MongoDB connection error:", error.message);
         }
 };
 
@@ -60,7 +67,9 @@ app.get("/", (req, res) => {
 });
 
 // Test MongoDB connection when server starts
-testConnection();
-
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+app.listen(PORT, () => {
+        console.log(`🚀 Server running on port ${PORT}`);
+        // Test MongoDB connection after server starts
+        testConnection();
+});
