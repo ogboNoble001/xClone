@@ -26,7 +26,7 @@ const connectDB = async () => {
 const posts = [
         { id: 1, text: "Hello from xClone!" },
         { id: 2, text: "This is a test post." },
-        { id: 3, text: "Backend working without MongoDB." }
+        { id: 3, text: "Backend working with MongoDB." }
 ];
 
 // Routes
