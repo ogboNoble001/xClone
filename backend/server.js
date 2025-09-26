@@ -12,27 +12,27 @@ app.use(express.json());
 // Connect to MongoDB
 const connectDB = async () => {
         try {
-                await mongoose.connect(process.env.MONGO_URI, {
-                        useNewUrlParser: true,
-                        useUnifiedTopology: true
-                });
+                await mongoose.connect(process.env.MONGO_URI);
                 console.log("✅ MongoDB connected successfully");
         } catch (error) {
                 console.error("❌ MongoDB connection error:", error.message);
+                process.exit(1); // Exit if DB connection fails
         }
 };
 
 // Post schema and model
 const postSchema = new mongoose.Schema({
-        text: { type: String, required: true }
+        text: { type: String, required: true, maxlength: 500 }
 }, { timestamps: true });
 
 const Post = mongoose.model("Post", postSchema);
 
 // Routes
-app.get("/", (req, res) => res.json({ message: "Backend running successfully!" }));
+app.get("/", (req, res) => {
+        res.json({ message: "Backend running successfully!" });
+});
 
-// Fetch all posts from MongoDB
+// Fetch all posts
 app.get("/api/posts", async (req, res) => {
         try {
                 const posts = await Post.find().sort({ createdAt: -1 });
@@ -43,9 +43,10 @@ app.get("/api/posts", async (req, res) => {
 });
 
 // Check MongoDB connection status
+const states = ["disconnected", "connected", "connecting", "disconnecting"];
 app.get("/api/db-status", (req, res) => {
-        const status = mongoose.connection.readyState === 1 ? "connected" : "disconnected";
-        res.json({ status, message: `MongoDB connection is ${status}` });
+        const state = states[mongoose.connection.readyState];
+        res.json({ status: state, message: `MongoDB connection is ${state}` });
 });
 
 // Add a new post
@@ -58,13 +59,15 @@ app.post("/api/posts", async (req, res) => {
                 await newPost.save();
                 res.status(201).json(newPost);
         } catch (error) {
-                res.status(500).json({ error: "Failed to creat post" });
+                res.status(500).json({ error: "Failed to create post" });
         }
 });
 
-// Start server and connect to MongoDB
+// Start server after DB connection
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-        console.log(`🚀 Server running on port ${PORT}`);
-        connectDB();
-});
+const startServer = async () => {
+        await connectDB();
+        app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+};
+
+startServer();
