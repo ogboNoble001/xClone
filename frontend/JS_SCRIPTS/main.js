@@ -35,4 +35,14 @@ window.addEventListener('DOMContentLoaded', () => {
                 sidebar.style.display = 'block';
                 sidebarOverlay.style.display = 'block';
         }, 1050);
-});
+        
+fetch("https://xclone-vc7a.onrender.com/api/posts")
+        .then(res => res.json())
+        .then(posts => {
+                
+                posts.forEach(post => {
+                        console.log(post.text);
+                });
+        })
+        .catch(err => console.error("Error:", err));
+})
