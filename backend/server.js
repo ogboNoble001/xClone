@@ -17,8 +17,7 @@ app.get("/", (req, res) => {
 // Example API route
 app.get("/api/posts", (req, res) => {
         res.json([
-                { id: 1, text: "Hello from xClone backend!" },
-                { id: 2, text: "No MongoDB required" }
+                { id: 1, text: "Hello from xClone backend!" }
         ]);
 });
 
