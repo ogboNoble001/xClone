@@ -14,24 +14,29 @@ console.log("🔹 Backend initializing...");
 
 // Step 2: Connect to MongoDB
 console.log("🔹 Connecting to MongoDB...");
-mongoose.connect(process.env.MONGO_URI, {
-                useNewUrlParser: true,
-                useUnifiedTopology: true
-        })
-        .then(() => {
+
+const connectDB = async () => {
+        try {
+                await mongoose.connect(process.env.MONGO_URI, {
+                        useNewUrlParser: true,
+                        useUnifiedTopology: true
+                });
                 console.log("✅ MongoDB connected successfully");
-        })
-        .catch(err => {
+                
+                // Step 3: Start Express server **after MongoDB connects**
+                console.log("🔹 Starting Express server...");
+                const PORT = process.env.PORT || 5000;
+                app.listen(PORT, () => {
+                        console.log(`🚀 Server listening on port ${PORT}`);
+                });
+                
+        } catch (err) {
                 console.error("❌ MongoDB connection error:", err.message);
                 process.exit(1); // Stop server if DB fails
-        });
+        }
+};
 
-// Step 3: Start Express server after a small delay to ensure DB connect logs first
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-        console.log("🔹 Starting Express server...");
-        console.log(`🚀 Server listening on port ${PORT}`);
-});
+connectDB();
 
 // Optional test route
 app.get("/", (req, res) => {
