@@ -58,7 +58,7 @@ app.post("/api/posts", async (req, res) => {
                 await newPost.save();
                 res.status(201).json(newPost);
         } catch (error) {
-                res.status(500).json({ error: "Failed to create post" });
+                res.status(500).json({ error: "Failed to creat post" });
         }
 });
 
