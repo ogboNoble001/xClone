@@ -1,7 +1,7 @@
 window.addEventListener('DOMContentLoaded', () => {
         lucide.createIcons();
         
-        // UI elements (optional, your splash/menus)
+        // UI elements (splash/menu)
         const splash = document.querySelector('.prntAppPic');
         const nav = document.querySelector('nav.mainNav');
         const mainBody = document.querySelector('.mainBody');
@@ -20,8 +20,10 @@ window.addEventListener('DOMContentLoaded', () => {
         // Sidebar/icons toggle
         const icns = document.querySelectorAll('.icns');
         icns.forEach(icn => {
-                icns.forEach(other => other.classList.remove('active'));
-                icn.classList.add('active');
+                icn.addEventListener('click', () => {
+                        icns.forEach(other => other.classList.remove('active'));
+                        icn.classList.add('active');
+                });
         });
         
         // Show main UI after splash
@@ -32,26 +34,18 @@ window.addEventListener('DOMContentLoaded', () => {
                 sidebar.style.display = 'block';
                 sidebarOverlay.style.display = 'block';
                 console.log("🖥 Main UI visible");
+                
+                // Fetch backend/MongoDB status once
+                fetch("https://xclone-vc7a.onrender.com/api/db-status")
+                        .then(res => {
+                                if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
+                                return res.json();
+                        })
+                        .then(status => {
+                                console.log(`🔹 Backend status: online`);
+                                console.log(`🗄 MongoDB status: ${status.status}`);
+                        })
+                        .catch(err => console.error("❌ Fetch error:", err));
+                
         }, 1050);
-        
-        // Function to poll DB status from backend
-        const pollDBStatus = async () => {
-                try {
-                        const res = await fetch("https://xclone-vc7a.onrender.com/api/db-status");
-                        if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
-                        const status = await res.json();
-                        console.log(`🔹 Backend status: online`);
-                        console.log(`🗄 MongoDB status: ${status.status}`);
-                } catch (err) {
-                        console.error("❌ Fetch error:", err);
-                }
-        };
-        
-        // Poll every 1 second to simulate step-by-step logging
-        const interval = setInterval(() => {
-                pollDBStatus();
-        }, 1000);
-        
-        // Optionally stop polling after 5 seconds (backend fully ready)
-        setTimeout(() => clearInterval(interval), 5000);
 });
