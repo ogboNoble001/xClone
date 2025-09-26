@@ -9,38 +9,38 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Connect to MongoDB
-const connectDB = async () => {
-        try {
-                await mongoose.connect(process.env.MONGO_URI, {
-                        useNewUrlParser: true,
-                        useUnifiedTopology: true
-                });
-                console.log("✅ MongoDB connected successfully");
-        } catch (error) {
-                console.error("❌ MongoDB connection error:", error.message);
-                process.exit(1); // Exit if DB connection fails
-        }
-};
+// Step 1: Starting backend
+console.log("🔹 Backend initializing...");
 
-// Simple test route
-app.get("/", (req, res) => {
-        res.json({ message: "Express server is running and MongoDB connection is secured!" });
+// Step 2: Connect to MongoDB
+console.log("🔹 Connecting to MongoDB...");
+mongoose.connect(process.env.MONGO_URI, {
+                useNewUrlParser: true,
+                useUnifiedTopology: true
+        })
+        .then(() => {
+                console.log("✅ MongoDB connected successfully");
+        })
+        .catch(err => {
+                console.error("❌ MongoDB connection error:", err.message);
+                process.exit(1); // Stop server if DB fails
+        });
+
+// Step 3: Start Express server after a small delay to ensure DB connect logs first
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+        console.log("🔹 Starting Express server...");
+        console.log(`🚀 Server listening on port ${PORT}`);
 });
 
-// Check MongoDB connection status
+// Optional test route
+app.get("/", (req, res) => {
+        res.json({ message: "Express backend running" });
+});
+
+// Optional DB status route
 const states = ["disconnected", "connected", "connecting", "disconnecting"];
 app.get("/api/db-status", (req, res) => {
         const state = states[mongoose.connection.readyState];
         res.json({ status: state, message: `MongoDB connection is ${state}` });
 });
-
-// Start server after DB connection
-const PORT = process.env.PORT || 5000;
-const startServer = async () => {
-        await connectDB();
-        console.log("🚀 Express server is ready");
-        app.listen(PORT, () => console.log(`🚀 Server listening on port ${PORT}`));
-};
-
-startServer();
