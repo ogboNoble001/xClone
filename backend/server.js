@@ -9,67 +9,42 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Test MongoDB connection when server starts (not during build)
-const testConnection = async () => {
-        // Only try to connect if we're actually running the server (not building)
-        if (!process.env.MONGODB_URI) {
-                console.log("⚠️ MONGODB_URI not found - skipping MongoDB connection test");
-                return;
-        }
-        
+// Connect to MongoDB
+const connectDB = async () => {
         try {
-                console.log("🚀 Testing MongoDB connection...");
-                await mongoose.connect(process.env.MONGODB_URI);
+                await mongoose.connect(process.env.MONGO_URI, {
+                        useNewUrlParser: true,
+                        useUnifiedTopology: true
+                });
                 console.log("✅ MongoDB connected successfully");
         } catch (error) {
                 console.error("❌ MongoDB connection error:", error.message);
         }
 };
 
-// Mock posts data (keeping your original data)
+// Mock posts data
 const posts = [
         { id: 1, text: "Hello from xClone!" },
         { id: 2, text: "This is a test post." },
         { id: 3, text: "Backend working without MongoDB." }
 ];
 
-// Route to get posts (unchanged)
-app.get("/api/posts", (req, res) => {
-        res.json(posts);
+// Routes
+app.get("/", (req, res) => res.json({ message: "Backend running successfully!" }));
+
+app.get("/api/posts", (req, res) => res.json(posts));
+
+app.get("/api/db-status", (req, res) => {
+        const status = mongoose.connection.readyState === 1 ? "connected" : "disconnected";
+        res.json({
+                status,
+                message: `MongoDB connection is ${status}`
+        });
 });
 
-// Route to check MongoDB connection status
-app.get("/api/db-status", async (req, res) => {
-        try {
-                if (mongoose.connection.readyState === 1) {
-                        res.json({
-                                status: "connected",
-                                message: "MongoDB connection is active"
-                        });
-                } else {
-                        res.json({
-                                status: "disconnected",
-                                message: "MongoDB connection is not active"
-                        });
-                }
-        } catch (error) {
-                res.status(500).json({
-                        status: "error",
-                        message: "Error checking MongoDB status",
-                        error: error.message
-                });
-        }
-});
-
-// Root route (unchanged)
-app.get("/", (req, res) => {
-        res.json({ message: "Backend running successfully!" });
-});
-
-// Test MongoDB connection when server starts
+// Start server and connect to MongoDB
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
         console.log(`🚀 Server running on port ${PORT}`);
-        // Test MongoDB connection after server starts
-        testConnection();
+        connectDB();
 });
