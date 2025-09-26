@@ -37,12 +37,14 @@ window.addEventListener('DOMContentLoaded', () => {
         }, 1050);
         
 fetch("https://xclone-vc7a.onrender.com/api/posts")
-        .then(res => res.json())
-        .then(posts => {
-                
-                posts.forEach(post => {
-                        console.log(post.text);
-                });
-        })
-        .catch(err => console.error("Error:", err));
+    .then(res => {
+        if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
+        return res.json();
+    })
+    .then(posts => {
+        posts.forEach(post => {
+            console.log(post.text);
+        });
+    })
+    .catch(err => console.error("Fetch Error:", err));
 })

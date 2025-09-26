@@ -12,7 +12,7 @@ app.use(express.json());
 const posts = [
         { id: 1, text: "Hello from xClone!" },
         { id: 2, text: "This is a test post." },
-        { id: 3, text: "Backend is working without MongoDB." }
+        { id: 3, text: "Backend iorking without MongoDB." }
 ];
 
 // Route to get posts
