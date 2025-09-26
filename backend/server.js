@@ -22,24 +22,44 @@ const connectDB = async () => {
         }
 };
 
-// Mock posts data
-const posts = [
-        { id: 1, text: "Hello from xClone!" },
-        { id: 2, text: "This is a test post." },
-        { id: 3, text: "Backend working with MongoDB." }
-];
+// Post schema and model
+const postSchema = new mongoose.Schema({
+        text: { type: String, required: true }
+}, { timestamps: true });
+
+const Post = mongoose.model("Post", postSchema);
 
 // Routes
 app.get("/", (req, res) => res.json({ message: "Backend running successfully!" }));
 
-app.get("/api/posts", (req, res) => res.json(posts));
+// Fetch all posts from MongoDB
+app.get("/api/posts", async (req, res) => {
+        try {
+                const posts = await Post.find().sort({ createdAt: -1 });
+                res.json(posts);
+        } catch (error) {
+                res.status(500).json({ error: "Failed to fetch posts" });
+        }
+});
 
+// Check MongoDB connection status
 app.get("/api/db-status", (req, res) => {
         const status = mongoose.connection.readyState === 1 ? "connected" : "disconnected";
-        res.json({
-                status,
-                message: `MongoDB connection is ${status}`
-        });
+        res.json({ status, message: `MongoDB connection is ${status}` });
+});
+
+// Add a new post
+app.post("/api/posts", async (req, res) => {
+        try {
+                const { text } = req.body;
+                if (!text) return res.status(400).json({ error: "Text is required" });
+                
+                const newPost = new Post({ text });
+                await newPost.save();
+                res.status(201).json(newPost);
+        } catch (error) {
+                res.status(500).json({ error: "Failed to create post" });
+        }
 });
 
 // Start server and connect to MongoDB
