@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
         authSubtitle.textContent = 'Join X today';
     });
     
-    // Password strength and match
+    // Password strength + match
     const signupPassword = document.getElementById('signup-password');
     const confirmPassword = document.getElementById('confirm-password');
     const strengthDiv = document.getElementById('password-strength');
@@ -72,25 +72,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
-    // Form submissions
-    document.getElementById('signin-form').addEventListener('submit', e => {
-        e.preventDefault();
-        console.log('Sign in form submitted');
-    });
-    
-    document.getElementById('signup-form').addEventListener('submit', e => {
-        e.preventDefault();
-        if (signupPassword.value !== confirmPassword.value) {
-            alert('Passwords do not match');
-            return;
-        }
-        if (!isStrongPassword(signupPassword.value)) {
-            alert('Password must contain letters, numbers, and special characters.');
-            return;
-        }
-        console.log('Sign up form submitted');
-    });
-    
     function isStrongPassword(password) {
         return /[A-Za-z]/.test(password) &&
             /\d/.test(password) &&
@@ -110,15 +91,53 @@ document.addEventListener('DOMContentLoaded', () => {
         return { text: 'Weak password', color: 'red' };
     }
     
-    // Backend status check
-    fetch("https://xclone-vc7a.onrender.com/api/db-status")
-        .then(res => {
-            if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
-            return res.json();
-        })
-        .then(status => {
-            console.log(`🔹 Backend status: online`);
-            console.log(`🗄 MongoDB status: ${status.status}`);
-        })
-        .catch(err => console.error("❌ Fetch error:", err));
+    // Backend form submissions
+    const backendUrl = "https://your-app.onrender.com"; // replace with your Render backend URL
+    
+    document.getElementById('signin-form').addEventListener('submit', async e => {
+        e.preventDefault();
+        const email = document.getElementById("signin-email").value;
+        const password = document.getElementById("signin-password").value;
+        
+        try {
+            const res = await fetch(`${backendUrl}/api/login`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password })
+            });
+            const data = await res.json();
+            alert(data.message);
+        } catch (err) {
+            alert("❌ Error connecting to server");
+        }
+    });
+    
+    document.getElementById('signup-form').addEventListener('submit', async e => {
+        e.preventDefault();
+        const username = document.getElementById("signup-username").value;
+        const email = document.getElementById("signup-email").value;
+        const password = signupPassword.value;
+        const confirm = confirmPassword.value;
+        
+        if (password !== confirm) {
+            alert("❌ Passwords do not match");
+            return;
+        }
+        if (!isStrongPassword(password)) {
+            alert("❌ Password must contain letters, numbers, and special characters");
+            return;
+        }
+        
+        try {
+            const res = await fetch(`${backendUrl}/api/signup`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username, email, password })
+            });
+            const data = await res.json();
+            alert(data.message);
+        } catch (err) {
+            alert("❌ Error connecting to server");
+        }
+    });
 });
