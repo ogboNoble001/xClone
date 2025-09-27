@@ -92,8 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     // Backend form submissions
-    const backendUrl = "https://your-app.onrender.com"; // replace with your Render backend URL
-    
+    const backendUrl = "https://xclone-vc7a.onrender.com";
     document.getElementById('signin-form').addEventListener('submit', async e => {
         e.preventDefault();
         const email = document.getElementById("signin-email").value;
