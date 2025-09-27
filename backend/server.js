@@ -2,7 +2,6 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
-import bcrypt from "bcryptjs";
 
 dotenv.config();
 
@@ -39,65 +38,14 @@ const connectDB = async () => {
 
 connectDB();
 
-// ========================
-// User Schema + Model
-// ========================
-const userSchema = new mongoose.Schema({
-        username: { type: String, required: true },
-        email: { type: String, required: true, unique: true },
-        password: { type: String, required: true }
-});
-
-const User = mongoose.model("User", userSchema);
-
-// ========================
-// Routes
-// ========================
-
-// Root
+// Optional test route
 app.get("/", (req, res) => {
         res.json({ message: "Express backend running" });
 });
 
-// DB status
+// Optional DB status route
 const states = ["disconnected", "connected", "connecting", "disconnecting"];
 app.get("/api/db-status", (req, res) => {
         const state = states[mongoose.connection.readyState];
         res.json({ status: state, message: `MongoDB connection is ${state}` });
-});
-
-// Signup route
-app.post("/api/signup", async (req, res) => {
-        const { username, email, password } = req.body;
-        try {
-                const existing = await User.findOne({ email });
-                if (existing) {
-                        return res.status(400).json({ message: "Email already registered" });
-                }
-                
-                const hashedPassword = await bcrypt.hash(password, 10);
-                
-                const newUser = new User({ username, email, password: hashedPassword });
-                await newUser.save();
-                
-                res.json({ message: "✅ User created successfully" });
-        } catch (err) {
-                res.status(500).json({ message: "❌ Error creating user" });
-        }
-});
-
-// Login route
-app.post("/api/login", async (req, res) => {
-        const { email, password } = req.body;
-        try {
-                const user = await User.findOne({ email });
-                if (!user) return res.status(400).json({ message: "❌ User not found" });
-                
-                const isMatch = await bcrypt.compare(password, user.password);
-                if (!isMatch) return res.status(400).json({ message: "❌ Invalid credentials" });
-                
-                res.json({ message: `✅ Welcome back, ${user.username}` });
-        } catch (err) {
-                res.status(500).json({ message: "❌ Error logging in" });
-        }
 });
