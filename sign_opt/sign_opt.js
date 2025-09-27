@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const toggleButtons = document.querySelectorAll('.toggle-password');
     toggleButtons.forEach(btn => {
         btn.addEventListener('click', () => {
-            const inputId = btn.dataset.target; // <button data-target="signup-password">
+            const inputId = btn.dataset.target;
             const input = document.getElementById(inputId);
             if (!input) return;
             
@@ -109,4 +109,16 @@ document.addEventListener('DOMContentLoaded', () => {
             return { text: 'Medium strength', color: 'orange' };
         return { text: 'Weak password', color: 'red' };
     }
+    
+    // Backend status check
+    fetch("https://xclone-vc7a.onrender.com/api/db-status")
+        .then(res => {
+            if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
+            return res.json();
+        })
+        .then(status => {
+            console.log(`🔹 Backend status: online`);
+            console.log(`🗄 MongoDB status: ${status.status}`);
+        })
+        .catch(err => console.error("❌ Fetch error:", err));
 });
