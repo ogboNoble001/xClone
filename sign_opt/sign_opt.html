@@ -14,7 +14,7 @@
     <div class="right-section">
       <div class="auth-container">
         <div class="auth-header">
-          <img src="/frontend/res/x-social-media-white-icon.png" alt="X" class="auth-logo main-logo" />
+          <img src="/frontend/res/file_00000000d1bc6243b622c7897a43e5b3.png" alt="X" class="auth-logo main-logo" />
           <h2 class="auth-title focus-in-expand">Welcome back</h2>
           <p class="auth-subtitle animate-section-title">Sign in to your account</p>
         </div>
@@ -24,9 +24,9 @@
           <button type="button" class="tab animate-menu-item" id="signup-tab">Sign Up</button>
         </div>
 
-        <form id="signin-form" class="auth-form" action="/signin" method="POST">
+        <form id="signin-form" autocomplete="on" class="auth-form" action="/signin" method="POST">
           <div class="form-group animate-menu-item">
-            <label class="form-label" for="signin-email">Email or Username</label>
+            <label class="form-label" for="signin-email">Email</label>
             <input type="text" id="signin-email" name="email" class="form-input" placeholder="Enter your email or username" required>
           </div>
 
@@ -45,7 +45,7 @@
           <button type="submit" class="submit-btn animate-menu-item">Sign in</button>
         </form>
 
-        <form id="signup-form" class="auth-form hidden" action="/signup" method="POST">
+        <form id="signup-form" autocomplete="on" class="auth-form hidden" action="/signup" method="POST">
           <div class="form-group animate-menu-item">
             <label class="form-label" for="signup-fullname">Full Name</label>
             <input type="text" id="signup-fullname" name="fullname" class="form-input" placeholder="Enter your full name" required>

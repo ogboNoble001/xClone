@@ -42,7 +42,7 @@ window.addEventListener('DOMContentLoaded', () => {
                                 return res.json();
                         })
                         .then(status => {
-                                console.log(`🔹 Backend status: online`);
+                                console.log(`🔹 Backend status: online🎊`);
                                 console.log(`🗄 MongoDB status: ${status.status}`);
                         })
                         .catch(err => console.error("❌ Fetch error:", err));
