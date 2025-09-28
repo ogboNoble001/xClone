@@ -18,7 +18,7 @@ app.use(cors({
         "http://localhost:7700", // YOUR FRONTEND PORT - THIS WAS MISSING!
         "http://localhost:5000",
         "http://localhost:8000",
-        "https://x-clone.vercel.app", 
+        "https://x-clone-real.vercel.app", 
         "https://xclone-vc7a.onrender.com"
     ], 
     credentials: true,
