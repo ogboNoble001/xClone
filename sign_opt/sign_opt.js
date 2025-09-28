@@ -232,6 +232,93 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 console.log("🔹 Attempting to sign in...");
                 
+                const res = await fetch(`${backendUrl}/api/login`, {
+                    method: "POST",
+                    headers: { 
+                        "Content-Type": "application/json"
+                    },
+                    credentials: 'include', // Important: include cookies
+                    body: JSON.stringify({ email, password })
+                });
+                
+                const data = await res.json();
+                
+                if (res.ok) {
+                    // ✅ Login successful
+                    console.log("✅ Login successful");
+                    showMessage(data.message, 'success');
+                    
+                    // Store user data
+                    if (data.user) {
+                        localStorage.setItem('currentUser', JSON.stringify(data.user));
+                    }
+                    
+                    // Redirect after a short delay
+                    setTimeout(() => {
+                        window.location.href = "/index.html";
+                    }, 1000);
+                } else {
+                    // ❌ Login failed
+                    console.log("❌ Login failed:", data.message);
+                    showMessage(data.message);
+                }
+            } catch (err) {
+                console.error("❌ Sign-in error:", err);
+                showMessage("❌ Error connecting to server. Please check your internet connection and try again.");
+            } finally {
+                setLoadingState(signinForm, false);
+            }
+        });
+    }
+    
+    // ------------------------------
+    // Sign-up form submission
+    // ------------------------------
+    if (signupForm) {
+        signupForm.addEventListener('submit', async e => {
+            e.preventDefault();
+            
+            const username = document.getElementById("signup-username")?.value?.trim();
+            const email = document.getElementById("signup-email")?.value?.trim();
+            const password = signupPassword?.value;
+            const confirm = confirmPassword?.value;
+            
+            // Validation
+            if (!username || !email || !password || !confirm) {
+                showMessage("❌ Please fill in all fields");
+                return;
+            }
+            
+            // Username validation
+            if (username.length < 2) {
+                showMessage("❌ Username must be at least 2 characters long");
+                return;
+            }
+            
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showMessage("❌ Please enter a valid email address");
+                return;
+            }
+            
+            // Password match validation
+            if (password !== confirm) {
+                showMessage("❌ Passwords do not match");
+                return;
+            }
+            
+            // Password strength validation
+            if (!isStrongPassword(password)) {
+                showMessage("❌ Password must contain at least 8 characters with letters, numbers, and special characters");
+                return;
+            }
+            
+            setLoadingState(signupForm, true);
+            
+            try {
+                console.log("🔹 Attempting to sign up...");
+                
                 const res = await fetch(`${backendUrl}/api/signup`, {
                     method: "POST",
                     headers: { 
@@ -342,91 +429,4 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     
     console.log("✅ Sign-in/Sign-up page initialization complete");
-});(`${backendUrl}/api/login`, {
-                    method: "POST",
-                    headers: { 
-                        "Content-Type": "application/json"
-                    },
-                    credentials: 'include', // Important: include cookies
-                    body: JSON.stringify({ email, password })
-                });
-                
-                const data = await res.json();
-                
-                if (res.ok) {
-                    // ✅ Login successful
-                    console.log("✅ Login successful");
-                    showMessage(data.message, 'success');
-                    
-                    // Store user data
-                    if (data.user) {
-                        localStorage.setItem('currentUser', JSON.stringify(data.user));
-                    }
-                    
-                    // Redirect after a short delay
-                    setTimeout(() => {
-                        window.location.href = "/index.html";
-                    }, 1000);
-                } else {
-                    // ❌ Login failed
-                    console.log("❌ Login failed:", data.message);
-                    showMessage(data.message);
-                }
-            } catch (err) {
-                console.error("❌ Sign-in error:", err);
-                showMessage("❌ Error connecting to server. Please check your internet connection and try again.");
-            } finally {
-                setLoadingState(signinForm, false);
-            }
-        });
-    }
-    
-    // ------------------------------
-    // Sign-up form submission
-    // ------------------------------
-    if (signupForm) {
-        signupForm.addEventListener('submit', async e => {
-            e.preventDefault();
-            
-            const username = document.getElementById("signup-username")?.value?.trim();
-            const email = document.getElementById("signup-email")?.value?.trim();
-            const password = signupPassword?.value;
-            const confirm = confirmPassword?.value;
-            
-            // Validation
-            if (!username || !email || !password || !confirm) {
-                showMessage("❌ Please fill in all fields");
-                return;
-            }
-            
-            // Username validation
-            if (username.length < 2) {
-                showMessage("❌ Username must be at least 2 characters long");
-                return;
-            }
-            
-            // Email validation
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                showMessage("❌ Please enter a valid email address");
-                return;
-            }
-            
-            // Password match validation
-            if (password !== confirm) {
-                showMessage("❌ Passwords do not match");
-                return;
-            }
-            
-            // Password strength validation
-            if (!isStrongPassword(password)) {
-                showMessage("❌ Password must contain at least 8 characters with letters, numbers, and special characters");
-                return;
-            }
-            
-            setLoadingState(signupForm, true);
-            
-            try {
-                console.log("🔹 Attempting to sign up...");
-                
-                const res = await fetch
+});
