@@ -1,6 +1,31 @@
-// Complete sign-in/sign-up JavaScript with authentication
+// Debugging sign-in/sign-up JavaScript
 document.addEventListener('DOMContentLoaded', () => {
     console.log("🔹 Sign-in/Sign-up page loaded");
+    
+    // ------------------------------
+    // Backend URL - CHANGE THIS TO YOUR ACTUAL BACKEND URL
+    // ------------------------------
+    const backendUrl = "https://xclone-vc7a.onrender.com"; // Change this if different
+    
+    // Test backend connection on page load
+    testBackendConnection();
+    
+    async function testBackendConnection() {
+        try {
+            console.log("🔹 Testing backend connection to:", backendUrl);
+            
+            const response = await fetch(`${backendUrl}/api/db-status`);
+            const data = await response.json();
+            
+            console.log("✅ Backend connection successful:", data);
+        } catch (error) {
+            console.error("❌ Backend connection failed:", error);
+            console.log("Please check:");
+            console.log("1. Backend URL is correct:", backendUrl);
+            console.log("2. Backend server is running");
+            console.log("3. CORS is properly configured");
+        }
+    }
     
     // Check if user is already authenticated
     checkIfAlreadyAuthenticated();
@@ -38,9 +63,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (signinTab) {
         signinTab.addEventListener('click', () => {
             signinTab.classList.add('active');
-            signupTab.classList.remove('active');
-            signinForm.classList.remove('hidden');
-            signupForm.classList.add('hidden');
+            if (signupTab) signupTab.classList.remove('active');
+            if (signinForm) signinForm.classList.remove('hidden');
+            if (signupForm) signupForm.classList.add('hidden');
             if (authTitle) authTitle.textContent = 'Welcome back';
             if (authSubtitle) authSubtitle.textContent = 'Sign in to your account';
         });
@@ -49,9 +74,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (signupTab) {
         signupTab.addEventListener('click', () => {
             signupTab.classList.add('active');
-            signinTab.classList.remove('active');
-            signupForm.classList.remove('hidden');
-            signinForm.classList.add('hidden');
+            if (signinTab) signinTab.classList.remove('active');
+            if (signupForm) signupForm.classList.remove('hidden');
+            if (signinForm) signinForm.classList.add('hidden');
             if (authTitle) authTitle.textContent = 'Create account';
             if (authSubtitle) authSubtitle.textContent = 'Join X today';
         });
@@ -88,10 +113,10 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         if (signupPassword.value === confirmPassword.value) {
-            matchDiv.textContent = '✅ Passwords match';
+            matchDiv.textContent = 'Passwords match';
             matchDiv.style.color = '#53D500';
         } else {
-            matchDiv.textContent = '❌ Passwords do not match';
+            matchDiv.textContent = 'Passwords do not match';
             matchDiv.style.color = 'red';
         }
     }
@@ -104,22 +129,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     function getPasswordStrength(password) {
-        if (password.length < 6) return { text: 'Too short (min 6 chars)', color: 'red' };
+        if (password.length < 6) return { text: 'Too short', color: 'red' };
         const hasLetter = /[A-Za-z]/.test(password);
         const hasNumber = /\d/.test(password);
         const hasSpecial = /[^A-Za-z0-9]/.test(password);
-        
         if (hasLetter && hasNumber && hasSpecial && password.length >= 8)
-            return { text: '✅ Strong password', color: '#53D500' };
+            return { text: 'Strong password', color: '#53D500' };
         if ((hasLetter && hasNumber) || (hasLetter && hasSpecial) || (hasNumber && hasSpecial))
-            return { text: '⚡ Medium strength', color: 'orange' };
-        return { text: '⚠️ Weak password', color: 'red' };
+            return { text: 'Medium strength', color: 'orange' };
+        return { text: 'Weak password', color: 'red' };
     }
-    
-    // ------------------------------
-    // Backend URL
-    // ------------------------------
-    const backendUrl = "https://xclone-vc7a.onrender.com";
     
     // ------------------------------
     // Check if already authenticated
@@ -143,130 +162,50 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     // ------------------------------
-    // Loading state management
-    // ------------------------------
-    function setLoadingState(form, loading) {
-        const submitBtn = form.querySelector('button[type="submit"]');
-        const inputs = form.querySelectorAll('input');
-        
-        if (loading) {
-            if (submitBtn) {
-                submitBtn.disabled = true;
-                submitBtn.textContent = submitBtn.textContent.includes('Sign in') ? 'Signing in...' : 'Creating account...';
-            }
-            inputs.forEach(input => input.disabled = true);
-        } else {
-            if (submitBtn) {
-                submitBtn.disabled = false;
-                submitBtn.textContent = submitBtn.textContent.includes('Signing') ? 'Sign in' : 'Create account';
-            }
-            inputs.forEach(input => input.disabled = false);
-        }
-    }
-    
-    // ------------------------------
-    // Show error/success messages
-    // ------------------------------
-    function showMessage(message, type = 'error') {
-        // Remove any existing message
-        const existingMessage = document.querySelector('.auth-message');
-        if (existingMessage) {
-            existingMessage.remove();
-        }
-        
-        // Create new message element
-        const messageDiv = document.createElement('div');
-        messageDiv.className = `auth-message ${type}`;
-        messageDiv.textContent = message;
-        messageDiv.style.cssText = `
-            padding: 12px 16px;
-            margin: 10px 0;
-            border-radius: 8px;
-            font-size: 14px;
-            text-align: center;
-            ${type === 'error' 
-                ? 'background-color: #fee; color: #c53030; border: 1px solid #fed7d7;' 
-                : 'background-color: #f0fff4; color: #22543d; border: 1px solid #9ae6b4;'
-            }
-        `;
-        
-        // Insert message at the top of the form container
-        const authContainer = document.querySelector('.auth-container') || document.body;
-        authContainer.insertBefore(messageDiv, authContainer.firstChild);
-        
-        // Auto-remove success messages after 3 seconds
-        if (type === 'success') {
-            setTimeout(() => {
-                if (messageDiv.parentNode) {
-                    messageDiv.remove();
-                }
-            }, 3000);
-        }
-    }
-    
-    // ------------------------------
     // Sign-in form submission
     // ------------------------------
-    if (signinForm) {
-        signinForm.addEventListener('submit', async e => {
+    const signinFormElement = document.getElementById('signin-form');
+    if (signinFormElement) {
+        signinFormElement.addEventListener('submit', async e => {
             e.preventDefault();
             
-            const email = document.getElementById("signin-email")?.value?.trim();
+            const email = document.getElementById("signin-email")?.value;
             const password = document.getElementById("signin-password")?.value;
             
-            // Validation
-            if (!email || !password) {
-                showMessage("❌ Please fill in all fields");
-                return;
-            }
-            
-            // Email validation
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                showMessage("❌ Please enter a valid email address");
-                return;
-            }
-            
-            setLoadingState(signinForm, true);
+            console.log("🔹 Attempting sign-in with:", { email: email ? "provided" : "missing", password: password ? "provided" : "missing" });
             
             try {
-                console.log("🔹 Attempting to sign in...");
+                console.log("🔹 Making request to:", `${backendUrl}/api/login`);
                 
                 const res = await fetch(`${backendUrl}/api/login`, {
                     method: "POST",
-                    headers: { 
-                        "Content-Type": "application/json"
-                    },
-                    credentials: 'include', // Important: include cookies
+                    headers: { "Content-Type": "application/json" },
+                    credentials: 'include', // Add this for cookies
                     body: JSON.stringify({ email, password })
                 });
                 
+                console.log("🔹 Response status:", res.status);
+                console.log("🔹 Response headers:", Object.fromEntries(res.headers.entries()));
+                
                 const data = await res.json();
+                console.log("🔹 Response data:", data);
                 
                 if (res.ok) {
-                    // ✅ Login successful
-                    console.log("✅ Login successful");
-                    showMessage(data.message, 'success');
-                    
-                    // Store user data
-                    if (data.user) {
-                        localStorage.setItem('currentUser', JSON.stringify(data.user));
-                    }
-                    
-                    // Redirect after a short delay
-                    setTimeout(() => {
-                        window.location.href = "/index.html";
-                    }, 1000);
+                    // ✅ Login successful → redirect
+                    alert(data.message);
+                    window.location.href = "/index.html";
                 } else {
-                    // ❌ Login failed
-                    console.log("❌ Login failed:", data.message);
-                    showMessage(data.message);
+                    // ❌ Login failed → show error
+                    alert(data.message);
                 }
             } catch (err) {
-                console.error("❌ Sign-in error:", err);
-                showMessage("❌ Error connecting to server. Please check your internet connection and try again.");
-            } finally {
-                setLoadingState(signinForm, false);
+                console.error("❌ Detailed sign-in error:", err);
+                console.log("Error details:");
+                console.log("- Error name:", err.name);
+                console.log("- Error message:", err.message);
+                console.log("- Backend URL used:", backendUrl);
+                
+                alert("❌ Error connecting to server. Check console for details.");
             }
         });
     }
@@ -274,159 +213,63 @@ document.addEventListener('DOMContentLoaded', () => {
     // ------------------------------
     // Sign-up form submission
     // ------------------------------
-    if (signupForm) {
-        signupForm.addEventListener('submit', async e => {
+    const signupFormElement = document.getElementById('signup-form');
+    if (signupFormElement) {
+        signupFormElement.addEventListener('submit', async e => {
             e.preventDefault();
             
-            const username = document.getElementById("signup-username")?.value?.trim();
-            const email = document.getElementById("signup-email")?.value?.trim();
+            const username = document.getElementById("signup-username")?.value;
+            const email = document.getElementById("signup-email")?.value;
             const password = signupPassword?.value;
             const confirm = confirmPassword?.value;
             
-            // Validation
-            if (!username || !email || !password || !confirm) {
-                showMessage("❌ Please fill in all fields");
-                return;
-            }
-            
-            // Username validation
-            if (username.length < 2) {
-                showMessage("❌ Username must be at least 2 characters long");
-                return;
-            }
-            
-            // Email validation
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                showMessage("❌ Please enter a valid email address");
-                return;
-            }
-            
-            // Password match validation
             if (password !== confirm) {
-                showMessage("❌ Passwords do not match");
+                alert("❌ Passwords do not match");
                 return;
             }
-            
-            // Password strength validation
             if (!isStrongPassword(password)) {
-                showMessage("❌ Password must contain at least 8 characters with letters, numbers, and special characters");
+                alert("❌ Password must contain letters, numbers, and special characters");
                 return;
             }
             
-            setLoadingState(signupForm, true);
+            console.log("🔹 Attempting sign-up with:", {
+                username: username ? "provided" : "missing",
+                email: email ? "provided" : "missing",
+                password: password ? "provided" : "missing"
+            });
             
             try {
-                console.log("🔹 Attempting to sign up...");
+                console.log("🔹 Making request to:", `${backendUrl}/api/signup`);
                 
                 const res = await fetch(`${backendUrl}/api/signup`, {
                     method: "POST",
-                    headers: { 
-                        "Content-Type": "application/json" 
-                    },
-                    credentials: 'include', // Important: include cookies
+                    headers: { "Content-Type": "application/json" },
+                    credentials: 'include', // Add this for cookies
                     body: JSON.stringify({ username, email, password })
                 });
                 
+                console.log("🔹 Response status:", res.status);
+                console.log("🔹 Response headers:", Object.fromEntries(res.headers.entries()));
+                
                 const data = await res.json();
+                console.log("🔹 Response data:", data);
                 
                 if (res.ok) {
-                    // ✅ Signup successful
-                    console.log("✅ Signup successful");
-                    showMessage(data.message, 'success');
-                    
-                    // Store user data
-                    if (data.user) {
-                        localStorage.setItem('currentUser', JSON.stringify(data.user));
-                    }
-                    
-                    // Redirect after a short delay
-                    setTimeout(() => {
-                        window.location.href = "/index.html";
-                    }, 1000);
+                    alert(data.message);
+                    window.location.href = "/index.html";
                 } else {
-                    // ❌ Signup failed
-                    console.log("❌ Signup failed:", data.message);
-                    showMessage(data.message);
+                    // ❌ Signup failed → show error
+                    alert(data.message);
                 }
             } catch (err) {
-                console.error("❌ Sign-up error:", err);
-                showMessage("❌ Error connecting to server. Please check your internet connection and try again.");
-            } finally {
-                setLoadingState(signupForm, false);
+                console.error("❌ Detailed sign-up error:", err);
+                console.log("Error details:");
+                console.log("- Error name:", err.name);
+                console.log("- Error message:", err.message);
+                console.log("- Backend URL used:", backendUrl);
+                
+                alert("❌ Error connecting to server. Check console for details.");
             }
         });
     }
-    
-    // ------------------------------
-    // Additional utility functions
-    // ------------------------------
-    
-    // Clear form function
-    function clearForm(form) {
-        const inputs = form.querySelectorAll('input');
-        inputs.forEach(input => {
-            input.value = '';
-            input.disabled = false;
-        });
-        
-        // Clear password strength indicators
-        if (strengthDiv) strengthDiv.textContent = '';
-        if (matchDiv) matchDiv.textContent = '';
-    }
-    
-    // Handle enter key in forms
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-            const activeForm = document.querySelector('form:not(.hidden)');
-            if (activeForm) {
-                const submitBtn = activeForm.querySelector('button[type="submit"]');
-                if (submitBtn && !submitBtn.disabled) {
-                    e.preventDefault();
-                    submitBtn.click();
-                }
-            }
-        }
-    });
-    
-    // Handle form reset
-    const resetButtons = document.querySelectorAll('button[type="reset"]');
-    resetButtons.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            const form = e.target.closest('form');
-            if (form) {
-                setTimeout(() => clearForm(form), 10);
-            }
-        });
-    });
-    
-    // Auto-focus first input
-    setTimeout(() => {
-        const visibleForm = document.querySelector('form:not(.hidden)');
-        if (visibleForm) {
-            const firstInput = visibleForm.querySelector('input:not([disabled])');
-            if (firstInput) {
-                firstInput.focus();
-            }
-        }
-    }, 100);
-    
-    // Handle network status
-    window.addEventListener('online', () => {
-        console.log("🌐 Back online");
-        showMessage("✅ Connection restored", 'success');
-    });
-    
-    window.addEventListener('offline', () => {
-        console.log("📴 Gone offline");
-        showMessage("❌ No internet connection. Please check your network.", 'error');
-    });
-    
-    // Handle page unload
-    window.addEventListener('beforeunload', (e) => {
-        // Clear any sensitive data if needed
-        // This is optional and depends on your security requirements
-    });
-    
-    console.log("✅ Sign-in/Sign-up page initialization complete");
 });
