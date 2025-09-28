@@ -15,11 +15,11 @@ document.addEventListener("DOMContentLoaded", () => {
                         if (data.authenticated) {
                                 loadApp(data.user);
                         } else {
-                                window.location.href = "/login.html";
+                                window.location.href = "/sign_opt/sign_opt.html";
                         }
                 } catch (error) {
                         console.error("❌ Auth check error:", error);
-                        window.location.href = "/login.html";
+                        window.location.href = "/sign_opt/sign_opt.html";
                 }
         }
         
@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                 credentials: "include"
                         });
                         if (response.ok) {
-                                window.location.href = "/login.html";
+                                window.location.href = "/sign_opt/sign_opt.html";
                         }
                 } catch (error) {
                         console.error("❌ Logout error:", error);
@@ -102,11 +102,11 @@ document.addEventListener("DOMContentLoaded", () => {
                         if (response.ok && data.user) {
                                 console.log("✅ User profile loaded:", data.user);
                         } else {
-                                window.location.href = "/login.html";
+                                window.location.href = "/sign_opt/sign_opt.html";
                         }
                 } catch (error) {
                         console.error("❌ Profile load error:", error);
-                        window.location.href = "/login.html";
+                        window.location.href = "/sign_opt/sign_opt.html";
                 }
         }
         
