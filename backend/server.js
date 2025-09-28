@@ -10,16 +10,10 @@ dotenv.config();
 
 const app = express();
 
-// CORS configuration
 app.use(cors({
     origin: [
-        'https://x-clone-real.vercel.app/index.html',
-        "http://localhost:3000",
-        "http://localhost:7700",
-        "http://localhost:5000",
-        "http://localhost:8000",
-        "https://x-clone-real.vercel.app",
-        "https://xclone-vc7a.onrender.com"
+        'https://x-clone-real.vercel.app',
+        'http://localhost:3000'
     ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
@@ -29,10 +23,8 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
-// Backend init
 console.log("🔹 Backend initializing...");
 
-// Connect to MongoDB
 const connectDB = async () => {
     try {
         await mongoose.connect(process.env.MONGO_URI, {
@@ -40,10 +32,8 @@ const connectDB = async () => {
             useUnifiedTopology: true
         });
         console.log("✅ MongoDB connected successfully");
-        
         const PORT = process.env.PORT || 5000;
         app.listen(PORT, () => console.log(`🚀 Server listening on port ${PORT}`));
-        
     } catch (err) {
         console.error("❌ MongoDB connection error:", err.message);
         process.exit(1);
@@ -52,9 +42,6 @@ const connectDB = async () => {
 
 connectDB();
 
-// ========================
-// User Schema + Model
-// ========================
 const userSchema = new mongoose.Schema({
     username: { type: String, required: true },
     email: { type: String, required: true, unique: true },
@@ -63,13 +50,9 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model("User", userSchema);
 
-// ========================
-// Authentication middleware
-// ========================
 const authenticateToken = (req, res, next) => {
     const token = req.cookies.authToken;
     if (!token) return res.status(401).json({ authenticated: false, message: "No token provided" });
-    
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
         if (err) {
             res.clearCookie("authToken");
@@ -80,25 +63,17 @@ const authenticateToken = (req, res, next) => {
     });
 };
 
-// ========================
-// Routes
-// ========================
-
-// Root
 app.get("/", (req, res) => res.json({ message: "Express backend running" }));
 
-// DB status
 app.get("/api/db-status", (req, res) => {
     const states = ["disconnected", "connected", "connecting", "disconnecting"];
     const state = states[mongoose.connection.readyState];
     res.json({ status: state, message: `MongoDB connection is ${state}` });
 });
 
-// Check auth status
 app.get("/api/auth/status", (req, res) => {
     const token = req.cookies.authToken;
     if (!token) return res.json({ authenticated: false });
-    
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
         if (err) {
             res.clearCookie("authToken");
@@ -108,10 +83,8 @@ app.get("/api/auth/status", (req, res) => {
     });
 });
 
-// Signup
 app.post("/api/signup", async (req, res) => {
     const { username, email, password } = req.body;
-    
     if (!username || !email || !password)
         return res.status(400).json({ message: "❌ All fields are required" });
     
@@ -135,7 +108,7 @@ app.post("/api/signup", async (req, res) => {
         res.cookie("authToken", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            sameSite: 'lax',
+            sameSite: 'none',
             maxAge: 7 * 24 * 60 * 60 * 1000,
             path: '/'
         });
@@ -148,7 +121,6 @@ app.post("/api/signup", async (req, res) => {
     }
 });
 
-// Login
 app.post("/api/login", async (req, res) => {
     const { email, password } = req.body;
     if (!email || !password) return res.status(400).json({ message: "❌ Email and password required" });
@@ -165,7 +137,7 @@ app.post("/api/login", async (req, res) => {
         res.cookie("authToken", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            sameSite: 'lax',
+            sameSite: 'none',
             maxAge: 7 * 24 * 60 * 60 * 1000,
             path: '/'
         });
@@ -178,13 +150,11 @@ app.post("/api/login", async (req, res) => {
     }
 });
 
-// Logout
 app.post("/api/logout", (req, res) => {
-    res.clearCookie("authToken", { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax', path: '/' });
+    res.clearCookie("authToken", { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'none', path: '/' });
     res.json({ message: "✅ Logged out successfully" });
 });
 
-// Profile (protected)
 app.get("/api/profile", authenticateToken, async (req, res) => {
     try {
         const user = await User.findById(req.user.id).select('-password');
@@ -195,10 +165,8 @@ app.get("/api/profile", authenticateToken, async (req, res) => {
     }
 });
 
-// Catch-all 404
 app.use('*', (req, res) => res.status(404).json({ message: "Route not found" }));
 
-// Global error handler
 app.use((err, req, res, next) => {
     console.error("❌ Global error:", err);
     res.status(500).json({ message: "Internal server error" });
