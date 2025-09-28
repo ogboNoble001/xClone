@@ -174,13 +174,22 @@ async function handleLogout() {
                 
                 const data = await response.json();
                 
-                // Clear user data
+                // FORCE clear cookie on frontend (fixes Vercel deployment issue)
+                document.cookie = "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=" + window.location.hostname;
+                document.cookie = "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                
+                // Clear all user data thoroughly
                 localStorage.removeItem('currentUser');
+                sessionStorage.clear();
+                
+                console.log("🔹 Cleared all cookies and storage data");
                 
                 if (response.ok) {
                         console.log("✅ Logout successful:", data.message);
-                        // Redirect to sign options page
-                        window.location.href = "/sign_opt/sign_opt.html";
+                        // Small delay to ensure cookie clearing takes effect
+                        setTimeout(() => {
+                                window.location.href = "/sign_opt/sign_opt.html";
+                        }, 100);
                 } else {
                         throw new Error(data.message || 'Logout failed');
                 }
@@ -188,8 +197,11 @@ async function handleLogout() {
         } catch (error) {
                 console.error("❌ Error logging out:", error);
                 
-                // Clear local data anyway
+                // Force clear data anyway - especially important for Vercel
+                document.cookie = "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=" + window.location.hostname;
+                document.cookie = "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
                 localStorage.removeItem('currentUser');
+                sessionStorage.clear();
                 
                 // Reset button state if it exists
                 if (logoutBtn) {
