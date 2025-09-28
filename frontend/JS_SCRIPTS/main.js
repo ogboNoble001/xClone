@@ -1,123 +1,44 @@
-document.addEventListener("DOMContentLoaded", () => {
-        const backendUrl = "https://xclone-vc7a.onrender.com";
+window.addEventListener('DOMContentLoaded', () => {
+        lucide.createIcons();
         
-        // ========================
-        // Check authentication status
-        // ========================
-        async function checkAuthStatus() {
-                try {
-                        const response = await fetch(`${backendUrl}/api/auth/status`, {
-                                method: "GET",
-                                credentials: "include"
-                        });
-                        const data = await response.json();
-                        
-                        if (data.authenticated) {
-                                loadApp(data.user);
-                        } else {
-                                window.location.href = "/sign_opt/sign_opt.html";
-                        }
-                } catch (error) {
-                        console.error("❌ Auth check error:", error);
-                        window.location.href = "/sign_opt/sign_opt.html";
-                }
-        }
+        // UI elements (splash/menu)
+        const splash = document.querySelector('.prntAppPic');
+        const nav = document.querySelector('nav.mainNav');
+        const mainBody = document.querySelector('.mainBody');
+        const sidebar = document.querySelector('.sidebar');
+        const sidebarOverlay = document.querySelector('.sidebar-overlay');
         
-        // ========================
-        // Signup
-        // ========================
-        async function signup(username, email, password) {
-                try {
-                        const response = await fetch(`${backendUrl}/api/signup`, {
-                                method: "POST",
-                                headers: { "Content-Type": "application/json" },
-                                credentials: "include",
-                                body: JSON.stringify({ username, email, password })
-                        });
-                        const data = await response.json();
-                        
-                        if (response.ok) {
-                                window.location.href = "/index.html";
-                        } else {
-                                alert(data.message || "Signup failed");
-                        }
-                } catch (error) {
-                        console.error("❌ Signup error:", error);
-                        alert("Connection error: " + error.message);
-                }
-        }
+        // Top nav icons toggle
+        const topNavIcns = document.querySelectorAll('.topNav div');
+        topNavIcns.forEach(icn => {
+                icn.addEventListener('click', () => {
+                        topNavIcns.forEach(other => other.classList.remove('active'));
+                        icn.classList.add('active');
+                });
+        });
         
-        // ========================
-        // Login
-        // ========================
-        async function login(email, password) {
-                try {
-                        const response = await fetch(`${backendUrl}/api/login`, {
-                                method: "POST",
-                                headers: { "Content-Type": "application/json" },
-                                credentials: "include",
-                                body: JSON.stringify({ email, password })
-                        });
-                        const data = await response.json();
-                        
-                        if (response.ok) {
-                                window.location.href = "/index.html";
-                        } else {
-                                alert(data.message || "Login failed");
-                        }
-                } catch (error) {
-                        console.error("❌ Login error:", error);
-                        alert("Connection error: " + error.message);
-                }
-        }
+        const profileSignIn = document.querySelector('#profile')
+        profileSignIn.addEventListener('click', ()=>{
+                window.location.href = "/sign_opt/sign_opt.html"
+        })
+        const icns = document.querySelectorAll('.icns');
+        icns.forEach(icn => {
+                icn.addEventListener('click', () => {
+                        icns.forEach(other => other.classList.remove('active'));
+                        icn.classList.add('active');
+                });
+        });
         
-        // ========================
-        // Logout
-        // ========================
-        async function logout() {
-                try {
-                        const response = await fetch(`${backendUrl}/api/logout`, {
-                                method: "GET",
-                                credentials: "include"
-                        });
-                        if (response.ok) {
-                                window.location.href = "/sign_opt/sign_opt.html";
-                        }
-                } catch (error) {
-                        console.error("❌ Logout error:", error);
-                }
-        }
-        
-        // ========================
-        // Load profile
-        // ========================
-        async function loadProfile() {
-                try {
-                        const response = await fetch(`${backendUrl}/api/profile`, {
-                                method: "GET",
-                                credentials: "include"
-                        });
-                        const data = await response.json();
-                        
-                        if (response.ok && data.user) {
-                                console.log("✅ User profile loaded:", data.user);
-                        } else {
-                                window.location.href = "/sign_opt/sign_opt.html";
-                        }
-                } catch (error) {
-                        console.error("❌ Profile load error:", error);
-                        window.location.href = "/sign_opt/sign_opt.html";
-                }
-        }
-        
-        // ========================
-        // Load App
-        // ========================
-        function loadApp(user) {
-                console.log("✅ User authenticated:", user);
-                loadProfile();
-        }
-        
-        // Run auth check
-        checkAuthStatus();
+        // Show main UI after splash
+        setTimeout(() => {
+                splash.style.display = 'none';
+                nav.style.display = 'flex';
+                mainBody.style.display = 'flex';
+                sidebar.style.display = 'block';
+                sidebarOverlay.style.display = 'block';
+                console.log("🖥 Main UI visible");
+                
+               
+                
+        }, 1050);
 });
