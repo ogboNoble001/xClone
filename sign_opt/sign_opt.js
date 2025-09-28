@@ -1,34 +1,10 @@
-// Debugging sign-in/sign-up JavaScript
 document.addEventListener('DOMContentLoaded', () => {
     console.log("🔹 Sign-in/Sign-up page loaded");
     
     // ------------------------------
-    // Backend URL - CHANGE THIS TO YOUR ACTUAL BACKEND URL
+    // Backend URL
     // ------------------------------
-    const backendUrl = "https://xclone-vc7a.onrender.com"; // Change this if different
-    
-    // Test backend connection on page load
-    testBackendConnection();
-    
-    async function testBackendConnection() {
-        try {
-            console.log("🔹 Testing backend connection to:", backendUrl);
-            
-            const response = await fetch(`${backendUrl}/api/db-status`);
-            const data = await response.json();
-            
-            console.log("✅ Backend connection successful:", data);
-        } catch (error) {
-            console.error("❌ Backend connection failed:", error);
-            console.log("Please check:");
-            console.log("1. Backend URL is correct:", backendUrl);
-            console.log("2. Backend server is running");
-            console.log("3. CORS is properly configured");
-        }
-    }
-    
-    // Check if user is already authenticated
-    checkIfAlreadyAuthenticated();
+    const backendUrl = "https://xclone-vc7a.onrender.com";
     
     // ------------------------------
     // Toggle password visibility
@@ -141,25 +117,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     // ------------------------------
-    // Check if already authenticated
+    // Don't check auth status on sign-in page (causes CORS issues)
     // ------------------------------
-    async function checkIfAlreadyAuthenticated() {
-        try {
-            const response = await fetch(`${backendUrl}/api/auth/status`, {
-                method: 'GET',
-                credentials: 'include'
-            });
-            
-            const data = await response.json();
-            
-            if (data.authenticated) {
-                console.log("✅ User already authenticated, redirecting to main page...");
-                window.location.href = "/index.html";
-            }
-        } catch (error) {
-            console.log("🔹 User not authenticated, staying on sign-in page");
-        }
-    }
+    // Removed checkIfAlreadyAuthenticated() to avoid CORS errors on page load
     
     // ------------------------------
     // Sign-in form submission
@@ -172,40 +132,37 @@ document.addEventListener('DOMContentLoaded', () => {
             const email = document.getElementById("signin-email")?.value;
             const password = document.getElementById("signin-password")?.value;
             
-            console.log("🔹 Attempting sign-in with:", { email: email ? "provided" : "missing", password: password ? "provided" : "missing" });
+            if (!email || !password) {
+                alert("❌ Please fill in all fields");
+                return;
+            }
             
             try {
-                console.log("🔹 Making request to:", `${backendUrl}/api/login`);
-                
                 const res = await fetch(`${backendUrl}/api/login`, {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    credentials: 'include', // Add this for cookies
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    credentials: 'include',
                     body: JSON.stringify({ email, password })
                 });
                 
-                console.log("🔹 Response status:", res.status);
-                console.log("🔹 Response headers:", Object.fromEntries(res.headers.entries()));
-                
                 const data = await res.json();
-                console.log("🔹 Response data:", data);
                 
                 if (res.ok) {
-                    // ✅ Login successful → redirect
                     alert(data.message);
                     window.location.href = "/index.html";
                 } else {
-                    // ❌ Login failed → show error
                     alert(data.message);
                 }
             } catch (err) {
-                console.error("❌ Detailed sign-in error:", err);
-                console.log("Error details:");
-                console.log("- Error name:", err.name);
-                console.log("- Error message:", err.message);
-                console.log("- Backend URL used:", backendUrl);
+                console.error("❌ Sign-in error:", err);
                 
-                alert("❌ Error connecting to server. Check console for details.");
+                if (err.message === 'Failed to fetch') {
+                    alert("❌ Cannot connect to server. This might be a CORS issue or the server is down.");
+                } else {
+                    alert("❌ Error connecting to server");
+                }
             }
         });
     }
@@ -223,52 +180,47 @@ document.addEventListener('DOMContentLoaded', () => {
             const password = signupPassword?.value;
             const confirm = confirmPassword?.value;
             
+            if (!username || !email || !password || !confirm) {
+                alert("❌ Please fill in all fields");
+                return;
+            }
+            
             if (password !== confirm) {
                 alert("❌ Passwords do not match");
                 return;
             }
+            
             if (!isStrongPassword(password)) {
                 alert("❌ Password must contain letters, numbers, and special characters");
                 return;
             }
             
-            console.log("🔹 Attempting sign-up with:", {
-                username: username ? "provided" : "missing",
-                email: email ? "provided" : "missing",
-                password: password ? "provided" : "missing"
-            });
-            
             try {
-                console.log("🔹 Making request to:", `${backendUrl}/api/signup`);
-                
                 const res = await fetch(`${backendUrl}/api/signup`, {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    credentials: 'include', // Add this for cookies
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    credentials: 'include',
                     body: JSON.stringify({ username, email, password })
                 });
                 
-                console.log("🔹 Response status:", res.status);
-                console.log("🔹 Response headers:", Object.fromEntries(res.headers.entries()));
-                
                 const data = await res.json();
-                console.log("🔹 Response data:", data);
                 
                 if (res.ok) {
                     alert(data.message);
                     window.location.href = "/index.html";
                 } else {
-                    // ❌ Signup failed → show error
                     alert(data.message);
                 }
             } catch (err) {
-                console.error("❌ Detailed sign-up error:", err);
-                console.log("Error details:");
-                console.log("- Error name:", err.name);
-                console.log("- Error message:", err.message);
-                console.log("- Backend URL used:", backendUrl);
+                console.error("❌ Sign-up error:", err);
                 
-                alert("❌ Error connecting to server. Check console for details.");
+                if (err.message === 'Failed to fetch') {
+                    alert("❌ Cannot connect to server. This might be a CORS issue or the server is down.");
+                } else {
+                    alert("❌ Error connecting to server");
+                }
             }
         });
     }

@@ -11,13 +11,21 @@ dotenv.config();
 const app = express();
 
 // Updated CORS configuration to allow credentials
+// In your server.js - Update the CORS configuration
+
 app.use(cors({
-    origin: ["http://localhost:3000", "https://x-clone.vercel.app", "https://xclone-vc7a.onrender.com"], // Add all your domains
+    origin: [
+        "http://localhost:3000",
+        "http://localhost:7700", // Add your local development port
+        "http://localhost:5000",
+        "http://localhost:8000",
+        "https://x-clone.vercel.app",
+        "https://xclone-vc7a.onrender.com"
+    ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
-
 app.use(express.json());
 app.use(cookieParser()); // Add cookie parser middleware
 
