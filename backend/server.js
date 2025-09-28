@@ -13,6 +13,7 @@ const app = express();
 // CORS configuration
 app.use(cors({
     origin: [
+        'https://x-clone-real.vercel.app/index.html',
         "http://localhost:3000",
         "http://localhost:7700",
         "http://localhost:5000",
