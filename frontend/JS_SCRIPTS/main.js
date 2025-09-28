@@ -63,7 +63,7 @@ window.addEventListener('DOMContentLoaded', () => {
                         if (res.ok) {
                                 alert(data.message);
                                 // Redirect to main page after successful login
-                                window.location.href = "/main.html"; // adjust to your main page path
+                                window.location.href = "/index.html"; // adjust to your main page path
                         } else {
                                 alert(data.message);
                         }
@@ -98,7 +98,7 @@ window.addEventListener('DOMContentLoaded', () => {
                         
                         if (res.ok) {
                                 // Redirect to sign-in page after signup
-                                window.location.href = "/signin.html"; // adjust path if needed
+                                window.location.href = '/sign_opt/sign_opt.html';
                         }
                         
                 } catch (err) {
