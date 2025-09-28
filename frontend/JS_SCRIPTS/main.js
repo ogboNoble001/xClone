@@ -163,6 +163,9 @@ async function handleLogout() {
         try {
                 console.log("🔹 Logging out...");
                 
+                // Set flag to prevent redirect loops
+                sessionStorage.setItem('userLoggedOut', 'true');
+                
                 const response = await fetch(`${backendUrl}/api/logout`, {
                         method: 'POST',
                         credentials: 'include',
