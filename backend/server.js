@@ -33,7 +33,7 @@ const connectDB = async () => {
                 
         } catch (err) {
                 console.error("❌ MongoDB connection error:", err.message);
-                process.exit(1);
+                process.exit(1); // Stop server if DB fails
         }
 };
 
@@ -72,7 +72,7 @@ app.post("/api/signup", async (req, res) => {
         try {
                 const existing = await User.findOne({ email });
                 if (existing) {
-                        return res.status(400).json({ success: false, message: "Email already registered" });
+                        return res.status(400).json({ message: "Email already registered" });
                 }
                 
                 const hashedPassword = await bcrypt.hash(password, 10);
@@ -80,9 +80,9 @@ app.post("/api/signup", async (req, res) => {
                 const newUser = new User({ username, email, password: hashedPassword });
                 await newUser.save();
                 
-                res.json({ success: true, message: "✅ User created successfully" });
+                res.json({ message: "✅ User created successfully" });
         } catch (err) {
-                res.status(500).json({ success: false, message: "❌ Error creating user" });
+                res.status(500).json({ message: "❌ Error creating user" });
         }
 });
 
@@ -91,17 +91,13 @@ app.post("/api/login", async (req, res) => {
         const { email, password } = req.body;
         try {
                 const user = await User.findOne({ email });
-                if (!user) {
-                        // User not found → frontend can redirect to signup
-                        return res.status(404).json({ success: false, exists: false, message: "User not found" });
-                }
+                if (!user) return res.status(400).json({ message: "❌ User not found" });
                 
                 const isMatch = await bcrypt.compare(password, user.password);
-                if (!isMatch) return res.status(400).json({ success: false, exists: true, message: "Invalid credentials" });
+                if (!isMatch) return res.status(400).json({ message: "❌ Invalid credentials" });
                 
-                // Successful login → frontend can redirect to main page
-                res.json({ success: true, exists: true, message: `Welcome back, ${user.username}` });
+                res.json({ message: `✅ Welcome back, ${user.username}` });
         } catch (err) {
-                res.status(500).json({ success: false, exists: null, message: "❌ Error logging in" });
+                res.status(500).json({ message: "❌ Error logging in" });
         }
 });
