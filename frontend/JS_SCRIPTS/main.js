@@ -23,6 +23,7 @@ async function checkAuthStatus() {
                 
                 console.log("✅ User authenticated:", data.user);
                 localStorage.setItem('currentUser', JSON.stringify(data.user));
+                updateUserDisplay(data.user);
                 return true;
                 
         } catch (error) {
@@ -91,6 +92,26 @@ async function initializeApp() {
         setupAdditionalFeatures();
 }
 
+// Update user display in sidebar
+function updateUserDisplay(user) {
+        // Update sidebar username display
+        const sidebarUsernames = document.querySelectorAll('.sidebar-subtitle span');
+        if (sidebarUsernames[0]) {
+                sidebarUsernames[0].textContent = `@${user.username}`;
+        }
+        
+        // Update profile section username
+        const profileUsername = document.querySelector('#profile .ai-c span');
+        if (profileUsername) {
+                profileUsername.textContent = `@${user.username}`;
+        }
+        
+        // Update any other username displays
+        document.querySelectorAll('.user-name').forEach(el => {
+                el.textContent = user.username || 'User';
+        });
+}
+
 // Show user profile
 function showUserProfile() {
         const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
@@ -102,73 +123,161 @@ User ID: ${currentUser.id || 'N/A'}
 
 Would you like to logout?`;
         
-        if (confirm(profileInfo)) logout();
+        if (confirm(profileInfo)) handleLogout();
 }
 
 // Display welcome message
 function displayWelcomeMessage() {
         const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
         console.log(`🎉 Welcome back, ${currentUser.username}!`);
-        document.querySelectorAll('.user-name').forEach(el => el.textContent = currentUser.username || 'User');
+        updateUserDisplay(currentUser);
 }
 
 // Add logout functionality
 function addLogoutFunctionality() {
-        window.logout = logout;
+        // Make logout functions globally available
+        window.logout = handleLogout;
+        window.handleLogout = handleLogout;
         
+        // Legacy logout button support
         const logoutButton = document.querySelector('#logout-btn');
-        if (logoutButton) logoutButton.addEventListener('click', logout);
+        if (logoutButton) logoutButton.addEventListener('click', handleLogout);
         
-        document.querySelectorAll('.logout-option').forEach(item => item.addEventListener('click', logout));
+        document.querySelectorAll('.logout-option').forEach(item => {
+                item.addEventListener('click', handleLogout);
+        });
 }
 
-// Logout
-async function logout() {
+// Main logout function (now matches the HTML handleLogout)
+async function handleLogout() {
+        const logoutBtn = document.getElementById('logoutBtn');
+        
+        // Show loading state if button exists
+        if (logoutBtn) {
+                logoutBtn.disabled = true;
+                logoutBtn.innerHTML = '<i data-lucide="loader-2" class="menu-icon animate-spin"></i><span>Logging out...</span>';
+                // Re-create icons for the loading spinner
+                lucide.createIcons();
+        }
+        
         try {
                 console.log("🔹 Logging out...");
+                
                 const response = await fetch(`${backendUrl}/api/logout`, {
                         method: 'POST',
                         credentials: 'include',
                         headers: { 'Content-Type': 'application/json' }
                 });
                 
+                const data = await response.json();
+                
+                // Clear user data
                 localStorage.removeItem('currentUser');
                 
                 if (response.ok) {
-                        console.log("✅ Logout successful");
+                        console.log("✅ Logout successful:", data.message);
+                        // Redirect to sign options page
                         window.location.href = "/sign_opt/sign_opt.html";
                 } else {
-                        console.error("❌ Logout failed, redirecting anyway");
-                        window.location.href = "/sign_opt/sign_opt.html";
+                        throw new Error(data.message || 'Logout failed');
                 }
+                
         } catch (error) {
                 console.error("❌ Error logging out:", error);
+                
+                // Clear local data anyway
                 localStorage.removeItem('currentUser');
-                window.location.href = "/sign_opt/sign_opt.html";
+                
+                // Reset button state if it exists
+                if (logoutBtn) {
+                        logoutBtn.disabled = false;
+                        logoutBtn.innerHTML = '<i data-lucide="log-out" class="menu-icon"></i><span>Logout</span>';
+                        lucide.createIcons();
+                }
+                
+                // Show error to user
+                alert('Failed to logout properly. Please try again.');
+                
+                // Force redirect after a moment if button reset doesn't work
+                setTimeout(() => {
+                        window.location.href = "/sign_opt/sign_opt.html";
+                }, 2000);
         }
+}
+
+// Legacy logout function for backward compatibility
+async function logout() {
+        return handleLogout();
 }
 
 // Additional features
 function setupAdditionalFeatures() {
+        // Periodic auth check (every 5 minutes)
         setInterval(async () => {
                 try {
-                        const response = await fetch(`${backendUrl}/api/auth/status`, { credentials: 'include' });
+                        const response = await fetch(`${backendUrl}/api/auth/status`, {
+                                credentials: 'include'
+                        });
                         const data = await response.json();
-                        if (data.authenticated) localStorage.setItem('currentUser', JSON.stringify(data.user));
-                } catch {}
-        }, 300000);
+                        
+                        if (data.authenticated) {
+                                localStorage.setItem('currentUser', JSON.stringify(data.user));
+                                updateUserDisplay(data.user);
+                        } else {
+                                // User session expired
+                                console.log("⚠️ Session expired, redirecting to login");
+                                localStorage.removeItem('currentUser');
+                                window.location.href = "/sign_opt/sign_opt.html";
+                        }
+                } catch (error) {
+                        console.log("⚠️ Auth check failed:", error);
+                }
+        }, 300000); // 5 minutes
         
+        // Network status logging
         window.addEventListener('online', () => console.log("🌐 Back online"));
         window.addEventListener('offline', () => console.log("📴 Gone offline"));
 }
 
+// Sidebar functions (if not defined elsewhere)
+function closeSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.querySelector('.sidebar-overlay');
+        
+        if (sidebar) sidebar.classList.remove('open');
+        if (overlay) overlay.classList.remove('open');
+}
+
+function openSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.querySelector('.sidebar-overlay');
+        
+        if (sidebar) sidebar.classList.add('open');
+        if (overlay) overlay.classList.add('open');
+}
+
 // Page visibility refresh
 document.addEventListener('visibilitychange', () => {
-        if (!document.hidden) checkAuthStatus();
+        if (!document.hidden) {
+                checkAuthStatus();
+        }
 });
 
+// Initialize app when DOM is loaded
 window.addEventListener('DOMContentLoaded', initializeApp);
-window.addEventListener('error', event => console.error('❌ Uncaught error:', event.error));
 
-// Expose functions
-window.appFunctions = { checkAuthStatus, logout, showUserProfile };
+// Global error handler
+window.addEventListener('error', event => {
+        console.error('❌ Uncaught error:', event.error);
+});
+
+// Expose functions globally for other scripts
+window.appFunctions = {
+        checkAuthStatus,
+        handleLogout,
+        logout: handleLogout, // Alias for backward compatibility
+        showUserProfile,
+        closeSidebar,
+        openSidebar,
+        updateUserDisplay
+};
