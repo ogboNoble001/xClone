@@ -1,5 +1,6 @@
-// main.js - Updated frontend with safe auth check
+// main.js - Complete updated frontend with authentication check
 
+// Backend URL - make sure this matches your backend
 const backendUrl = "https://xclone-vc7a.onrender.com";
 
 // Check authentication status before loading main UI
@@ -9,25 +10,31 @@ async function checkAuthStatus() {
                 
                 const response = await fetch(`${backendUrl}/api/auth/status`, {
                         method: 'GET',
-                        credentials: 'include',
-                        headers: { 'Content-Type': 'application/json' }
+                        credentials: 'include', // Important: include cookies
+                        headers: {
+                                'Content-Type': 'application/json'
+                        }
                 });
                 
                 const data = await response.json();
                 
                 if (!data.authenticated) {
-                        console.log("❌ User not authenticated. Will not redirect automatically.");
-                        // Return false but don't redirect immediately — let signup.js handle it
+                        // User is not authenticated, redirect to signup page
+                        console.log("❌ User not authenticated, redirecting to signup...");
+                        window.location.href = "/sign_opt/sign_opt.html";
                         return false;
                 }
                 
                 console.log("✅ User authenticated:", data.user);
+                // Store user data in localStorage for easy access
                 localStorage.setItem('currentUser', JSON.stringify(data.user));
                 return true;
                 
         } catch (error) {
                 console.error("❌ Error checking auth status:", error);
-                // Return false without redirect — frontend can handle offline/login page
+                // If there's an error, redirect to signup as a safety measure
+                console.log("❌ Redirecting to signup due to error");
+                window.location.href = "/sign_opt/sign_opt.html";
                 return false;
         }
 }
@@ -36,19 +43,21 @@ async function checkAuthStatus() {
 async function initializeApp() {
         console.log("🔹 Initializing app...");
         
+        // Check if user is authenticated first
         const isAuthenticated = await checkAuthStatus();
         
         if (!isAuthenticated) {
-                console.log("❌ User not authenticated. Stopping main UI initialization.");
-                // Don't redirect here; signup.js already handles redirect
+                // Don't proceed with app initialization if not authenticated
+                console.log("❌ Authentication failed, stopping app initialization");
                 return;
         }
         
         console.log("✅ Authentication successful, proceeding with app initialization");
         
+        // If we reach here, user is authenticated - proceed with normal app initialization
         lucide.createIcons();
         
-        // UI elements
+        // UI elements (splash/menu)
         const splash = document.querySelector('.prntAppPic');
         const nav = document.querySelector('nav.mainNav');
         const mainBody = document.querySelector('.mainBody');
@@ -56,26 +65,32 @@ async function initializeApp() {
         const sidebarOverlay = document.querySelector('.sidebar-overlay');
         
         // Top nav icons toggle
-        document.querySelectorAll('.topNav div').forEach(icn => {
+        const topNavIcns = document.querySelectorAll('.topNav div');
+        topNavIcns.forEach(icn => {
                 icn.addEventListener('click', () => {
-                        document.querySelectorAll('.topNav div').forEach(other => other.classList.remove('active'));
+                        topNavIcns.forEach(other => other.classList.remove('active'));
                         icn.classList.add('active');
                 });
         });
         
-        // Profile click handler
+        // Profile click handler - now shows profile instead of redirecting to signin
         const profileSignIn = document.querySelector('#profile');
-        if (profileSignIn) profileSignIn.addEventListener('click', showUserProfile);
+        if (profileSignIn) {
+                profileSignIn.addEventListener('click', () => {
+                        showUserProfile();
+                });
+        }
         
         // Side navigation icons
-        document.querySelectorAll('.icns').forEach(icn => {
+        const icns = document.querySelectorAll('.icns');
+        icns.forEach(icn => {
                 icn.addEventListener('click', () => {
-                        document.querySelectorAll('.icns').forEach(other => other.classList.remove('active'));
+                        icns.forEach(other => other.classList.remove('active'));
                         icn.classList.add('active');
                 });
         });
         
-        // Show main UI after splash
+        // Show main UI after splash (keep your original timing)
         setTimeout(() => {
                 if (splash) splash.style.display = 'none';
                 if (nav) nav.style.display = 'flex';
@@ -84,16 +99,23 @@ async function initializeApp() {
                 if (sidebarOverlay) sidebarOverlay.style.display = 'block';
                 console.log("🖥 Main UI visible");
                 
+                // Display welcome message with user info
                 displayWelcomeMessage();
-        }, 1050);
+                
+        }, 1050); // Keep your original 1050ms timing
         
+        // Add logout functionality
         addLogoutFunctionality();
+        
+        // Add other event listeners and functionality
         setupAdditionalFeatures();
 }
 
-// Show user profile
+// Function to show user profile (you can customize this)
 function showUserProfile() {
         const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+        
+        // You can replace this alert with a proper profile modal or page
         const profileInfo = `
 👤 Profile Information:
 Name: ${currentUser.username || 'N/A'}
@@ -102,14 +124,20 @@ User ID: ${currentUser.id || 'N/A'}
 
 Would you like to logout?`;
         
-        if (confirm(profileInfo)) logout();
+        if (confirm(profileInfo)) {
+                logout();
+        }
 }
 
 // Display welcome message
 function displayWelcomeMessage() {
         const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
         console.log(`🎉 Welcome back, ${currentUser.username}!`);
-        document.querySelectorAll('.user-name').forEach(el => el.textContent = currentUser.username || 'User');
+        
+        const userNameElements = document.querySelectorAll('.user-name');
+        userNameElements.forEach(element => {
+                element.textContent = currentUser.username || 'User';
+        });
 }
 
 // Add logout functionality
@@ -117,28 +145,36 @@ function addLogoutFunctionality() {
         window.logout = logout;
         
         const logoutButton = document.querySelector('#logout-btn');
-        if (logoutButton) logoutButton.addEventListener('click', logout);
+        if (logoutButton) {
+                logoutButton.addEventListener('click', logout);
+        }
         
-        document.querySelectorAll('.logout-option').forEach(item => item.addEventListener('click', logout));
+        const logoutMenuItems = document.querySelectorAll('.logout-option');
+        logoutMenuItems.forEach(item => {
+                item.addEventListener('click', logout);
+        });
 }
 
-// Logout
+// Logout function
 async function logout() {
         try {
                 console.log("🔹 Logging out...");
+                
                 const response = await fetch(`${backendUrl}/api/logout`, {
                         method: 'POST',
                         credentials: 'include',
-                        headers: { 'Content-Type': 'application/json' }
+                        headers: {
+                                'Content-Type': 'application/json'
+                        }
                 });
-                
-                localStorage.removeItem('currentUser');
                 
                 if (response.ok) {
                         console.log("✅ Logout successful");
+                        localStorage.removeItem('currentUser');
                         window.location.href = "/sign_opt/sign_opt.html";
                 } else {
-                        console.error("❌ Logout failed, redirecting anyway");
+                        console.error("❌ Logout failed");
+                        localStorage.removeItem('currentUser');
                         window.location.href = "/sign_opt/sign_opt.html";
                 }
         } catch (error) {
@@ -148,27 +184,54 @@ async function logout() {
         }
 }
 
-// Additional features
+// Setup additional features (you can add your own functionality here)
 function setupAdditionalFeatures() {
         setInterval(async () => {
                 try {
-                        const response = await fetch(`${backendUrl}/api/auth/status`, { credentials: 'include' });
+                        const response = await fetch(`${backendUrl}/api/auth/status`, {
+                                method: 'GET',
+                                credentials: 'include'
+                        });
                         const data = await response.json();
-                        if (data.authenticated) localStorage.setItem('currentUser', JSON.stringify(data.user));
-                } catch {}
-        }, 300000);
+                        
+                        if (data.authenticated) {
+                                localStorage.setItem('currentUser', JSON.stringify(data.user));
+                        } else {
+                                localStorage.removeItem('currentUser');
+                                window.location.href = "/sign_opt/sign_opt.html";
+                        }
+                } catch (error) {
+                        console.error("❌ Error refreshing auth status:", error);
+                }
+        }, 300000); // Check every 5 minutes
         
-        window.addEventListener('online', () => console.log("🌐 Back online"));
-        window.addEventListener('offline', () => console.log("📴 Gone offline"));
+        window.addEventListener('online', () => {
+                console.log("🌐 Back online");
+        });
+        
+        window.addEventListener('offline', () => {
+                console.log("📴 Gone offline");
+        });
 }
 
-// Page visibility refresh
+// Handle page visibility changes
 document.addEventListener('visibilitychange', () => {
-        if (!document.hidden) checkAuthStatus();
+        if (!document.hidden) {
+                checkAuthStatus();
+        }
 });
 
+// Initialize app when DOM is loaded
 window.addEventListener('DOMContentLoaded', initializeApp);
-window.addEventListener('error', event => console.error('❌ Uncaught error:', event.error));
 
-// Expose functions
-window.appFunctions = { checkAuthStatus, logout, showUserProfile };
+// Handle uncaught errors
+window.addEventListener('error', (event) => {
+        console.error('❌ Uncaught error:', event.error);
+});
+
+// Export functions
+window.appFunctions = {
+        checkAuthStatus,
+        logout,
+        showUserProfile
+};
