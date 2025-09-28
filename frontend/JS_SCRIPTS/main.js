@@ -17,10 +17,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 });
         });
         
-        const profileSignIn = document.querySelector('#profile')
-        profileSignIn.addEventListener('click', ()=>{
-                window.location.href = "/sign_opt/sign_opt.html"
-        })
+        
         const icns = document.querySelectorAll('.icns');
         icns.forEach(icn => {
                 icn.addEventListener('click', () => {

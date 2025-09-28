@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (res.ok) {
                 // ✅ Login successful → redirect
                 alert(data.message);
-                window.location.href = "/index.html"; // <-- change to your main page
+                window.location.href = "/index.html";
             } else {
                 // ❌ Login failed → show error
                 alert(data.message);
