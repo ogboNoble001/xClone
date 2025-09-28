@@ -4,9 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 1️⃣ Check if user is already logged in
     async function checkExistingAuth() {
         try {
-            const res = await fetch(`${backendUrl}/api/auth/status`, {
-                credentials: 'include'
-            });
+            const res = await fetch(`${backendUrl}/api/auth/status`, { credentials: 'include' });
             const data = await res.json();
             if (data.authenticated) {
                 console.log("🔹 User already logged in, redirecting to index.html...");
@@ -19,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     checkExistingAuth();
     
     // ========================
-    //  Tab switching logic
+    // Tab switching
     // ========================
     const signinTab = document.getElementById('signin-tab');
     const signupTab = document.getElementById('signup-tab');
@@ -42,7 +40,86 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
-    // 2️⃣ Sign-in form submission
+    // ========================
+    // Password show/hide toggle
+    // ========================
+    const toggleButtons = document.querySelectorAll('.toggle-password');
+    toggleButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const inputId = btn.dataset.target;
+            const input = document.getElementById(inputId);
+            if (!input) return;
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                btn.textContent = 'Hide';
+            } else {
+                input.type = 'password';
+                btn.textContent = 'Show';
+            }
+        });
+    });
+    
+    // ========================
+    // Password strength & match
+    // ========================
+    const signupPassword = document.getElementById('signup-password');
+    const confirmPassword = document.getElementById('confirm-password');
+    const strengthDiv = document.getElementById('password-strength');
+    const matchDiv = document.getElementById('password-match');
+    
+    if (signupPassword) {
+        signupPassword.addEventListener('input', () => {
+            const strength = getPasswordStrength(signupPassword.value);
+            if (strengthDiv) {
+                strengthDiv.textContent = strength.text;
+                strengthDiv.style.color = strength.color;
+            }
+            checkPasswordMatch();
+        });
+    }
+    
+    if (confirmPassword) {
+        confirmPassword.addEventListener('input', checkPasswordMatch);
+    }
+    
+    function checkPasswordMatch() {
+        if (!signupPassword || !confirmPassword || !matchDiv) return;
+        
+        if (confirmPassword.value === '') {
+            matchDiv.textContent = '';
+            return;
+        }
+        
+        if (signupPassword.value === confirmPassword.value) {
+            matchDiv.textContent = 'Passwords match';
+            matchDiv.style.color = '#53D500';
+        } else {
+            matchDiv.textContent = 'Passwords do not match';
+            matchDiv.style.color = 'red';
+        }
+    }
+    
+    function getPasswordStrength(password) {
+        if (password.length < 6) return { text: 'Too short', color: 'red' };
+        const hasLetter = /[A-Za-z]/.test(password);
+        const hasNumber = /\d/.test(password);
+        const hasSpecial = /[^A-Za-z0-9]/.test(password);
+        if (hasLetter && hasNumber && hasSpecial && password.length >= 8)
+            return { text: 'Strong password', color: '#53D500' };
+        if ((hasLetter && hasNumber) || (hasLetter && hasSpecial) || (hasNumber && hasSpecial))
+            return { text: 'Medium strength', color: 'orange' };
+        return { text: 'Weak password', color: 'red' };
+    }
+    
+    function isStrongPassword(password) {
+        const { text } = getPasswordStrength(password);
+        return text === 'Strong password';
+    }
+    
+    // ========================
+    // Sign-in form submission
+    // ========================
     const signinFormElement = document.getElementById('signin-form');
     if (signinFormElement) {
         signinFormElement.addEventListener('submit', async (e) => {
@@ -76,15 +153,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
-    // 3️⃣ Sign-up form submission
+    // ========================
+    // Sign-up form submission
+    // ========================
     const signupFormElement = document.getElementById('signup-form');
     if (signupFormElement) {
         signupFormElement.addEventListener('submit', async (e) => {
             e.preventDefault();
             const username = document.getElementById("signup-username")?.value?.trim();
             const email = document.getElementById("signup-email")?.value?.trim();
-            const password = document.getElementById("signup-password")?.value;
-            const confirm = document.getElementById("confirm-password")?.value;
+            const password = signupPassword?.value;
+            const confirm = confirmPassword?.value;
             
             if (!username || !email || !password || !confirm) {
                 alert("Please fill in all fields");
@@ -93,6 +172,11 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (password !== confirm) {
                 alert("Passwords do not match");
+                return;
+            }
+            
+            if (!isStrongPassword(password)) {
+                alert("Password must be strong: letters, numbers, and special characters, min 8 chars");
                 return;
             }
             
