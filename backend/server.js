@@ -10,6 +10,7 @@ dotenv.config();
 
 const app = express();
 
+
 // FIXED CORS - Added localhost:7700
 app.use(cors({
     origin: [
