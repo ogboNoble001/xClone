@@ -12,9 +12,13 @@ const app = express();
 
 app.use(cors({
     origin: [
-        'https://x-clone-real.vercel.app',
-        'http://localhost:3000'
-    ],
+    "http://localhost:3000",
+    "http://localhost:5000",
+    "http://localhost:7700",
+    "http://localhost:8000",
+    "https://x-clone-real.vercel.app",
+    "https://xclone-vc7a.onrender.com"
+],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
