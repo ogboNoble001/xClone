@@ -10,16 +10,23 @@ dotenv.config();
 
 const app = express();
 
-// Updated CORS configuration to allow credentials
+// FIXED CORS - Added localhost:7700
 app.use(cors({
-    origin: ["http://localhost:3000", "https://x-clone.vercel.app", "https://xclone-vc7a.onrender.com"], // Add all your domains
+    origin: [
+        "http://localhost:3000", 
+        "http://localhost:7700", // YOUR FRONTEND PORT - THIS WAS MISSING!
+        "http://localhost:5000",
+        "http://localhost:8000",
+        "https://x-clone.vercel.app", 
+        "https://xclone-vc7a.onrender.com"
+    ], 
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 app.use(express.json());
-app.use(cookieParser()); // Add cookie parser middleware
+app.use(cookieParser());
 
 // Step 1: Starting backend
 console.log("🔹 Backend initializing...");
@@ -44,7 +51,7 @@ const connectDB = async () => {
         
     } catch (err) {
         console.error("❌ MongoDB connection error:", err.message);
-        process.exit(1); // Stop server if DB fails
+        process.exit(1);
     }
 };
 
@@ -58,7 +65,7 @@ const userSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true }
 }, {
-    timestamps: true // Add createdAt and updatedAt fields
+    timestamps: true
 });
 
 const User = mongoose.model("User", userSchema);
@@ -101,7 +108,6 @@ app.get("/api/auth/status", (req, res) => {
 
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
         if (err) {
-            // Clear invalid cookie
             res.clearCookie('authToken');
             return res.json({ authenticated: false });
         }
@@ -123,9 +129,11 @@ app.get("/api/db-status", (req, res) => {
     res.json({ status: state, message: `MongoDB connection is ${state}` });
 });
 
-// Signup route (updated to include JWT)
+// Signup route
 app.post("/api/signup", async (req, res) => {
     const { username, email, password } = req.body;
+    
+    console.log("🔹 Signup attempt:", { email, username });
     
     // Validation
     if (!username || !email || !password) {
@@ -146,6 +154,7 @@ app.post("/api/signup", async (req, res) => {
     try {
         const existing = await User.findOne({ email: email.toLowerCase() });
         if (existing) {
+            console.log("❌ Email already exists");
             return res.status(400).json({ message: "❌ Email already registered" });
         }
         
@@ -173,12 +182,12 @@ app.post("/api/signup", async (req, res) => {
         res.cookie('authToken', token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            sameSite: 'lax', // Changed from 'strict' for better compatibility
-            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+            sameSite: 'lax',
+            maxAge: 7 * 24 * 60 * 60 * 1000,
             path: '/'
         });
         
-        console.log(`✅ New user registered: ${newUser.username} (${newUser.email})`);
+        console.log(`✅ New user created: ${newUser.username}`);
         
         res.status(201).json({ 
             message: "✅ User created successfully",
@@ -189,14 +198,16 @@ app.post("/api/signup", async (req, res) => {
             }
         });
     } catch (err) {
-        console.error("Signup error:", err);
+        console.error("❌ Signup error:", err);
         res.status(500).json({ message: "❌ Error creating user" });
     }
 });
 
-// Login route (updated to include JWT)
+// Login route
 app.post("/api/login", async (req, res) => {
     const { email, password } = req.body;
+    
+    console.log("🔹 Login attempt for:", email);
     
     // Validation
     if (!email || !password) {
@@ -206,11 +217,13 @@ app.post("/api/login", async (req, res) => {
     try {
         const user = await User.findOne({ email: email.toLowerCase() });
         if (!user) {
+            console.log("❌ User not found");
             return res.status(400).json({ message: "❌ Invalid credentials" });
         }
         
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
+            console.log("❌ Password mismatch");
             return res.status(400).json({ message: "❌ Invalid credentials" });
         }
         
@@ -230,7 +243,7 @@ app.post("/api/login", async (req, res) => {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'lax',
-            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+            maxAge: 7 * 24 * 60 * 60 * 1000,
             path: '/'
         });
         
@@ -245,7 +258,7 @@ app.post("/api/login", async (req, res) => {
             }
         });
     } catch (err) {
-        console.error("Login error:", err);
+        console.error("❌ Login error:", err);
         res.status(500).json({ message: "❌ Error logging in" });
     }
 });
@@ -267,12 +280,12 @@ app.get("/api/profile", authenticateToken, async (req, res) => {
         const user = await User.findById(req.user.id).select('-password');
         res.json({ user });
     } catch (err) {
-        console.error("Profile fetch error:", err);
+        console.error("❌ Profile fetch error:", err);
         res.status(500).json({ message: "❌ Error fetching profile" });
     }
 });
 
-// Protected route example (you can add more protected routes)
+// Protected route example
 app.get("/api/protected", authenticateToken, (req, res) => {
     res.json({ 
         message: "✅ Access granted to protected content",
@@ -287,6 +300,6 @@ app.use('*', (req, res) => {
 
 // Global error handler
 app.use((err, req, res, next) => {
-    console.error("Global error:", err);
+    console.error("❌ Global error:", err);
     res.status(500).json({ message: "Internal server error" });
 });
