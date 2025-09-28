@@ -1,7 +1,48 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // ------------------------------
-    // Toggle password visibility
-    // ------------------------------
+    const backendUrl = "https://xclone-vc7a.onrender.com";
+    
+    // 1️⃣ Check if user is already logged in
+    async function checkExistingAuth() {
+        try {
+            const res = await fetch(`${backendUrl}/api/auth/status`, { credentials: 'include' });
+            const data = await res.json();
+            if (data.authenticated) {
+                console.log("🔹 User already logged in, redirecting to index.html...");
+                window.location.href = "/index.html";
+            }
+        } catch (err) {
+            console.error("❌ Error checking auth:", err);
+        }
+    }
+    checkExistingAuth();
+    
+    // ========================
+    // Tab switching
+    // ========================
+    const signinTab = document.getElementById('signin-tab');
+    const signupTab = document.getElementById('signup-tab');
+    const signinForm = document.getElementById('signin-form');
+    const signupForm = document.getElementById('signup-form');
+    
+    if (signinTab && signupTab && signinForm && signupForm) {
+        signinTab.addEventListener('click', () => {
+            signinTab.classList.add('active');
+            signupTab.classList.remove('active');
+            signinForm.classList.remove('hidden');
+            signupForm.classList.add('hidden');
+        });
+        
+        signupTab.addEventListener('click', () => {
+            signupTab.classList.add('active');
+            signinTab.classList.remove('active');
+            signupForm.classList.remove('hidden');
+            signinForm.classList.add('hidden');
+        });
+    }
+    
+    // ========================
+    // Password show/hide toggle
+    // ========================
     const toggleButtons = document.querySelectorAll('.toggle-password');
     toggleButtons.forEach(btn => {
         btn.addEventListener('click', () => {
@@ -19,56 +60,37 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
     
-    // ------------------------------
-    // Tabs switching
-    // ------------------------------
-    const signinTab = document.getElementById('signin-tab');
-    const signupTab = document.getElementById('signup-tab');
-    const signinForm = document.getElementById('signin-form');
-    const signupForm = document.getElementById('signup-form');
-    const authTitle = document.querySelector('.auth-title');
-    const authSubtitle = document.querySelector('.auth-subtitle');
-    
-    signinTab.addEventListener('click', () => {
-        signinTab.classList.add('active');
-        signupTab.classList.remove('active');
-        signinForm.classList.remove('hidden');
-        signupForm.classList.add('hidden');
-        authTitle.textContent = 'Welcome back';
-        authSubtitle.textContent = 'Sign in to your account';
-    });
-    
-    signupTab.addEventListener('click', () => {
-        signupTab.classList.add('active');
-        signinTab.classList.remove('active');
-        signupForm.classList.remove('hidden');
-        signinForm.classList.add('hidden');
-        authTitle.textContent = 'Create account';
-        authSubtitle.textContent = 'Join X today';
-    });
-    
-    // ------------------------------
-    // Password strength + match
-    // ------------------------------
+    // ========================
+    // Password strength & match
+    // ========================
     const signupPassword = document.getElementById('signup-password');
     const confirmPassword = document.getElementById('confirm-password');
     const strengthDiv = document.getElementById('password-strength');
     const matchDiv = document.getElementById('password-match');
     
-    signupPassword.addEventListener('input', () => {
-        const strength = getPasswordStrength(signupPassword.value);
-        strengthDiv.textContent = strength.text;
-        strengthDiv.style.color = strength.color;
-        checkPasswordMatch();
-    });
+    if (signupPassword) {
+        signupPassword.addEventListener('input', () => {
+            const strength = getPasswordStrength(signupPassword.value);
+            if (strengthDiv) {
+                strengthDiv.textContent = strength.text;
+                strengthDiv.style.color = strength.color;
+            }
+            checkPasswordMatch();
+        });
+    }
     
-    confirmPassword.addEventListener('input', checkPasswordMatch);
+    if (confirmPassword) {
+        confirmPassword.addEventListener('input', checkPasswordMatch);
+    }
     
     function checkPasswordMatch() {
+        if (!signupPassword || !confirmPassword || !matchDiv) return;
+        
         if (confirmPassword.value === '') {
             matchDiv.textContent = '';
             return;
         }
+        
         if (signupPassword.value === confirmPassword.value) {
             matchDiv.textContent = 'Passwords match';
             matchDiv.style.color = '#53D500';
@@ -76,13 +98,6 @@ document.addEventListener('DOMContentLoaded', () => {
             matchDiv.textContent = 'Passwords do not match';
             matchDiv.style.color = 'red';
         }
-    }
-    
-    function isStrongPassword(password) {
-        return /[A-Za-z]/.test(password) &&
-            /\d/.test(password) &&
-            /[^A-Za-z0-9]/.test(password) &&
-            password.length >= 8;
     }
     
     function getPasswordStrength(password) {
@@ -97,76 +112,92 @@ document.addEventListener('DOMContentLoaded', () => {
         return { text: 'Weak password', color: 'red' };
     }
     
-    // ------------------------------
-    // Backend URL
-    // ------------------------------
-    const backendUrl = "https://xclone-vc7a.onrender.com";
+    function isStrongPassword(password) {
+        const { text } = getPasswordStrength(password);
+        return text === 'Strong password';
+    }
     
-    // ------------------------------
+    // ========================
     // Sign-in form submission
-    // ------------------------------
-    signinForm.addEventListener('submit', async e => {
-        e.preventDefault();
-        const email = document.getElementById("signin-email").value;
-        const password = document.getElementById("signin-password").value;
-        
-        try {
-            const res = await fetch(`${backendUrl}/api/login`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, password })
-            });
-            const data = await res.json();
+    // ========================
+    const signinFormElement = document.getElementById('signin-form');
+    if (signinFormElement) {
+        signinFormElement.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById("signin-email")?.value?.trim();
+            const password = document.getElementById("signin-password")?.value;
             
-            if (res.ok) {
-                // ✅ Login successful → redirect
-                alert(data.message);
-                window.location.href = "/index.html";
-            } else {
-                // ❌ Login failed → show error
-                alert(data.message);
+            if (!email || !password) {
+                alert("Please fill in all fields");
+                return;
             }
-        } catch (err) {
-            alert("❌ Error connecting to server");
-        }
-    });
+            
+            try {
+                const response = await fetch(`${backendUrl}/api/login`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: 'include',
+                    body: JSON.stringify({ email, password })
+                });
+                
+                const data = await response.json();
+                if (response.ok) {
+                    window.location.href = "/index.html";
+                } else {
+                    alert("Login failed: " + data.message);
+                }
+            } catch (error) {
+                console.error("❌ Detailed error:", error);
+                alert("Connection error: " + error.message);
+            }
+        });
+    }
     
-    // ------------------------------
+    // ========================
     // Sign-up form submission
-    // ------------------------------
-    signupForm.addEventListener('submit', async e => {
-        e.preventDefault();
-        const username = document.getElementById("signup-username").value;
-        const email = document.getElementById("signup-email").value;
-        const password = signupPassword.value;
-        const confirm = confirmPassword.value;
-        
-        if (password !== confirm) {
-            alert("❌ Passwords do not match");
-            return;
-        }
-        if (!isStrongPassword(password)) {
-            alert("❌ Password must contain letters, numbers, and special characters");
-            return;
-        }
-        
-        try {
-            const res = await fetch(`${backendUrl}/api/signup`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ username, email, password })
-            });
-            const data = await res.json();
+    // ========================
+    const signupFormElement = document.getElementById('signup-form');
+    if (signupFormElement) {
+        signupFormElement.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById("signup-username")?.value?.trim();
+            const email = document.getElementById("signup-email")?.value?.trim();
+            const password = signupPassword?.value;
+            const confirm = confirmPassword?.value;
             
-            if (res.ok) {
-                alert(data.message);
-                window.location.href = "/index.html"; // <-- change to your main page
-            } else {
-                // ❌ Signup failed → show error
-                alert(data.message);
+            if (!username || !email || !password || !confirm) {
+                alert("Please fill in all fields");
+                return;
             }
-        } catch (err) {
-            alert("❌ Error connecting to server");
-        }
-    });
+            
+            if (password !== confirm) {
+                alert("Passwords do not match");
+                return;
+            }
+            
+            if (!isStrongPassword(password)) {
+                alert("Password must be strong: letters, numbers, and special characters, min 8 chars");
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${backendUrl}/api/signup`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: 'include',
+                    body: JSON.stringify({ username, email, password })
+                });
+                
+                const data = await response.json();
+                if (response.ok) {
+                    window.location.href = "/index.html";
+                } else {
+                    alert("Signup failed: " + data.message);
+                }
+            } catch (error) {
+                console.error("❌ Detailed error:", error);
+                alert("Connection error: " + error.message);
+            }
+        });
+    }
 });
