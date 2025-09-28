@@ -1,205 +1,136 @@
 import express from "express";
-import cors from "cors";
-import dotenv from "dotenv";
 import mongoose from "mongoose";
+import dotenv from "dotenv";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import cors from "cors";
 import cookieParser from "cookie-parser";
+import User from "./models/User.js";
 
 dotenv.config();
 
 const app = express();
-
-// CORS configuration
-app.use(cors({
-    origin: [
-        'https://x-clone-real.vercel.app/index.html',
-        "http://localhost:3000",
-        "http://localhost:7700",
-        "http://localhost:5000",
-        "http://localhost:8000",
-        "https://x-clone-real.vercel.app",
-        "https://xclone-vc7a.onrender.com"
-    ],
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
-}));
+const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
 app.use(cookieParser());
 
-// Backend init
-console.log("🔹 Backend initializing...");
+app.use(cors({
+    origin: [
+        "https://x-clone-real.vercel.app",
+        "http://localhost:3000",
+        "http://localhost:7700",
+        "http://localhost:5000",
+        "http://localhost:8000",
+        "https://xclone-vc7a.onrender.com"
+    ],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+}));
 
-// Connect to MongoDB
-const connectDB = async () => {
+mongoose.connect(process.env.MONGO_URI, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    }).then(() => console.log("MongoDB connected"))
+    .catch((err) => console.error(err));
+
+app.post("/api/auth/signup", async (req, res) => {
     try {
-        await mongoose.connect(process.env.MONGO_URI, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true
+        const { username, email, password } = req.body;
+        const existingUser = await User.findOne({ email });
+        if (existingUser) return res.status(400).json({ error: "User already exists" });
+        
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const user = new User({ username, email, password: hashedPassword });
+        await user.save();
+        
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "7d" });
+        res.cookie("authToken", token, {
+            httpOnly: true,
+            secure: true,
+            sameSite: "none",
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+            path: "/"
         });
-        console.log("✅ MongoDB connected successfully");
         
-        const PORT = process.env.PORT || 5000;
-        app.listen(PORT, () => console.log(`🚀 Server listening on port ${PORT}`));
-        
+        res.status(201).json({ message: "User registered successfully", user });
     } catch (err) {
-        console.error("❌ MongoDB connection error:", err.message);
-        process.exit(1);
+        res.status(500).json({ error: err.message });
     }
-};
-
-connectDB();
-
-// ========================
-// User Schema + Model
-// ========================
-const userSchema = new mongoose.Schema({
-    username: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true }
-}, { timestamps: true });
-
-const User = mongoose.model("User", userSchema);
-
-// ========================
-// Authentication middleware
-// ========================
-const authenticateToken = (req, res, next) => {
-    const token = req.cookies.authToken;
-    if (!token) return res.status(401).json({ authenticated: false, message: "No token provided" });
-    
-    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-        if (err) {
-            res.clearCookie("authToken");
-            return res.status(403).json({ authenticated: false, message: "Invalid token" });
-        }
-        req.user = user;
-        next();
-    });
-};
-
-// ========================
-// Routes
-// ========================
-
-// Root
-app.get("/", (req, res) => res.json({ message: "Express backend running" }));
-
-// DB status
-app.get("/api/db-status", (req, res) => {
-    const states = ["disconnected", "connected", "connecting", "disconnecting"];
-    const state = states[mongoose.connection.readyState];
-    res.json({ status: state, message: `MongoDB connection is ${state}` });
 });
 
-// Check auth status
+app.post("/api/auth/login", async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        const user = await User.findOne({ email });
+        if (!user) return res.status(400).json({ error: "User not found" });
+        
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) return res.status(400).json({ error: "Invalid credentials" });
+        
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "7d" });
+        res.cookie("authToken", token, {
+            httpOnly: true,
+            secure: true,
+            sameSite: "none",
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+            path: "/"
+        });
+        
+        res.json({ message: "Login successful", user });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.get("/api/auth/logout", (req, res) => {
+    res.clearCookie("authToken", {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+        path: "/"
+    });
+    res.json({ message: "Logged out successfully" });
+});
+
 app.get("/api/auth/status", (req, res) => {
     const token = req.cookies.authToken;
     if (!token) return res.json({ authenticated: false });
     
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
         if (err) {
-            res.clearCookie("authToken");
+            res.clearCookie("authToken", {
+                httpOnly: true,
+                secure: true,
+                sameSite: "none",
+                path: "/"
+            });
             return res.json({ authenticated: false });
         }
         res.json({ authenticated: true, user });
     });
 });
 
-// Signup
-app.post("/api/signup", async (req, res) => {
-    const { username, email, password } = req.body;
+const authenticateToken = (req, res, next) => {
+    const token = req.cookies.authToken;
+    if (!token) return res.status(401).json({ error: "Access denied" });
     
-    if (!username || !email || !password)
-        return res.status(400).json({ message: "❌ All fields are required" });
-    
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email))
-        return res.status(400).json({ message: "❌ Please enter a valid email" });
-    
-    if (password.length < 6)
-        return res.status(400).json({ message: "❌ Password must be at least 6 characters" });
-    
-    try {
-        const existing = await User.findOne({ email: email.toLowerCase() });
-        if (existing) return res.status(400).json({ message: "❌ Email already registered" });
-        
-        const hashedPassword = await bcrypt.hash(password, 12);
-        const newUser = new User({ username: username.trim(), email: email.toLowerCase(), password: hashedPassword });
-        await newUser.save();
-        
-        const token = jwt.sign({ id: newUser._id, username: newUser.username, email: newUser.email }, process.env.JWT_SECRET, { expiresIn: '7d' });
-        
-        res.cookie("authToken", token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'lax',
-            maxAge: 7 * 24 * 60 * 60 * 1000,
-            path: '/'
-        });
-        
-        res.status(201).json({ message: "✅ User created successfully", user: { id: newUser._id, username: newUser.username, email: newUser.email } });
-        
-    } catch (err) {
-        console.error("❌ Signup error:", err);
-        res.status(500).json({ message: "❌ Error creating user" });
-    }
-});
+    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+        if (err) return res.status(403).json({ error: "Invalid token" });
+        req.user = user;
+        next();
+    });
+};
 
-// Login
-app.post("/api/login", async (req, res) => {
-    const { email, password } = req.body;
-    if (!email || !password) return res.status(400).json({ message: "❌ Email and password required" });
-    
-    try {
-        const user = await User.findOne({ email: email.toLowerCase() });
-        if (!user) return res.status(400).json({ message: "❌ Invalid credentials" });
-        
-        const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) return res.status(400).json({ message: "❌ Invalid credentials" });
-        
-        const token = jwt.sign({ id: user._id, username: user.username, email: user.email }, process.env.JWT_SECRET, { expiresIn: '7d' });
-        
-        res.cookie("authToken", token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'lax',
-            maxAge: 7 * 24 * 60 * 60 * 1000,
-            path: '/'
-        });
-        
-        res.json({ message: `✅ Welcome back, ${user.username}!`, user: { id: user._id, username: user.username, email: user.email } });
-        
-    } catch (err) {
-        console.error("❌ Login error:", err);
-        res.status(500).json({ message: "❌ Error logging in" });
-    }
-});
-
-// Logout
-app.post("/api/logout", (req, res) => {
-    res.clearCookie("authToken", { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax', path: '/' });
-    res.json({ message: "✅ Logged out successfully" });
-});
-
-// Profile (protected)
 app.get("/api/profile", authenticateToken, async (req, res) => {
     try {
-        const user = await User.findById(req.user.id).select('-password');
-        res.json({ user });
+        const user = await User.findById(req.user.id).select("-password");
+        if (!user) return res.status(404).json({ error: "User not found" });
+        res.json(user);
     } catch (err) {
-        console.error("❌ Profile error:", err);
-        res.status(500).json({ message: "❌ Error fetching profile" });
+        res.status(500).json({ error: err.message });
     }
 });
 
-// Catch-all 404
-app.use('*', (req, res) => res.status(404).json({ message: "Route not found" }));
-
-// Global error handler
-app.use((err, req, res, next) => {
-    console.error("❌ Global error:", err);
-    res.status(500).json({ message: "Internal server error" });
-});
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

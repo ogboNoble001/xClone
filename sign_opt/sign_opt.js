@@ -1,10 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
     const backendUrl = "https://xclone-vc7a.onrender.com";
     
-    // 1️⃣ Check if user is already logged in
+    // ========================
+    // Check if user is already logged in
+    // ========================
     async function checkExistingAuth() {
         try {
-            const res = await fetch(`${backendUrl}/api/auth/status`, { credentials: 'include' });
+            const res = await fetch(`${backendUrl}/api/auth/status`, {
+                method: "GET",
+                credentials: "include"
+            });
             const data = await res.json();
             if (data.authenticated) {
                 console.log("🔹 User already logged in, redirecting to index.html...");
@@ -136,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const response = await fetch(`${backendUrl}/api/login`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    credentials: 'include',
+                    credentials: "include",
                     body: JSON.stringify({ email, password })
                 });
                 
@@ -184,7 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const response = await fetch(`${backendUrl}/api/signup`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    credentials: 'include',
+                    credentials: "include",
                     body: JSON.stringify({ username, email, password })
                 });
                 
