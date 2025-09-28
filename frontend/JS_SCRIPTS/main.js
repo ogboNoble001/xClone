@@ -17,7 +17,10 @@ window.addEventListener('DOMContentLoaded', () => {
                 });
         });
         
-        // Sidebar/icons toggle
+        const profileSignIn = document.querySelector('#profile')
+        profileSignIn.addEventListener('click', ()=>{
+                window.location.href = "/sign_opt/sign_opt.html"
+        })
         const icns = document.querySelectorAll('.icns');
         icns.forEach(icn => {
                 icn.addEventListener('click', () => {
@@ -35,17 +38,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 sidebarOverlay.style.display = 'block';
                 console.log("🖥 Main UI visible");
                 
-                // Fetch backend/MongoDB status once
-                fetch("https://xclone-vc7a.onrender.com/api/db-status")
-                        .then(res => {
-                                if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
-                                return res.json();
-                        })
-                        .then(status => {
-                                console.log(`🔹 Backend status: online🎊`);
-                                console.log(`🗄 MongoDB status: ${status.status}`);
-                        })
-                        .catch(err => console.error("❌ Fetch error:", err));
+               
                 
         }, 1050);
 });

@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // ------------------------------
     // Toggle password visibility
+    // ------------------------------
     const toggleButtons = document.querySelectorAll('.toggle-password');
     toggleButtons.forEach(btn => {
         btn.addEventListener('click', () => {
@@ -17,7 +19,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
     
-    // Tabs
+    // ------------------------------
+    // Tabs switching
+    // ------------------------------
     const signinTab = document.getElementById('signin-tab');
     const signupTab = document.getElementById('signup-tab');
     const signinForm = document.getElementById('signin-form');
@@ -43,7 +47,9 @@ document.addEventListener('DOMContentLoaded', () => {
         authSubtitle.textContent = 'Join X today';
     });
     
+    // ------------------------------
     // Password strength + match
+    // ------------------------------
     const signupPassword = document.getElementById('signup-password');
     const confirmPassword = document.getElementById('confirm-password');
     const strengthDiv = document.getElementById('password-strength');
@@ -91,9 +97,15 @@ document.addEventListener('DOMContentLoaded', () => {
         return { text: 'Weak password', color: 'red' };
     }
     
-    // Backend form submissions
+    // ------------------------------
+    // Backend URL
+    // ------------------------------
     const backendUrl = "https://xclone-vc7a.onrender.com";
-    document.getElementById('signin-form').addEventListener('submit', async e => {
+    
+    // ------------------------------
+    // Sign-in form submission
+    // ------------------------------
+    signinForm.addEventListener('submit', async e => {
         e.preventDefault();
         const email = document.getElementById("signin-email").value;
         const password = document.getElementById("signin-password").value;
@@ -105,13 +117,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify({ email, password })
             });
             const data = await res.json();
-            alert(data.message);
+            
+            if (res.ok) {
+                // ✅ Login successful → redirect
+                alert(data.message);
+                window.location.href = "/index.html"; // <-- change to your main page
+            } else {
+                // ❌ Login failed → show error
+                alert(data.message);
+            }
         } catch (err) {
             alert("❌ Error connecting to server");
         }
     });
     
-    document.getElementById('signup-form').addEventListener('submit', async e => {
+    // ------------------------------
+    // Sign-up form submission
+    // ------------------------------
+    signupForm.addEventListener('submit', async e => {
         e.preventDefault();
         const username = document.getElementById("signup-username").value;
         const email = document.getElementById("signup-email").value;
@@ -134,7 +157,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify({ username, email, password })
             });
             const data = await res.json();
-            alert(data.message);
+            
+            if (res.ok) {
+                alert(data.message);
+                window.location.href = "/index.html"; // <-- change to your main page
+            } else {
+                // ❌ Signup failed → show error
+                alert(data.message);
+            }
         } catch (err) {
             alert("❌ Error connecting to server");
         }
