@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             const data = await res.json();
             if (data.authenticated) {
-                // User is already logged in → redirect to main page
                 console.log("🔹 User already logged in, redirecting to index.html...");
                 window.location.href = "/index.html";
             }
@@ -17,9 +16,31 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error("❌ Error checking auth:", err);
         }
     }
-    
-    // Only run check for returning users on page load
     checkExistingAuth();
+    
+    // ========================
+    //  Tab switching logic
+    // ========================
+    const signinTab = document.getElementById('signin-tab');
+    const signupTab = document.getElementById('signup-tab');
+    const signinForm = document.getElementById('signin-form');
+    const signupForm = document.getElementById('signup-form');
+    
+    if (signinTab && signupTab && signinForm && signupForm) {
+        signinTab.addEventListener('click', () => {
+            signinTab.classList.add('active');
+            signupTab.classList.remove('active');
+            signinForm.classList.remove('hidden');
+            signupForm.classList.add('hidden');
+        });
+        
+        signupTab.addEventListener('click', () => {
+            signupTab.classList.add('active');
+            signinTab.classList.remove('active');
+            signupForm.classList.remove('hidden');
+            signinForm.classList.add('hidden');
+        });
+    }
     
     // 2️⃣ Sign-in form submission
     const signinFormElement = document.getElementById('signin-form');
@@ -44,12 +65,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 const data = await response.json();
                 if (response.ok) {
-                    // ✅ Login successful → redirect immediately
                     window.location.href = "/index.html";
                 } else {
                     alert("Login failed: " + data.message);
                 }
-                
             } catch (error) {
                 console.error("❌ Detailed error:", error);
                 alert("Connection error: " + error.message);
@@ -87,12 +106,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 const data = await response.json();
                 if (response.ok) {
-                    // ✅ Signup successful → redirect immediately
                     window.location.href = "/index.html";
                 } else {
                     alert("Signup failed: " + data.message);
                 }
-                
             } catch (error) {
                 console.error("❌ Detailed error:", error);
                 alert("Connection error: " + error.message);
