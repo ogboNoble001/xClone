@@ -106,6 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Sign-in form submission
     // ------------------------------
     signinForm.addEventListener('submit', async e => {
+       document.getElementById('signIn').textContent='Signing in...'
         e.preventDefault();
         const email = document.getElementById("signin-email").value;
         const password = document.getElementById("signin-password").value;
@@ -136,6 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ------------------------------
     signupForm.addEventListener('submit', async e => {
         e.preventDefault();
+        document.getElementById('signUp').textContent='Creating account...'
         const username = document.getElementById("signup-username").value;
         const email = document.getElementById("signup-email").value;
         const password = signupPassword.value;
