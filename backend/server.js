@@ -3,11 +3,15 @@ import cors from "cors";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 dotenv.config();
 
 const app = express();
-app.use(cors());
+app.use(cors({
+    origin: '*',  // Allow all origins for development
+    credentials: true
+}));
 app.use(express.json());
 
 // Step 1: Starting backend
@@ -86,7 +90,7 @@ app.post("/api/signup", async (req, res) => {
         }
 });
 
-// Login route
+// Login route (UPDATED WITH TOKEN)
 app.post("/api/login", async (req, res) => {
         const { email, password } = req.body;
         try {
@@ -96,8 +100,45 @@ app.post("/api/login", async (req, res) => {
                 const isMatch = await bcrypt.compare(password, user.password);
                 if (!isMatch) return res.status(400).json({ message: "❌ Invalid credentials" });
                 
-                res.json({ message: `✅ Welcome back, ${user.username}` });
+                // CREATE A TOKEN
+                const token = jwt.sign(
+                        { userId: user._id, email: user.email },
+                        process.env.JWT_SECRET,
+                        { expiresIn: '7d' } // Token expires in 7 days
+                );
+                
+                res.json({ 
+                        message: `✅ Welcome back, ${user.username}`,
+                        token: token,  // Send token to frontend
+                        username: user.username
+                });
         } catch (err) {
                 res.status(500).json({ message: "❌ Error logging in" });
+        }
+});
+
+// Verify token route (NEW)
+app.post("/api/verify-token", async (req, res) => {
+        const { token } = req.body;
+        
+        if (!token) {
+                return res.status(401).json({ message: "No token provided" });
+        }
+        
+        try {
+                const decoded = jwt.verify(token, process.env.JWT_SECRET);
+                const user = await User.findById(decoded.userId);
+                
+                if (!user) {
+                        return res.status(401).json({ message: "User not found" });
+                }
+                
+                res.json({ 
+                        valid: true, 
+                        username: user.username,
+                        email: user.email
+                });
+        } catch (err) {
+                res.status(401).json({ message: "Invalid or expired token" });
         }
 });
