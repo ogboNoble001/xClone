@@ -5,7 +5,7 @@
                 'https://xclone-vc7a.onrender.com',    // Production (Render)
                 'http://192.168.1.5:5000',              // Your computer's local IP
                 'http://192.168.1.10:5000',             // Alternative local IP
-                'http://localhost:5000',                // Localhost fallback
+                'http://localhost:7700',                // Localhost fallback
                 'http://127.0.0.1:5000'                 // Another localhost option
         ];
         
