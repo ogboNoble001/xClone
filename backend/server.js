@@ -13,6 +13,7 @@ const app = express();
 // CORS setup (production + local dev)
 // ========================
 const allowedOrigins = [
+    "https://startling-manatee-3912f5.netlify.app",
     "https://x-clone-real.vercel.app",  // your Vercel frontend
     "http://localhost:7700"      // your local dev frontend
 ];
