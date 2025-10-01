@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const themeToggle = document.getElementById('themeToggle');
     const sunIcon = document.getElementById('sunIcon');
     const moonIcon = document.getElementById('moonIcon');
+    const xIcon =document.querySelector('.main-logo')
     const body = document.body;
     
     // Check saved theme or default to light
@@ -14,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
         body.classList.add('dark-theme');
         sunIcon.style.display = 'none';
         moonIcon.style.display = 'block';
+        xIcon.src='/frontend/res/x-social-media-white-icon.png'
     }
     
     // Toggle theme
@@ -22,10 +24,12 @@ document.addEventListener('DOMContentLoaded', () => {
             body.classList.toggle('dark-theme');
             
             if (body.classList.contains('dark-theme')) {
+                xIcon.src='/frontend/res/x-social-media-white-icon.png'
                 localStorage.setItem('theme', 'dark');
                 sunIcon.style.display = 'none';
                 moonIcon.style.display = 'block';
             } else {
+                xIcon.src='/frontend/res/file_00000000d1bc6243b622c7897a43e5b3.png'
                 localStorage.setItem('theme', 'light');
                 sunIcon.style.display = 'block';
                 moonIcon.style.display = 'none';

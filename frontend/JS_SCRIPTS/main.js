@@ -2,6 +2,11 @@
         const savedTheme = localStorage.getItem('theme') || 'light';
         if (savedTheme === 'dark') {
                 document.body.classList.add('dark-theme');
+        const xIcon = document.querySelector('.xIcon')
+        xIcon.src='/frontend/res/x-social-media-white-icon.png'
+        }
+        else{
+                xIcon.src='/frontend/res/file_00000000d1bc6243b622c7897a43e5b3.png'
         }
 })();
 
