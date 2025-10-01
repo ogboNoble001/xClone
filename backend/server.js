@@ -4,18 +4,21 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import multer from "multer";
+import { v2 as cloudinary } from "cloudinary";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
 
 dotenv.config();
 
 const app = express();
 
 // ========================
-// CORS setup (production + local dev)
+// CORS setup
 // ========================
 const allowedOrigins = [
     "https://startling-manatee-3912f5.netlify.app",
-    "https://x-clone-real.vercel.app",  // your Vercel frontend
-    "http://localhost:7700"      // your local dev frontend
+    "https://x-clone-real.vercel.app",
+    "http://localhost:7700"
 ];
 
 app.use(cors({
@@ -31,12 +34,9 @@ app.use(cors({
 
 app.use(express.json());
 
-// Step 1: Starting backend
-console.log("🔹 Backend initializing...");
-
-// Step 2: Connect to MongoDB
-console.log("🔹 Connecting to MongoDB...");
-
+// ========================
+// MongoDB Connection
+// ========================
 const connectDB = async () => {
     try {
         await mongoose.connect(process.env.MONGO_URI, {
@@ -45,16 +45,13 @@ const connectDB = async () => {
         });
         console.log("✅ MongoDB connected successfully");
 
-        // Step 3: Start Express server **after MongoDB connects**
-        console.log("🔹 Starting Express server...");
         const PORT = process.env.PORT || 5000;
         app.listen(PORT, () => {
             console.log(`🚀 Server listening on port ${PORT}`);
         });
-
     } catch (err) {
         console.error("❌ MongoDB connection error:", err.message);
-        process.exit(1); // Stop server if DB fails
+        process.exit(1);
     }
 };
 
@@ -72,6 +69,23 @@ const userSchema = new mongoose.Schema({
 const User = mongoose.model("User", userSchema);
 
 // ========================
+// Cloudinary Config
+// ========================
+cloudinary.config({
+    secure: true // reads CLOUDINARY_URL from .env
+});
+
+const storage = new CloudinaryStorage({
+    cloudinary,
+    params: {
+        folder: "profiles",
+        allowed_formats: ["jpg", "png", "jpeg"]
+    }
+});
+
+const upload = multer({ storage });
+
+// ========================
 // Routes
 // ========================
 
@@ -85,6 +99,11 @@ const states = ["disconnected", "connected", "connecting", "disconnecting"];
 app.get("/api/db-status", (req, res) => {
     const state = states[mongoose.connection.readyState];
     res.json({ status: state, message: `MongoDB connection is ${state}` });
+});
+
+// Upload photo (standalone)
+app.post("/api/upload-photo", upload.single("photo"), (req, res) => {
+    res.json({ imageUrl: req.file.path });
 });
 
 // Signup route
@@ -101,18 +120,18 @@ app.post("/api/signup", async (req, res) => {
         const newUser = new User({ username, email, password: hashedPassword });
         await newUser.save();
 
-        res.json({ message: " User created successfully" });
+        res.json({ message: "User created successfully" });
     } catch (err) {
         res.status(500).json({ message: "Error creating user" });
     }
 });
 
-// Login route (with JWT)
+// Login route
 app.post("/api/login", async (req, res) => {
     const { email, password } = req.body;
     try {
         const user = await User.findOne({ email });
-        if (!user) return res.status(400).json({ message: " User not found" });
+        if (!user) return res.status(400).json({ message: "User not found" });
 
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
