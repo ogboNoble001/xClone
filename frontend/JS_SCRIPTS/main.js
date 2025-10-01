@@ -26,7 +26,7 @@
                 declineBtn.addEventListener('click', () => {
                         localStorage.setItem('cookieConsent', 'declined');
                         cookieBanner.classList.remove('show');
-                        console.log('❌ Cookies declined');
+                        console.log(' Cookies declined');
                         
                         // Optional: Clear auth tokens if user declines
                         // localStorage.removeItem('authToken');
@@ -52,7 +52,7 @@
         
         // No token? Redirect to sign in
         if (!token) {
-                console.log("❌ No token found - redirecting to sign in");
+                console.log(" No token found - redirecting to sign in");
                 window.location.href = "/sign_opt/sign_opt.html";
                 return;
         }
@@ -81,18 +81,18 @@
                                 workingURL = url;
                                 break; // Exit loop - found working backend
                         } else {
-                                console.log(`❌ Auth failed at ${url} - trying next...`);
+                                console.log(` Auth failed at ${url} - trying next...`);
                         }
                         
                 } catch (error) {
-                        console.log(`❌ Could not reach ${url} - trying next...`);
+                        console.log(` Could not reach ${url} - trying next...`);
                         // Continue to next URL
                 }
         }
         
         // If no backend responded successfully
         if (!workingURL) {
-                console.error("❌ Could not connect to any backend - redirecting to sign in");
+                console.error(" Could not connect to any backend - redirecting to sign in");
                 localStorage.removeItem('authToken');
                 localStorage.removeItem('username');
                 localStorage.removeItem('API_URL');
@@ -181,7 +181,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 mainBody.style.display = 'flex';
                 sidebar.style.display = 'block';
                 sidebarOverlay.style.display = 'block';
-                console.log("🖥 Main UI visible");
+                console.log(" Main UI visible");
                 
                 // Show which backend is being used
                 const apiUrl = localStorage.getItem('API_URL');

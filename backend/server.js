@@ -100,9 +100,9 @@ app.post("/api/signup", async (req, res) => {
         const newUser = new User({ username, email, password: hashedPassword });
         await newUser.save();
 
-        res.json({ message: "✅ User created successfully" });
+        res.json({ message: " User created successfully" });
     } catch (err) {
-        res.status(500).json({ message: "❌ Error creating user" });
+        res.status(500).json({ message: "Error creating user" });
     }
 });
 
@@ -111,10 +111,10 @@ app.post("/api/login", async (req, res) => {
     const { email, password } = req.body;
     try {
         const user = await User.findOne({ email });
-        if (!user) return res.status(400).json({ message: "❌ User not found" });
+        if (!user) return res.status(400).json({ message: " User not found" });
 
         const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) return res.status(400).json({ message: "❌ Invalid credentials" });
+        if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
 
         const token = jwt.sign(
             { userId: user._id, email: user.email },
@@ -123,12 +123,12 @@ app.post("/api/login", async (req, res) => {
         );
 
         res.json({
-            message: `✅ Welcome back, ${user.username}`,
+            message: `Welcome back, ${user.username}`,
             token: token,
             username: user.username
         });
     } catch (err) {
-        res.status(500).json({ message: "❌ Error logging in" });
+        res.status(500).json({ message: "Error logging in" });
     }
 });
 

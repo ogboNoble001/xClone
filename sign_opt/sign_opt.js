@@ -178,7 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 signInButton.disabled = false;
             }
         } catch (err) {
-            showFeedback("signin-feedback", "❌ Error: Could not connect to any server. Check your internet connection.", "error");
+            showFeedback("signin-feedback", " Check your internet connection.", "error");
             signInButton.textContent = originalText;
             signInButton.disabled = false;
         }
@@ -202,13 +202,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const confirm = confirmPassword.value;
         
         if (password !== confirm) {
-            showFeedback("signup-feedback", "❌ Passwords do not match", "error");
+            showFeedback("signup-feedback", "Passwords do not match", "error");
             signUpButton.textContent = originalText;
             signUpButton.disabled = false;
             return;
         }
         if (!isStrongPassword(password)) {
-            showFeedback("signup-feedback", "❌ Password must contain letters, numbers, and special characters", "error");
+            showFeedback("signup-feedback", " Password must contain letters, numbers, and special characters", "error");
             signUpButton.textContent = originalText;
             signUpButton.disabled = false;
             return;
@@ -231,7 +231,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 signUpButton.disabled = false;
             }
         } catch (err) {
-            showFeedback("signup-feedback", "❌ Error: Could not connect to any server. Check your internet connection.", "error");
+            showFeedback("signup-feedback", "Check your internet connection.", "error");
             signUpButton.textContent = originalText;
             signUpButton.disabled = false;
         }
