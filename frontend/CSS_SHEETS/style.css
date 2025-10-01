@@ -686,6 +686,7 @@ body.dark-theme .theme-toggle-sidebar:hover {
 .privPrnt {
   display: flex;
 align-items: center;
+margin-bottom: 1.1em;
 position: relative;
 padding: 0.75rem 1.5rem;
 font-size: 0.95rem;
