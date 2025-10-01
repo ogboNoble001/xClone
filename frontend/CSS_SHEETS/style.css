@@ -513,8 +513,7 @@ body.dark-theme .sidebar-close {
 }
 
 body.dark-theme .sidebar-close:hover {
-    background-color: rgba(29, 155, 240, 0.1);
-    color: #1d9bf0;
+     color: #1d9bf0;
 }
 
 body.dark-theme .menu-section-title {
@@ -624,40 +623,45 @@ body.dark-theme .slot.sep {
 }
 /* Theme toggle in sidebar */
 .theme-toggle-sidebar {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    background: none;
-    font-size: 0.95rem;
-    color: #536471;
-    text-decoration: none;
-    transition: all 0.2s ease;
-    cursor: pointer;
-    border: none;
-    width: 100%;
-    text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 0.1rem;
+  margin-left: 1.4em;
+  font-family: "Ysabeau Office", sans-serif;
+  font-size: 0.95rem;
+  color: #536471;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
 }
-
+.theme-toggle-sidebar {
+  -webkit-tap-highlight-color: transparent; /* Removes the white/gray overlay */
+  outline: none;
+}
 .theme-toggle-sidebar:hover {
-    background-color: #f7f9fa;
-    color: #0f1419;
+  color: #0f1419;
 }
 
 body.dark-theme .theme-toggle-sidebar {
-    color: #e7e9ea;
+  color: #e7e9ea;
 }
 
 body.dark-theme .theme-toggle-sidebar:hover {
-    background-color: rgba(29, 155, 240, 0.1);
-    color: #1d9bf0;
+    color: #1d9bf0
+  
 }
 
 .theme-toggle-sidebar .menu-icon {
-    margin-right: 0.75rem;
-    width: 18px;
-    height: 18px;
-    color: inherit;
+  margin-right: 0.75rem;
+  width: 18px;
+  height: 18px;
+  color: inherit;
 }
+
 /* Mobile responsive for cookie banner */
 @media (max-width: 768px) {
   .cookie-content {
@@ -677,5 +681,15 @@ body.dark-theme .theme-toggle-sidebar:hover {
 }
 .diff6{
   color: #FFfFfF;
+}
+.privPrnt {
+  display: flex;
+align-items: center;
+position: relative;
+padding: 0.75rem 1.5rem;
+font-size: 0.95rem;
+color: #536471;
+text-decoration: none;
+transition: all 0.2s ease;
 }
 

@@ -44,11 +44,23 @@ body.dark-theme .right-section {
 }
 
 /* Theme toggle button */
-.theme-toggle {
-    
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    .theme-toggle {
+  position: fixed;
+top: 20px;
+right: 20px;
+width: 50px;
+height: 50px;
+border-radius: 50%;
+background: rgba(255, 255, 255, 0.9);
+border: 1px solid rgba(0, 0, 0, 0.1);
+display: flex;
+align-items: center;
+justify-content: center;
+cursor: pointer;
+transition: all 0.3s ease;
+z-index: 1000;
+box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
-
 body.dark-theme .theme-toggle {
     background: #1e2732;
     border-color: rgba(255, 255, 255, 0.1);
