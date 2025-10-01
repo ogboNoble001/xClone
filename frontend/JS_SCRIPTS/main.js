@@ -1,4 +1,5 @@
 // COOKIE CONSENT CHECK - Run this FIRST
+
 (function checkCookieConsent() {
         const cookieConsent = localStorage.getItem('cookieConsent');
         const cookieBanner = document.getElementById('cookieBanner');
