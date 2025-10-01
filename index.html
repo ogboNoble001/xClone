@@ -13,6 +13,23 @@
 </head>
 <body>
 
+  <!-- Cookie Consent Banner -->
+  <div class="cookie-banner" id="cookieBanner">
+    <div class="cookie-content">
+      <div class="cookie-icon">
+        <i data-lucide="cookie"></i>
+      </div>
+      <div class="cookie-text">
+        <h3>We value your privacy</h3>
+        <p>We use authentication tokens to keep you signed in and provide a personalized experience. By clicking "Accept", you agree to the storage of tokens on your device. You can decline, but some features may not work properly.</p>
+      </div>
+      <div class="cookie-buttons">
+        <button class="cookie-btn cookie-decline" id="cookieDecline">Decline</button>
+        <button class="cookie-btn cookie-accept" id="cookieAccept">Accept</button>
+      </div>
+    </div>
+  </div>
+
   <div class="sidebar-overlay" onclick="closeSidebar()"></div>
 
   <div class="sidebar" id="sidebar">
@@ -20,7 +37,7 @@
     
     <div class="sidebar-header">
       <div class="sidebar-subtitle">
-        <span>@aryta</span>
+        <span id="usernameDisplay">@aryta</span>
         <br />
         <div class="flex-row diff2">
           <span class="flex-row diff1">
@@ -80,13 +97,13 @@
       
       <div class="menu-section">
         <div class="menu-section-title">Account</div>
-        <div class="flex-row ai-c diff4" id="profile">
+        <div class="flex-row ai-c diff4">
           <div class="menu-item ai-c diff4 diff5">
             <div class="ai-c">
               <i data-lucide="user" class="menu-icon"></i>
               <span>Profile</span>
             </div>
-            <span class="ai-c">@aryta</span>
+            <span class="ai-c" id="sidebarUsername">@aryta</span>
           </div>
         </div>
         <a href="" class="menu-item">
@@ -96,6 +113,10 @@
         <a href="#" class="menu-item">
           <i data-lucide="help-circle" class="menu-icon"></i>
           Help
+        </a>
+        <a href="#" class="menu-item logout-btn" id="logoutBtn">
+          <i data-lucide="log-out" class="menu-icon"></i>
+          Logout
         </a>
       </div>
 
@@ -110,9 +131,8 @@
         <img src="/frontend/res/file_00000000d1bc6243b622c7897a43e5b3.png" alt="App Logo">
     </div>
     <div class="as-fe ai-c diff1 flex-row underAppPic">
-
       <span>v.120.918.12</span>
-      </div>
+    </div>
   </div>
   
   <main class="mainBody diff4">
@@ -123,28 +143,27 @@
       <div class="">
        <span>Following</span>
       </div>
-            <div class="">
+      <div class="">
         <span>Framer</span> 
       </div>
-                  <div class="">
-              <span>Advancers in Framer</span>
-            </div>
+      <div class="">
+        <span>Advancers in Framer</span>
+      </div>
     </nav>
     <nav class="mainNav">
       <div class="icns active">
         <div class="house" data-lucide="house"></div>
       </div>
-            <div class="icns">
-<i data-lucide="search"></i>
+      <div class="icns">
+        <i data-lucide="search"></i>
       </div>
-
       <div class="icns">
         <i data-lucide="users"></i>
       </div>
-            <div class="icns">
+      <div class="icns">
         <i data-lucide="bell"></i>
       </div>
-            <div class="icns">
+      <div class="icns">
         <i data-lucide="mail"></i>
       </div>
     </nav>

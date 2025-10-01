@@ -1,3 +1,59 @@
+// AUTH CHECK - If already logged in, redirect to main page
+(async function checkIfAlreadyLoggedIn() {
+        // Array of possible backend URLs
+        const API_URLS = [
+                'https://xclone-vc7a.onrender.com',    // Production (Render)
+                'http://192.168.1.5:5000',              // Your computer's local IP
+                'http://192.168.1.10:5000',             // Alternative local IP
+                'http://localhost:7700',                // Localhost fallback
+                'http://127.0.0.1:5000'                 // Another localhost option
+        ];
+        
+        const token = localStorage.getItem('authToken');
+        
+        // If no token, user needs to sign in - stay on this page
+        if (!token) {
+                console.log("No token found - user needs to sign in");
+                return;
+        }
+        
+        // If token exists, verify it
+        for (const url of API_URLS) {
+                try {
+                        console.log(`🔍 Checking token with: ${url}`);
+                        
+                        const response = await fetch(`${url}/api/verify-token`, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ token }),
+                                signal: AbortSignal.timeout(5000)
+                        });
+                        
+                        if (response.ok) {
+                                const data = await response.json();
+                                console.log(`✅ Token valid - redirecting to main page`);
+                                
+                                // Save working URL
+                                localStorage.setItem('API_URL', url);
+                                
+                                // Redirect to main page - user already logged in
+                                window.location.href = "/index.html";
+                                return;
+                        }
+                        
+                } catch (error) {
+                        console.log(`❌ Could not reach ${url} - trying next...`);
+                }
+        }
+        
+        // If we get here, token is invalid - remove it
+        console.log("Token invalid - clearing and staying on sign in page");
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('username');
+        localStorage.removeItem('API_URL');
+        
+})();
+
 document.addEventListener('DOMContentLoaded', () => {
     // ------------------------------
     // Toggle password visibility
@@ -98,37 +154,84 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     // ------------------------------
-    // Backend URL
+    // Backend URLs (Multiple options)
     // ------------------------------
-    const backendUrl = "https://xclone-vc7a.onrender.com";
+    const API_URLS = [
+        'https://xclone-vc7a.onrender.com',    // Production (Render)
+        'http://192.168.1.5:5000',              // Your computer's local IP
+        'http://192.168.1.10:5000',             // Alternative local IP
+        'http://localhost:5000',                // Localhost fallback
+        'http://127.0.0.1:5000'                 // Another localhost option
+    ];
+    
+    // Function to try each backend URL until one works
+    async function tryBackendRequest(endpoint, data) {
+        for (const url of API_URLS) {
+            try {
+                console.log(`🔍 Trying: ${url}${endpoint}`);
+                
+                const response = await fetch(`${url}${endpoint}`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data),
+                    signal: AbortSignal.timeout(10000) // 10 second timeout
+                });
+                
+                const responseData = await response.json();
+                
+                // Save the working URL for future use
+                localStorage.setItem('API_URL', url);
+                console.log(`✅ Connected to: ${url}`);
+                
+                return { response, data: responseData };
+                
+            } catch (error) {
+                console.log(`❌ Failed to reach ${url} - trying next...`);
+                // Continue to next URL
+            }
+        }
+        
+        // If no backend worked
+        throw new Error("Could not connect to any backend server");
+    }
     
     // ------------------------------
     // Sign-in form submission
     // ------------------------------
     signinForm.addEventListener('submit', async e => {
-       document.getElementById('signIn').textContent='Signing in...'
         e.preventDefault();
+        
+        const signInButton = document.getElementById('signIn');
+        const originalText = signInButton.textContent;
+        signInButton.textContent = 'Signing in...';
+        signInButton.disabled = true;
+        
         const email = document.getElementById("signin-email").value;
         const password = document.getElementById("signin-password").value;
         
         try {
-            const res = await fetch(`${backendUrl}/api/login`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, password })
-            });
-            const data = await res.json();
+            const { response, data } = await tryBackendRequest("/api/login", { email, password });
             
-            if (res.ok) {
-                // ✅ Login successful → redirect
+            if (response.ok) {
+                // ✅ Login successful
                 alert(data.message);
-                window.location.href = "/index.html"; // <-- change to your main page
+                
+                // Save token and username
+                localStorage.setItem('authToken', data.token);
+                localStorage.setItem('username', data.username);
+                
+                // Redirect to main page
+                window.location.href = "/index.html";
             } else {
-                // ❌ Login failed → show error
+                // ❌ Login failed
                 alert(data.message);
+                signInButton.textContent = originalText;
+                signInButton.disabled = false;
             }
         } catch (err) {
-            alert("❌ Error connecting to server");
+            alert("❌ Error: Could not connect to any server. Check your internet connection.");
+            signInButton.textContent = originalText;
+            signInButton.disabled = false;
         }
     });
     
@@ -137,7 +240,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // ------------------------------
     signupForm.addEventListener('submit', async e => {
         e.preventDefault();
-        document.getElementById('signUp').textContent='Creating account...'
+        
+        const signUpButton = document.getElementById('signUp');
+        const originalText = signUpButton.textContent;
+        signUpButton.textContent = 'Creating account...';
+        signUpButton.disabled = true;
+        
         const username = document.getElementById("signup-username").value;
         const email = document.getElementById("signup-email").value;
         const password = signupPassword.value;
@@ -145,30 +253,42 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (password !== confirm) {
             alert("❌ Passwords do not match");
+            signUpButton.textContent = originalText;
+            signUpButton.disabled = false;
             return;
         }
         if (!isStrongPassword(password)) {
             alert("❌ Password must contain letters, numbers, and special characters");
+            signUpButton.textContent = originalText;
+            signUpButton.disabled = false;
             return;
         }
         
         try {
-            const res = await fetch(`${backendUrl}/api/signup`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ username, email, password })
-            });
-            const data = await res.json();
+            const { response, data } = await tryBackendRequest("/api/signup", { username, email, password });
             
-            if (res.ok) {
-                alert(data.message);
-                window.location.href = "/index.html"; // <-- change to your main page
+            if (response.ok) {
+                // ✅ Signup successful
+                alert(data.message + "\n\nPlease sign in with your new account.");
+                
+                // Switch to sign-in tab
+                signinTab.click();
+                
+                // Pre-fill email
+                document.getElementById("signin-email").value = email;
+                
+                signUpButton.textContent = originalText;
+                signUpButton.disabled = false;
             } else {
-                // ❌ Signup failed → show error
+                // ❌ Signup failed
                 alert(data.message);
+                signUpButton.textContent = originalText;
+                signUpButton.disabled = false;
             }
         } catch (err) {
-            alert("❌ Error connecting to server");
+            alert("❌ Error: Could not connect to any server. Check your internet connection.");
+            signUpButton.textContent = originalText;
+            signUpButton.disabled = false;
         }
     });
 });
