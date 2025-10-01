@@ -1,5 +1,11 @@
-// COOKIE CONSENT CHECK - Run this FIRST
+(function initTheme() {
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        if (savedTheme === 'dark') {
+                document.body.classList.add('dark-theme');
+        }
+})();
 
+// COOKIE CONSENT CHECK
 (function checkCookieConsent() {
         const cookieConsent = localStorage.getItem('cookieConsent');
         const cookieBanner = document.getElementById('cookieBanner');
@@ -8,7 +14,7 @@
         if (!cookieConsent && cookieBanner) {
                 setTimeout(() => {
                         cookieBanner.classList.add('show');
-                }, 1000); // Show after 1 second
+                }, 1000);
         }
         
         // Accept button
@@ -27,25 +33,20 @@
                 declineBtn.addEventListener('click', () => {
                         localStorage.setItem('cookieConsent', 'declined');
                         cookieBanner.classList.remove('show');
-                        console.log(' Cookies declined');
-                        
-                        // Optional: Clear auth tokens if user declines
-                        // localStorage.removeItem('authToken');
-                        // localStorage.removeItem('username');
-                        // window.location.href = "/sign_opt/sign_opt.html";
+                        console.log('❌ Cookies declined');
                 });
         }
 })();
 
 // AUTH CHECK - Run this BEFORE anything else
 (async function checkAuthentication() {
-        // Array of possible backend URLs - tries each one until it finds a working one
+        // Array of possible backend URLs
         const API_URLS = [
                 'https://xclone-vc7a.onrender.com',
-                'http://192.168.1.5:5000', // Your computer's local IP
-                'http://192.168.1.10:5000', // Alternative local IP
-                'http://localhost:5000', // Localhost fallback
-                'http://127.0.0.1:5000' // Another localhost option
+                'http://192.168.1.5:5000',
+                'http://192.168.1.10:5000',
+                'http://localhost:5000',
+                'http://127.0.0.1:5000'
         ];
         
         let workingURL = null;
@@ -53,7 +54,7 @@
         
         // No token? Redirect to sign in
         if (!token) {
-                console.log(" No token found - redirecting to sign in");
+                console.log("❌ No token found - redirecting to sign in");
                 window.location.href = "/sign_opt/sign_opt.html";
                 return;
         }
@@ -67,7 +68,7 @@
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify({ token }),
-                                signal: AbortSignal.timeout(5000) // 5 second timeout
+                                signal: AbortSignal.timeout(5000)
                         });
                         
                         if (response.ok) {
@@ -75,34 +76,31 @@
                                 console.log(`✅ Connected to backend at: ${url}`);
                                 console.log("✅ User authenticated:", data.username);
                                 
-                                // Store the working URL for future requests
                                 localStorage.setItem('API_URL', url);
                                 localStorage.setItem('username', data.username);
                                 
                                 workingURL = url;
-                                break; // Exit loop - found working backend
+                                break;
                         } else {
-                                console.log(` Auth failed at ${url} - trying next...`);
+                                console.log(`❌ Auth failed at ${url} - trying next...`);
                         }
                         
                 } catch (error) {
-                        console.log(` Could not reach ${url} - trying next...`);
-                        // Continue to next URL
+                        console.log(`❌ Could not reach ${url} - trying next...`);
                 }
         }
         
         // If no backend responded successfully
         if (!workingURL) {
-                console.error(" Could not connect to any backend - redirecting to sign in");
+                console.error("❌ Could not connect to any backend - redirecting to sign in");
                 localStorage.removeItem('authToken');
                 localStorage.removeItem('username');
                 localStorage.removeItem('API_URL');
                 window.location.href = "/sign_opt/sign_opt.html";
         }
-        
 })();
 
-// MAIN APP CODE - Runs after auth check
+// MAIN APP CODE
 window.addEventListener('DOMContentLoaded', () => {
         lucide.createIcons();
         
@@ -115,7 +113,43 @@ window.addEventListener('DOMContentLoaded', () => {
                 if (sidebarUsername) sidebarUsername.textContent = `@${username}`;
         }
         
-        // UI elements (splash/menu)
+        // Theme toggle functionality
+        const themeToggleSidebar = document.getElementById('themeToggleSidebar');
+        const sidebarSunIcon = document.getElementById('sidebarSunIcon');
+        const sidebarMoonIcon = document.getElementById('sidebarMoonIcon');
+        const themeToggleText = document.getElementById('themeToggleText');
+        
+        if (themeToggleSidebar) {
+                // Set initial state
+                const currentTheme = localStorage.getItem('theme') || 'light';
+                if (currentTheme === 'dark') {
+                        sidebarSunIcon.style.display = 'none';
+                        sidebarMoonIcon.style.display = 'block';
+                        themeToggleText.textContent = 'Light Mode';
+                }
+                
+                // Toggle theme on click
+                themeToggleSidebar.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        document.body.classList.toggle('dark-theme');
+                        
+                        if (document.body.classList.contains('dark-theme')) {
+                                localStorage.setItem('theme', 'dark');
+                                sidebarSunIcon.style.display = 'none';
+                                sidebarMoonIcon.style.display = 'block';
+                                themeToggleText.textContent = 'Light Mode';
+                        } else {
+                                localStorage.setItem('theme', 'light');
+                                sidebarSunIcon.style.display = 'block';
+                                sidebarMoonIcon.style.display = 'none';
+                                themeToggleText.textContent = 'Dark Mode';
+                        }
+                        
+                        lucide.createIcons();
+                });
+        }
+        
+        // UI elements
         const splash = document.querySelector('.prntAppPic');
         const nav = document.querySelector('nav.mainNav');
         const mainBody = document.querySelector('.mainBody');
@@ -131,34 +165,27 @@ window.addEventListener('DOMContentLoaded', () => {
                 });
         });
         
-        // Logout button (from sidebar)
+        // Logout button
         const logoutBtn = document.getElementById('logoutBtn');
         if (logoutBtn) {
                 logoutBtn.addEventListener('click', (e) => {
                         e.preventDefault();
                         
-                        // Confirm logout
                         if (confirm('Are you sure you want to logout?')) {
-                                // Clear all stored data
                                 localStorage.removeItem('authToken');
                                 localStorage.removeItem('username');
                                 localStorage.removeItem('API_URL');
-                                
                                 console.log('👋 User logged out');
-                                
-                                // Redirect to sign in page
                                 window.location.href = "/sign_opt/sign_opt.html";
                         }
                 });
         }
         
-        // Profile button - Also acts as logout (keeping your original functionality)
+        // Profile button logout
         const profileSignIn = document.querySelector('#profile');
         if (profileSignIn) {
                 profileSignIn.addEventListener('click', () => {
-                        // Confirm logout
                         if (confirm('Logout from your account?')) {
-                                // Log out user
                                 localStorage.removeItem('authToken');
                                 localStorage.removeItem('username');
                                 localStorage.removeItem('API_URL');
@@ -167,6 +194,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 });
         }
         
+        // Bottom nav icons
         const icns = document.querySelectorAll('.icns');
         icns.forEach(icn => {
                 icn.addEventListener('click', () => {
@@ -182,15 +210,13 @@ window.addEventListener('DOMContentLoaded', () => {
                 mainBody.style.display = 'flex';
                 sidebar.style.display = 'block';
                 sidebarOverlay.style.display = 'block';
-                console.log(" Main UI visible");
+                console.log("🖥 Main UI visible");
                 
-                // Show which backend is being used
                 const apiUrl = localStorage.getItem('API_URL');
                 if (apiUrl) {
                         console.log(`📡 Using backend: ${apiUrl}`);
                 }
                 
-                // Refresh Lucide icons after UI is visible
                 lucide.createIcons();
         }, 1050);
 });

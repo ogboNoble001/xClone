@@ -12,6 +12,13 @@ body {
     display: flex;
     color: #111827;
     line-height: 1.5;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Dark theme styles */
+body.dark-theme {
+    background: #15202b;
+    color: #ffffff;
 }
 
 .container {
@@ -29,6 +36,50 @@ body {
     padding: 40px;
     background: #f9fafb;
     width: 100%;
+    transition: background-color 0.3s ease;
+}
+
+body.dark-theme .right-section {
+    background: #15202b;
+}
+
+/* Theme toggle button */
+.theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+body.dark-theme .theme-toggle {
+    background: #1e2732;
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.theme-toggle:hover {
+    transform: scale(1.1);
+}
+
+.theme-toggle svg {
+    width: 24px;
+    height: 24px;
+    color: #111827;
+    transition: transform 0.3s ease;
+}
+
+body.dark-theme .theme-toggle svg {
+    color: #1d9bf0;
 }
 
 .auth-container {
@@ -41,6 +92,13 @@ body {
     padding: 48px;
     box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
     animation: slideIn 0.8s ease-out;
+    transition: all 0.3s ease;
+}
+
+body.dark-theme .auth-container {
+    background: rgba(30, 39, 50, 0.95);
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
 }
 
 .auth-header {
@@ -61,16 +119,30 @@ body {
     animation: logoFloat 6s ease-in-out infinite;
 }
 
+body.dark-theme .main-logo {
+    filter: drop-shadow(0 8px 32px rgba(29, 155, 240, 0.3));
+}
+
 .auth-title {
     font-size: 2.2rem;
     font-weight: 700;
     margin-bottom: 8px;
     color: #111827;
+    transition: color 0.3s ease;
+}
+
+body.dark-theme .auth-title {
+    color: #ffffff;
 }
 
 .auth-subtitle {
     color: #6b7280;
     font-size: 1rem;
+    transition: color 0.3s ease;
+}
+
+body.dark-theme .auth-subtitle {
+    color: #8b98a5;
 }
 
 .auth-tabs {
@@ -79,6 +151,11 @@ body {
     border-radius: 12px;
     padding: 4px;
     margin-bottom: 32px;
+    transition: background-color 0.3s ease;
+}
+
+body.dark-theme .auth-tabs {
+    background: rgba(255, 255, 255, 0.05);
 }
 
 .tab {
@@ -95,10 +172,20 @@ body {
     transition: all 0.3s ease;
 }
 
+body.dark-theme .tab {
+    color: #8b98a5;
+}
+
 .tab.active {
     background: #111827;
     color: #ffffff;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+body.dark-theme .tab.active {
+    background: #1d9bf0;
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(29, 155, 240, 0.3);
 }
 
 .form-group {
@@ -111,6 +198,11 @@ body {
     color: #374151;
     font-size: 0.9rem;
     font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+body.dark-theme .form-label {
+    color: #e7e9ea;
 }
 
 .form-input {
@@ -125,14 +217,30 @@ body {
     outline: none;
 }
 
+body.dark-theme .form-input {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+}
+
 .form-input::placeholder {
     color: rgba(0, 0, 0, 0.4);
+}
+
+body.dark-theme .form-input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
 }
 
 .form-input:focus {
     border-color: #1d9bf0;
     background: #ffffff;
     box-shadow: 0 0 0 4px rgba(29, 155, 240, 0.1);
+}
+
+body.dark-theme .form-input:focus {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: #1d9bf0;
+    box-shadow: 0 0 0 4px rgba(29, 155, 240, 0.2);
 }
 
 .password-container {
@@ -152,8 +260,16 @@ body {
     transition: color 0.3s ease;
 }
 
+body.dark-theme .toggle-password {
+    color: #8b98a5;
+}
+
 .toggle-password:hover {
     color: #111827;
+}
+
+body.dark-theme .toggle-password:hover {
+    color: #ffffff;
 }
 
 #password-strength,
@@ -193,10 +309,20 @@ body {
     margin-bottom: 24px;
 }
 
+body.dark-theme .submit-btn {
+    background: #1d9bf0;
+    color: #ffffff;
+}
+
 .submit-btn:hover {
     background: #1f2937;
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+body.dark-theme .submit-btn:hover {
+    background: #1a8cd8;
+    box-shadow: 0 8px 25px rgba(29, 155, 240, 0.3);
 }
 
 .submit-btn:active {
@@ -215,12 +341,23 @@ body {
     flex: 1;
     height: 1px;
     background: rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+body.dark-theme .divider::before,
+body.dark-theme .divider::after {
+    background: rgba(255, 255, 255, 0.1);
 }
 
 .divider span {
     padding: 0 16px;
     color: #6b7280;
     font-size: 0.9rem;
+    transition: color 0.3s ease;
+}
+
+body.dark-theme .divider span {
+    color: #8b98a5;
 }
 
 .oauth-buttons {
@@ -245,16 +382,32 @@ body {
     transition: all 0.3s ease;
 }
 
+body.dark-theme .oauth-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+}
+
 .oauth-btn:hover {
     background: rgba(0, 0, 0, 0.05);
     border-color: rgba(0, 0, 0, 0.2);
     transform: translateY(-2px);
 }
 
+body.dark-theme .oauth-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
 .auth-footer {
     text-align: center;
     color: #6b7280;
     font-size: 0.9rem;
+    transition: color 0.3s ease;
+}
+
+body.dark-theme .auth-footer {
+    color: #8b98a5;
 }
 
 .auth-footer a {
@@ -265,6 +418,7 @@ body {
 .auth-footer a:hover {
     text-decoration: underline;
 }
+
 .form-feedback {
     display: none;
     margin-bottom: 16px;
@@ -288,6 +442,7 @@ body {
     border: 1px solid #17bf63;
     color: #17bf63;
 }
+
 .focus-in-expand {
     animation: focus-in-expand 0.8s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
 }
@@ -314,4 +469,10 @@ body {
 @media (max-width: 768px) {
     .right-section { padding: 20px; }
     .auth-container { padding: 32px 24px; }
+    .theme-toggle {
+        top: 10px;
+        right: 10px;
+        width: 45px;
+        height: 45px;
+    }
 }

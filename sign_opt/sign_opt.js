@@ -1,4 +1,38 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // THEME TOGGLE FUNCTIONALITY - Run this FIRST
+(function initTheme() {
+    const themeToggle = document.getElementById('themeToggle');
+    const sunIcon = document.getElementById('sunIcon');
+    const moonIcon = document.getElementById('moonIcon');
+    const body = document.body;
+    
+    // Check saved theme or default to light
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    
+    // Apply saved theme
+    if (savedTheme === 'dark') {
+        body.classList.add('dark-theme');
+        sunIcon.style.display = 'none';
+        moonIcon.style.display = 'block';
+    }
+    
+    // Toggle theme
+    if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-theme');
+            
+            if (body.classList.contains('dark-theme')) {
+                localStorage.setItem('theme', 'dark');
+                sunIcon.style.display = 'none';
+                moonIcon.style.display = 'block';
+            } else {
+                localStorage.setItem('theme', 'light');
+                sunIcon.style.display = 'block';
+                moonIcon.style.display = 'none';
+            }
+        });
+    }
+})();
     // ------------------------------
     // Feedback helper
     // ------------------------------
