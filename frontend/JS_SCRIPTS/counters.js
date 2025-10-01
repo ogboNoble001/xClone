@@ -13,6 +13,7 @@ class Odometer {
                 this.duration = opts.duration ?? 2000;
                 this.direction = opts.direction ?? 'up';
                 this.current = '0';
+               
                 this.container.style.setProperty('--duration', this.duration + 'ms');
                 this.container.style.display = 'inline-flex';
                 this.container.style.alignItems = 'flex-end';
@@ -53,6 +54,7 @@ class Odometer {
                                 for (let cycle = 0; cycle < 2; cycle++) {
                                         for (let d = 0; d <= 9; d++) {
                                                 const s = document.createElement('span');
+         
                                                 s.textContent = d;
                                                 s.style.display = 'block';
                                                 s.style.lineHeight = '1em';
@@ -67,10 +69,9 @@ class Odometer {
                                 const sep = document.createElement('div');
                                 sep.className = 'slot sep';
                                 sep.style.display = 'inline-block';
-                                sep.style.marginLeft = '-0.2em';
+                                
                                 sep.style.fontWeight = 'bold';
-                                sep.style.marginBottom = '.1em';
-                                sep.style.fontSize = '0.9em';
+                               
                                 sep.textContent = chT;
                                 this.container.appendChild(sep);
                         }
@@ -108,6 +109,7 @@ class Odometer {
 }
 
 window.runCounters = function() {
+        
         const followersContainer = document.getElementById('followersCounter');
         const followingContainer = document.getElementById('followingCounter');
         

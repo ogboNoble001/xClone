@@ -266,22 +266,35 @@ nav.mainNav{
 }
 
 /* ===== Odometer Counter Styles ===== */
+/* Default (light theme) */
 .counter {
-  display:inline-flex;
-  align-items:center;
-  gap: 4px;
   font-weight:700;
   font-size: 1rem;
   color:#0f1419;
+}
+.slot.digit span,
+.slot.sep {
+  
+  color:#0f1419; /* same as text */
+}
+
+/* Dark theme override */
+body.dark-theme .counter {
+  color:#ffffff;
+}
+body.dark-theme .slot.digit span,
+body.dark-theme .slot.sep {
+  color:#ffffff; /* numbers + dots + k/M/B */
 }
 .slot { 
   overflow:hidden; 
   height:1em; 
   display:inline-flex; 
+  
   align-items:flex-start; 
   position:relative; 
 }
-.slot.digit { width:1ch; text-align:center; }
+.slot.digit { width:1ch; text-align:center; margin-left: .3em;}
 .slot.sep { padding:0 2px; color:rgba(0,0,0,0.6); }
 .inner { 
   display:block; 
@@ -602,20 +615,25 @@ body.dark-theme .cookie-decline:hover {
     background-color: rgba(255, 255, 255, 0.15);
     color: #ffffff;
 }
-
+body.dark-theme .counter {
+  color:#ffffff;
+}
+body.dark-theme .slot.digit span,
+body.dark-theme .slot.sep {
+  color:#ffffff; /* numbers + dots + k/M/B */
+}
 /* Theme toggle in sidebar */
 .theme-toggle-sidebar {
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    padding: 0.75rem 1.5rem;
+    background: none;
     font-size: 0.95rem;
     color: #536471;
     text-decoration: none;
     transition: all 0.2s ease;
     cursor: pointer;
     border: none;
-    background: none;
     width: 100%;
     text-align: left;
 }
@@ -660,3 +678,4 @@ body.dark-theme .theme-toggle-sidebar:hover {
 .diff6{
   color: #FFfFfF;
 }
+
