@@ -1,8 +1,46 @@
-// AUTH CHECK - Run this FIRST before anything else
+// COOKIE CONSENT CHECK - Run this FIRST
+(function checkCookieConsent() {
+        const cookieConsent = localStorage.getItem('cookieConsent');
+        const cookieBanner = document.getElementById('cookieBanner');
+        
+        // If user hasn't chosen yet, show banner after a delay
+        if (!cookieConsent && cookieBanner) {
+                setTimeout(() => {
+                        cookieBanner.classList.add('show');
+                }, 1000); // Show after 1 second
+        }
+        
+        // Accept button
+        const acceptBtn = document.getElementById('cookieAccept');
+        if (acceptBtn) {
+                acceptBtn.addEventListener('click', () => {
+                        localStorage.setItem('cookieConsent', 'accepted');
+                        cookieBanner.classList.remove('show');
+                        console.log('✅ Cookies accepted');
+                });
+        }
+        
+        // Decline button
+        const declineBtn = document.getElementById('cookieDecline');
+        if (declineBtn) {
+                declineBtn.addEventListener('click', () => {
+                        localStorage.setItem('cookieConsent', 'declined');
+                        cookieBanner.classList.remove('show');
+                        console.log('❌ Cookies declined');
+                        
+                        // Optional: Clear auth tokens if user declines
+                        // localStorage.removeItem('authToken');
+                        // localStorage.removeItem('username');
+                        // window.location.href = "/sign_opt/sign_opt.html";
+                });
+        }
+})();
+
+// AUTH CHECK - Run this BEFORE anything else
 (async function checkAuthentication() {
         // Array of possible backend URLs - tries each one until it finds a working one
         const API_URLS = [
-                'https://xclone-vc7a.onrender.com', 
+                'https://xclone-vc7a.onrender.com',
                 'http://192.168.1.5:5000', // Your computer's local IP
                 'http://192.168.1.10:5000', // Alternative local IP
                 'http://localhost:5000', // Localhost fallback
@@ -67,6 +105,15 @@
 window.addEventListener('DOMContentLoaded', () => {
         lucide.createIcons();
         
+        // Display username from localStorage
+        const username = localStorage.getItem('username');
+        if (username) {
+                const usernameDisplay = document.getElementById('usernameDisplay');
+                const sidebarUsername = document.getElementById('sidebarUsername');
+                if (usernameDisplay) usernameDisplay.textContent = `@${username}`;
+                if (sidebarUsername) sidebarUsername.textContent = `@${username}`;
+        }
+        
         // UI elements (splash/menu)
         const splash = document.querySelector('.prntAppPic');
         const nav = document.querySelector('nav.mainNav');
@@ -83,15 +130,41 @@ window.addEventListener('DOMContentLoaded', () => {
                 });
         });
         
-        // Profile button - Logout
+        // Logout button (from sidebar)
+        const logoutBtn = document.getElementById('logoutBtn');
+        if (logoutBtn) {
+                logoutBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        
+                        // Confirm logout
+                        if (confirm('Are you sure you want to logout?')) {
+                                // Clear all stored data
+                                localStorage.removeItem('authToken');
+                                localStorage.removeItem('username');
+                                localStorage.removeItem('API_URL');
+                                
+                                console.log('👋 User logged out');
+                                
+                                // Redirect to sign in page
+                                window.location.href = "/sign_opt/sign_opt.html";
+                        }
+                });
+        }
+        
+        // Profile button - Also acts as logout (keeping your original functionality)
         const profileSignIn = document.querySelector('#profile');
-        profileSignIn.addEventListener('click', () => {
-                // Log out user
-                localStorage.removeItem('authToken');
-                localStorage.removeItem('username');
-                localStorage.removeItem('API_URL');
-                window.location.href = "/sign_opt/sign_opt.html";
-        });
+        if (profileSignIn) {
+                profileSignIn.addEventListener('click', () => {
+                        // Confirm logout
+                        if (confirm('Logout from your account?')) {
+                                // Log out user
+                                localStorage.removeItem('authToken');
+                                localStorage.removeItem('username');
+                                localStorage.removeItem('API_URL');
+                                window.location.href = "/sign_opt/sign_opt.html";
+                        }
+                });
+        }
         
         const icns = document.querySelectorAll('.icns');
         icns.forEach(icn => {
@@ -115,5 +188,8 @@ window.addEventListener('DOMContentLoaded', () => {
                 if (apiUrl) {
                         console.log(`📡 Using backend: ${apiUrl}`);
                 }
+                
+                // Refresh Lucide icons after UI is visible
+                lucide.createIcons();
         }, 1050);
 });
