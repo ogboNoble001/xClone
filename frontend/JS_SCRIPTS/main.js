@@ -128,9 +128,8 @@ window.addEventListener('DOMContentLoaded', () => {
         
         // Theme toggle functionality
         const themeToggleSidebar = document.getElementById('themeToggleSidebar');
-        const sidebarSunIcon = document.getElementById('sidebarSunIcon');
-        const sidebarMoonIcon = document.getElementById('sidebarMoonIcon');
-        const themeToggleText = document.getElementById('themeToggleText');
+ 
+        
         
         if (themeToggleSidebar) {
                 // Set initial state

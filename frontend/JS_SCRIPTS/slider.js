@@ -31,7 +31,13 @@ document.querySelectorAll('.menu-item').forEach(item => {
                 e.preventDefault();
                 document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
                 item.classList.add('active');
-                setTimeout(closeSidebar, 150);
+             if (item !== div.themeToggleSidebar) {
+                     setTimeout(closeSidebar, 150);
+             }
+             else {
+                     return
+             }
+                
         });
 });
 
