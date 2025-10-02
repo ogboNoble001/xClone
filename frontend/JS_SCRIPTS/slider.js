@@ -31,7 +31,7 @@ document.querySelectorAll('.menu-item').forEach(item => {
                 e.preventDefault();
                 document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
                 item.classList.add('active');
-             if (item !== div.themeToggleSidebar) {
+             if ((item !== div.themeToggleSidebar) || (item !== div.profileMenuBtn)) {
                      setTimeout(closeSidebar, 150);
              }
              else {

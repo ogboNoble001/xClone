@@ -1,6 +1,8 @@
 *, *::before, *::after {
   margin: 0;
   padding: 0;
+  outline: none;
+  webkit-tap-highlight-color: transparent; 
   box-sizing: border-box;
 }
 
@@ -165,7 +167,7 @@ html, body {
   color: #0f1419;
 }
 
-.menu-item.active::after {
+.menu-item.active::after{
   content: '';
   position: absolute;
   left: 0;
@@ -627,7 +629,7 @@ body.dark-theme .slot.sep {
   align-items: center;
   gap: 0.1rem;
   margin-left: 1.4em;
-  margin-bottom: 1.1em;
+
   font-family: "Ysabeau Office", sans-serif;
   font-size: 0.95rem;
   color: #536471;
@@ -686,7 +688,6 @@ body.dark-theme .theme-toggle-sidebar:hover {
 .privPrnt {
   display: flex;
 align-items: center;
-margin-top: -1em;
 position: relative;
 padding: 0.75rem 1.5rem;
 font-size: 0.95rem;

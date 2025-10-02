@@ -115,6 +115,7 @@
 
 // MAIN APP CODE
 window.addEventListener('DOMContentLoaded', () => {
+        
         lucide.createIcons();
         
         // Display username from localStorage
