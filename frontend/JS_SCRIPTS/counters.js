@@ -117,70 +117,11 @@ window.runCounters = function() {
                 const followers = new Odometer(followersContainer, { duration: 3000 });
                 const following = new Odometer(followingContainer, { duration: 3000 });
                 
-                followers.set(10680000);
-                following.set(390);
+                followers.set(0);
+                following.set(0);
                 
                 followersContainer.dataset.odometerInitialized = true;
                 followingContainer.dataset.odometerInitialized = true;
         }
 };
 
-window.toggleSidebar = function() {
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.querySelector('.sidebar-overlay');
-        sidebar.classList.toggle('active');
-        overlay.classList.toggle('active');
-        if (sidebar.classList.contains('active')) runCounters();
-};
-
-window.openSidebar = function() {
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.querySelector('.sidebar-overlay');
-        sidebar.classList.add('active');
-        overlay.classList.add('active');
-        runCounters();
-};
-
-window.closeSidebar = function() {
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.querySelector('.sidebar-overlay');
-        sidebar.classList.remove('active');
-        overlay.classList.remove('active');
-};
-
-// Menu item click logic
-document.querySelectorAll('.menu-item').forEach(item => {
-        item.addEventListener('click', (e) => {
-                e.preventDefault();
-                document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
-                item.classList.add('active');
-                setTimeout(closeSidebar, 150);
-        });
-});
-
-// Escape key closes sidebar
-document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') closeSidebar();
-});
-
-// DOMContentLoaded logic
-window.addEventListener('DOMContentLoaded', () => {
-        lucide.createIcons();
-        
-        const splash = document.querySelector('.prntAppPic');
-        const nav = document.querySelector('nav.mainNav');
-        const mainBody = document.querySelector('.mainBody');
-        const sidebar = document.getElementById('sidebar');
-        const sidebarOverlay = document.querySelector('.sidebar-overlay');
-        
-        setTimeout(() => {
-                splash.style.display = 'none';
-                nav.style.display = 'flex';
-                mainBody.style.display = 'flex';
-                sidebar.style.display = 'block';
-                sidebarOverlay.style.display = 'block';
-                
-                // ✅ Pass the global openSidebar function to gestures
-                window.initSwipeGestures(window.openSidebar);
-        }, 1200);
-});

@@ -167,7 +167,7 @@ html, body {
   color: #0f1419;
 }
 
-.menu-item.active::after{
+.menu-item.active::after {
   content: '';
   position: absolute;
   left: 0;
@@ -177,8 +177,8 @@ html, body {
   height: 95%;
   background-color: #0f1419;
   border-radius: 0 12px 12px 0;
+  transition: none; /* Instant appearance */
 }
-
 .menu-icon {
   margin-right: 0.75rem;
   width: 18px;
@@ -502,4 +502,7 @@ nav.mainNav{
   color: #536471;
   text-decoration: none;
   transition: all 0.2s ease;
+}
+#profileName{
+  margin-left: auto;
 }

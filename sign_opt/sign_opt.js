@@ -7,8 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const xIcon =document.querySelector('.main-logo')
     const body = document.body;
     
-    // Check saved theme or default to light
-    const savedTheme = localStorage.getItem('theme') || 'light';
+    // Check saved theme or default to dark
+    const savedTheme = localStorage.getItem('theme') || 'dark';
     
     // Apply saved theme
     if (savedTheme === 'dark') {

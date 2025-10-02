@@ -1,7 +1,6 @@
-
 (function initTheme() {
         var xIcon = document.querySelector('.xIcon')
-        const savedTheme = localStorage.getItem('theme') || 'light';
+        const savedTheme = localStorage.getItem('theme') || 'dark';
         if (savedTheme === 'dark') {
                 document.body.classList.add('dark-theme')
         xIcon.src='/frontend/res/x-social-media-white-icon.png'
@@ -115,7 +114,7 @@
 
 // MAIN APP CODE
 window.addEventListener('DOMContentLoaded', () => {
-        
+      const profileName= document.querySelector('#profileName')  
         lucide.createIcons();
         
         // Display username from localStorage
@@ -125,6 +124,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 const sidebarUsername = document.getElementById('sidebarUsername');
                 if (usernameDisplay) usernameDisplay.textContent = `@${username}`;
                 if (sidebarUsername) sidebarUsername.textContent = `@${username}`;
+                if (sidebarUsername) profileName.textContent= `@${username}`
         }
         
         // Theme toggle functionality
@@ -134,7 +134,7 @@ window.addEventListener('DOMContentLoaded', () => {
         
         if (themeToggleSidebar) {
                 // Set initial state
-                const currentTheme = localStorage.getItem('theme') || 'light';
+                const currentTheme = localStorage.getItem('theme') || 'dark';
                 if (currentTheme === 'dark') {
                         sidebarSunIcon.style.display = 'none';
                         sidebarMoonIcon.style.display = 'block';

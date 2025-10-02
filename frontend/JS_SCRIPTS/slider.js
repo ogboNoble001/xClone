@@ -25,10 +25,7 @@ function closeSidebar() {
         overlay.classList.remove('active');
 }
 
-// Escape key closes sidebar
-document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') closeSidebar();
-});
+
 
 window.runSidebarAnimations = function() {
         const username = document.querySelector('.sidebar-subtitle span:first-child');
