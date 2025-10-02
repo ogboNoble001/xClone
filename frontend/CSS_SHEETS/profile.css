@@ -14,10 +14,6 @@
               opacity 0.4s ease;
 }
 
-body.dark-theme .profile-page {
-  background: #15202b;
-}
-
 .profile-page.active {
   transform: translateX(0);
   opacity: 1;
@@ -34,11 +30,6 @@ body.dark-theme .profile-page {
   top: 0;
   z-index: 10;
   border-bottom: 1px solid #CFD9DE;
-}
-
-body.dark-theme .profile-header {
-  background: rgba(21, 32, 43, 0.9);
-  border-bottom-color: #38444d;
 }
 
 .profile-back-btn {
@@ -58,18 +49,10 @@ body.dark-theme .profile-header {
   background: rgba(0, 0, 0, 0.05);
 }
 
-body.dark-theme .profile-back-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-}
-
 .profile-back-btn svg {
   width: 20px;
   height: 20px;
   color: #0f1419;
-}
-
-body.dark-theme .profile-back-btn svg {
-  color: #ffffff;
 }
 
 .profile-header-info {
@@ -84,17 +67,9 @@ body.dark-theme .profile-back-btn svg {
   margin: 0;
 }
 
-body.dark-theme .profile-header-info h2 {
-  color: #ffffff;
-}
-
 .profile-post-count {
   font-size: 0.85rem;
   color: #536471;
-}
-
-body.dark-theme .profile-post-count {
-  color: #8b98a5;
 }
 
 .profile-more-btn {
@@ -113,10 +88,6 @@ body.dark-theme .profile-post-count {
   width: 20px;
   height: 20px;
   color: #0f1419;
-}
-
-body.dark-theme .profile-more-btn svg {
-  color: #ffffff;
 }
 
 /* Profile Banner */
@@ -150,11 +121,6 @@ body.dark-theme .profile-more-btn svg {
   background: #ffffff;
 }
 
-body.dark-theme .profile-avatar-container {
-  border-color: #15202b;
-  background: #15202b;
-}
-
 .profile-avatar {
   width: 100%;
   height: 100%;
@@ -182,26 +148,14 @@ body.dark-theme .profile-avatar-container {
   transition: background 0.2s ease;
 }
 
-body.dark-theme .profile-action-btn {
-  border-color: #38444d;
-}
-
 .profile-action-btn:hover {
   background: rgba(0, 0, 0, 0.05);
-}
-
-body.dark-theme .profile-action-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
 }
 
 .profile-action-btn svg {
   width: 18px;
   height: 18px;
   color: #0f1419;
-}
-
-body.dark-theme .profile-action-btn svg {
-  color: #ffffff;
 }
 
 .profile-edit-btn {
@@ -215,17 +169,8 @@ body.dark-theme .profile-action-btn svg {
   transition: background 0.2s ease;
 }
 
-body.dark-theme .profile-edit-btn {
-  border-color: #38444d;
-  color: #ffffff;
-}
-
 .profile-edit-btn:hover {
   background: rgba(0, 0, 0, 0.05);
-}
-
-body.dark-theme .profile-edit-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
 }
 
 /* Profile Details */
@@ -247,10 +192,6 @@ body.dark-theme .profile-edit-btn:hover {
   margin: 0;
 }
 
-body.dark-theme .profile-name-section h1 {
-  color: #ffffff;
-}
-
 .profile-verified {
   width: 20px;
   height: 20px;
@@ -266,19 +207,10 @@ body.dark-theme .profile-name-section h1 {
   font-weight: 600;
 }
 
-body.dark-theme .profile-badge {
-  background: #ffffff;
-  color: #0f1419;
-}
-
 .profile-username {
   color: #536471;
   font-size: 0.95rem;
   margin-bottom: 1rem;
-}
-
-body.dark-theme .profile-username {
-  color: #8b98a5;
 }
 
 .profile-website,
@@ -289,11 +221,6 @@ body.dark-theme .profile-username {
   color: #536471;
   font-size: 0.9rem;
   margin-bottom: 0.75rem;
-}
-
-body.dark-theme .profile-website,
-body.dark-theme .profile-join-date {
-  color: #8b98a5;
 }
 
 .profile-website svg,
@@ -333,16 +260,8 @@ body.dark-theme .profile-join-date {
   color: #0f1419;
 }
 
-body.dark-theme .profile-stat-count {
-  color: #ffffff;
-}
-
 .profile-stat-label {
   color: #536471;
-}
-
-body.dark-theme .profile-stat-label {
-  color: #8b98a5;
 }
 
 /* Followed By */
@@ -353,10 +272,6 @@ body.dark-theme .profile-stat-label {
   margin-top: 1rem;
   font-size: 0.85rem;
   color: #536471;
-}
-
-body.dark-theme .profile-followed-by {
-  color: #8b98a5;
 }
 
 .profile-followers-avatars {
@@ -372,10 +287,6 @@ body.dark-theme .profile-followed-by {
   margin-left: -0.5rem;
 }
 
-body.dark-theme .profile-followers-avatars img {
-  border-color: #15202b;
-}
-
 /* Profile Tabs */
 .profile-tabs {
   display: flex;
@@ -384,11 +295,6 @@ body.dark-theme .profile-followers-avatars img {
   top: 53px;
   background: #ffffff;
   z-index: 9;
-}
-
-body.dark-theme .profile-tabs {
-  border-bottom-color: #38444d;
-  background: #15202b;
 }
 
 .profile-tab {
@@ -403,25 +309,13 @@ body.dark-theme .profile-tabs {
   transition: background 0.2s ease;
 }
 
-body.dark-theme .profile-tab {
-  color: #8b98a5;
-}
-
 .profile-tab:hover {
   background: rgba(0, 0, 0, 0.03);
-}
-
-body.dark-theme .profile-tab:hover {
-  background: rgba(255, 255, 255, 0.03);
 }
 
 .profile-tab.active {
   color: #0f1419;
   font-weight: 600;
-}
-
-body.dark-theme .profile-tab.active {
-  color: #ffffff;
 }
 
 .profile-tab.active::after {
@@ -450,10 +344,6 @@ body.dark-theme .profile-tab.active {
   font-weight: 600;
 }
 
-body.dark-theme .pinned-label {
-  color: #8b98a5;
-}
-
 .pinned-label svg {
   width: 16px;
   height: 16px;
@@ -468,16 +358,8 @@ body.dark-theme .pinned-label {
   transition: background 0.2s ease;
 }
 
-body.dark-theme .post {
-  border-bottom-color: #38444d;
-}
-
 .post:hover {
   background: rgba(0, 0, 0, 0.02);
-}
-
-body.dark-theme .post:hover {
-  background: rgba(255, 255, 255, 0.02);
 }
 
 .post-avatar img {
@@ -509,10 +391,6 @@ body.dark-theme .post:hover {
   color: #0f1419;
 }
 
-body.dark-theme .post-name {
-  color: #ffffff;
-}
-
 .post-verified {
   width: 16px;
   height: 16px;
@@ -527,20 +405,10 @@ body.dark-theme .post-name {
   border-radius: 2px;
 }
 
-body.dark-theme .post-badge {
-  background: #ffffff;
-  color: #0f1419;
-}
-
 .post-username,
 .post-time {
   color: #536471;
   font-size: 0.9rem;
-}
-
-body.dark-theme .post-username,
-body.dark-theme .post-time {
-  color: #8b98a5;
 }
 
 .post-more {
@@ -549,10 +417,6 @@ body.dark-theme .post-time {
   padding: 0.25rem;
   cursor: pointer;
   color: #536471;
-}
-
-body.dark-theme .post-more {
-  color: #8b98a5;
 }
 
 .post-more svg {
@@ -564,10 +428,6 @@ body.dark-theme .post-more {
   margin-bottom: 1rem;
   color: #0f1419;
   line-height: 1.5;
-}
-
-body.dark-theme .post-text {
-  color: #ffffff;
 }
 
 .post-actions {
@@ -589,10 +449,6 @@ body.dark-theme .post-text {
   transition: all 0.2s ease;
 }
 
-body.dark-theme .post-action {
-  color: #8b98a5;
-}
-
 .post-action:hover {
   background: rgba(29, 155, 240, 0.1);
   color: #1d9bf0;
@@ -607,11 +463,7 @@ body.dark-theme .post-action {
   font-size: 0.85rem;
 }
 
-/* Profile Menu Button */
-.profile-menu-btn {
-  
-}
-
+/* Responsive */
 @media (max-width: 768px) {
   .profile-banner {
     height: 150px;

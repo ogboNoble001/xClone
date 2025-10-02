@@ -9,7 +9,7 @@
 *::-webkit-scrollbar {
   display: none;
   scrollbar-width: none;
- -ms-overflow-style: none;
+  -ms-overflow-style: none;
 }
 
 html, body {
@@ -192,9 +192,11 @@ nav.mainNav,
 .sidebar-overlay {
   display: none;
 }
+
 .mainBody{
   height: 100%;
 }
+
 nav.mainNav{
   width: 100%;
   justify-content: space-between;
@@ -205,14 +207,13 @@ nav.mainNav{
   gap: 1em;
   position: fixed;
   bottom: 0;
- 
 }
+
 .icns.active {
   position: relative;
 }
 .icns.active:not(:has(.house)) svg{
-      
-      stroke-width: 3;
+  stroke-width: 3;
 }
 .icns.active:has(.house) svg{
   fill: #0f1419;
@@ -222,7 +223,6 @@ nav.mainNav{
   content: "";
   background-color: #ffffff;
   width: 5px;
-  
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
   top: 50%;
@@ -267,8 +267,7 @@ nav.mainNav{
   text-underline-offset: 2px;
 }
 
-/* ===== Odometer Counter Styles ===== */
-/* Default (light theme) */
+/* Odometer Counter */
 .counter {
   font-weight:700;
   font-size: 1rem;
@@ -276,23 +275,12 @@ nav.mainNav{
 }
 .slot.digit span,
 .slot.sep {
-  
-  color:#0f1419; /* same as text */
-}
-
-/* Dark theme override */
-body.dark-theme .counter {
-  color:#ffffff;
-}
-body.dark-theme .slot.digit span,
-body.dark-theme .slot.sep {
-  color:#ffffff; /* numbers + dots + k/M/B */
+  color:#0f1419;
 }
 .slot { 
   overflow:hidden; 
   height:1em; 
   display:inline-flex; 
-  
   align-items:flex-start; 
   position:relative; 
 }
@@ -308,11 +296,13 @@ body.dark-theme .slot.sep {
   line-height:1; 
   text-align:center; 
 }
+
 .underAppPic{
   font-weight: 800;
   font-size: larger;
   margin-bottom: 2em;
 }
+
 .topNav{
   margin-bottom: auto;
   width: 100%;
@@ -321,25 +311,20 @@ body.dark-theme .slot.sep {
   overflow-x: scroll;
   border-bottom: 1px solid #CFD9DE;
   flex-direction: row;
-  
 }
-
 .topNav div {
   padding: .8em .8em .9em .8em;
   position: relative;
   flex: 0 0 auto;
 }
-
 .topNav div span {
   font-size: larger;
   position: relative;
 }
-
 .topNav div:not(.active) span {
   font-weight: 500;
   color: #536471;
 }
-
 .topNav div::after {
   content: "";
   height: 3px;
@@ -349,21 +334,19 @@ body.dark-theme .slot.sep {
   border-radius: 37px;
   position: absolute;
   background-color: #1D9BF0;
-  transition: width 0.3s ease-in-out; /* Smooth transition */
+  transition: width 0.3s ease-in-out;
 }
-
 .topNav div.active::after {
   width: 60%; 
 }
-
 .topNav div.active span {
   font-weight: 700;
 }
-
 .topNav div.animateAfterForBefore::after {
   width: 60%;
   transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
 .cookie-banner {
   position: fixed;
   bottom: 0;
@@ -379,7 +362,6 @@ body.dark-theme .slot.sep {
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
     opacity 0.4s ease;
 }
-
 .cookie-banner.show {
   transform: translateY(0);
   opacity: 1;
@@ -393,7 +375,6 @@ body.dark-theme .slot.sep {
   gap: 1.5rem;
   flex-wrap: wrap;
 }
-
 .cookie-icon {
   flex-shrink: 0;
   width: 48px;
@@ -405,36 +386,30 @@ body.dark-theme .slot.sep {
   justify-content: center;
   color: #1D9BF0;
 }
-
 .cookie-icon svg {
   width: 28px;
   height: 28px;
 }
-
 .cookie-text {
   flex: 1;
   min-width: 250px;
 }
-
 .cookie-text h3 {
   font-size: 1.1rem;
   font-weight: 700;
   color: #0f1419;
   margin-bottom: 0.5rem;
 }
-
 .cookie-text p {
   font-size: 0.9rem;
   color: #536471;
   line-height: 1.5;
 }
-
 .cookie-buttons {
   display: flex;
   gap: 0.75rem;
   flex-shrink: 0;
 }
-
 .cookie-btn {
   padding: 0.75rem 1.5rem;
   border-radius: 20px;
@@ -445,191 +420,40 @@ body.dark-theme .slot.sep {
   border: none;
   font-family: "Ysabeau Office", sans-serif;
 }
-
 .cookie-accept {
   background-color: #0f1419;
   color: #ffffff;
 }
-
 .cookie-accept:hover {
   background-color: #272c30;
 }
-
 .cookie-decline {
   background-color: #f7f9fa;
   color: #536471;
   border: 1px solid #CFD9DE;
 }
-
 .cookie-decline:hover {
   background-color: #e7e9ea;
   color: #0f1419;
 }
 
-/* Logout button styling */
+/* Logout */
 .logout-btn {
   color: #f4212e !important;
 }
-
 .logout-btn:hover {
   background-color: #fff1f2 !important;
 }
-
 .logout-btn .menu-icon {
   color: #f4212e !important;
 }
 
-
-/* ===== DARK THEME STYLES ===== */
-body.dark-theme {
-    background-color: #15202b;
-    color: #ffffff;
-}
-
-body.dark-theme .prntAppPic {
-    background: #15202b;
-    color: #8b98a5;
-}
-
-body.dark-theme .sidebar {
-    background-color: #1e2732;
-    border-right-color: #38444d;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-}
-
-body.dark-theme .sidebar-header {
-    background-color: #1e2732;
-    border-bottom-color: #38444d;
-}
-
-body.dark-theme .sidebar-title {
-    color: #ffffff;
-}
-
-body.dark-theme .sidebar-subtitle {
-    color: #8b98a5;
-}
-
-body.dark-theme .sidebar-close {
-    color: #8b98a5;
-}
-
-body.dark-theme .sidebar-close:hover {
-     color: #1d9bf0;
-}
-
-body.dark-theme .menu-section-title {
-    color: #8b98a5;
-}
-
-body.dark-theme .menu-item {
-    color: #e7e9ea;
-}
-
-body.dark-theme .menu-item:hover {
-    background-color: rgba(29, 155, 240, 0.1);
-    color: #1d9bf0;
-}
-
-body.dark-theme .menu-item.active {
-    background-color: rgba(29, 155, 240, 0.1);
-    color: #1d9bf0;
-}
-
-body.dark-theme .menu-item.active .menu-icon {
-    color: #1d9bf0;
-}
-
-body.dark-theme .menu-item.active::after {
-    background-color: #1d9bf0;
-}
-
-body.dark-theme nav.mainNav {
-    background-color: #15202b;
-    border-top-color: #38444d;
-}
-
-body.dark-theme .topNav {
-    border-bottom-color: #38444d;
-}
-
-body.dark-theme .topNav div:not(.active) span {
-    color: #8b98a5;
-}
-
-body.dark-theme .topNav div.active span {
-    color: #ffffff;
-}
-
-body.dark-theme .smallInfoDiv {
-    background-color: #1d9bf0;
-    color: #ffffff;
-}
-
-body.dark-theme .sidebar-overlay.active {
-    background-color: rgba(0, 0, 0, 0.7);
-}
-
-body.dark-theme .logout-btn {
-    color: #f91880 !important;
-}
-
-body.dark-theme .logout-btn:hover {
-    background-color: rgba(249, 24, 128, 0.1) !important;
-}
-
-body.dark-theme .cookie-banner {
-    background-color: #1e2732;
-    border-top-color: #38444d;
-    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5);
-}
-
-body.dark-theme .cookie-text h3 {
-    color: #ffffff;
-}
-
-body.dark-theme .cookie-text p {
-    color: #8b98a5;
-}
-
-body.dark-theme .cookie-icon {
-    background-color: rgba(29, 155, 240, 0.1);
-    color: #1d9bf0;
-}
-
-body.dark-theme .cookie-accept {
-    background-color: #1d9bf0;
-    color: #ffffff;
-}
-
-body.dark-theme .cookie-accept:hover {
-    background-color: #1a8cd8;
-}
-
-body.dark-theme .cookie-decline {
-    background-color: rgba(255, 255, 255, 0.1);
-    color: #8b98a5;
-    border-color: #38444d;
-}
-
-body.dark-theme .cookie-decline:hover {
-    background-color: rgba(255, 255, 255, 0.15);
-    color: #ffffff;
-}
-body.dark-theme .counter {
-  color:#ffffff;
-}
-body.dark-theme .slot.digit span,
-body.dark-theme .slot.sep {
-  color:#ffffff; /* numbers + dots + k/M/B */
-}
 /* Theme toggle in sidebar */
 .theme-toggle-sidebar {
   display: flex;
   align-items: center;
   gap: 0.1rem;
   margin-left: 1.4em;
-
   font-family: "Ysabeau Office", sans-serif;
   font-size: 0.95rem;
   color: #536471;
@@ -640,24 +464,12 @@ body.dark-theme .slot.sep {
   background: none;
   width: 100%;
   text-align: left;
-}
-.theme-toggle-sidebar {
-  -webkit-tap-highlight-color: transparent; /* Removes the white/gray overlay */
+  -webkit-tap-highlight-color: transparent;
   outline: none;
 }
 .theme-toggle-sidebar:hover {
   color: #0f1419;
 }
-
-body.dark-theme .theme-toggle-sidebar {
-  color: #e7e9ea;
-}
-
-body.dark-theme .theme-toggle-sidebar:hover {
-    color: #1d9bf0
-  
-}
-
 .theme-toggle-sidebar .menu-icon {
   margin-right: 0.75rem;
   width: 18px;
@@ -665,34 +477,29 @@ body.dark-theme .theme-toggle-sidebar:hover {
   color: inherit;
 }
 
-/* Mobile responsive for cookie banner */
 @media (max-width: 768px) {
   .cookie-content {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
   }
-  
   .cookie-buttons {
     width: 100%;
     flex-direction: column;
   }
-  
   .cookie-btn {
     width: 100%;
   }
 }
-.diff6{
-  color: #FFfFfF;
-}
+
+.diff6{ color: #fff; }
 .privPrnt {
   display: flex;
-align-items: center;
-position: relative;
-padding: 0.75rem 1.5rem;
-font-size: 0.95rem;
-color: #536471;
-text-decoration: none;
-transition: all 0.2s ease;
+  align-items: center;
+  position: relative;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.95rem;
+  color: #536471;
+  text-decoration: none;
+  transition: all 0.2s ease;
 }
-

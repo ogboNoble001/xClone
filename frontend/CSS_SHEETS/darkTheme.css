@@ -1,0 +1,296 @@
+body.dark-theme {
+  background-color: #15202b;
+  color: #ffffff;
+}
+
+body.dark-theme .prntAppPic {
+  background: #15202b;
+  color: #8b98a5;
+}
+
+body.dark-theme .sidebar {
+  background-color: #1e2732;
+  border-right-color: #38444d;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-theme .sidebar-header {
+  background-color: #1e2732;
+  border-bottom-color: #38444d;
+}
+
+body.dark-theme .sidebar-title {
+  color: #ffffff;
+}
+
+body.dark-theme .sidebar-subtitle {
+  color: #8b98a5;
+}
+
+body.dark-theme .sidebar-close {
+  color: #8b98a5;
+}
+
+body.dark-theme .sidebar-close:hover {
+  color: #1d9bf0;
+}
+
+body.dark-theme .menu-section-title {
+  color: #8b98a5;
+}
+
+body.dark-theme .menu-item {
+  color: #e7e9ea;
+}
+
+body.dark-theme .menu-item:hover {
+  background-color: rgba(29, 155, 240, 0.1);
+  color: #1d9bf0;
+}
+
+body.dark-theme .menu-item.active {
+  background-color: rgba(29, 155, 240, 0.1);
+  color: #1d9bf0;
+}
+
+body.dark-theme .menu-item.active .menu-icon {
+  color: #1d9bf0;
+}
+
+body.dark-theme .menu-item.active::after {
+  background-color: #1d9bf0;
+}
+
+body.dark-theme nav.mainNav {
+  background-color: #15202b;
+  border-top-color: #38444d;
+}
+
+body.dark-theme .topNav {
+  border-bottom-color: #38444d;
+}
+
+body.dark-theme .topNav div:not(.active) span {
+  color: #8b98a5;
+}
+
+body.dark-theme .topNav div.active span {
+  color: #ffffff;
+}
+
+body.dark-theme .smallInfoDiv {
+  background-color: #1d9bf0;
+  color: #ffffff;
+}
+
+body.dark-theme .sidebar-overlay.active {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+body.dark-theme .logout-btn {
+  color: #f91880 !important;
+}
+
+body.dark-theme .logout-btn:hover {
+  background-color: rgba(249, 24, 128, 0.1) !important;
+}
+
+body.dark-theme .cookie-banner {
+  background-color: #1e2732;
+  border-top-color: #38444d;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-theme .cookie-text h3 {
+  color: #ffffff;
+}
+
+body.dark-theme .cookie-text p {
+  color: #8b98a5;
+}
+
+body.dark-theme .cookie-icon {
+  background-color: rgba(29, 155, 240, 0.1);
+  color: #1d9bf0;
+}
+
+body.dark-theme .cookie-accept {
+  background-color: #1d9bf0;
+  color: #ffffff;
+}
+
+body.dark-theme .cookie-accept:hover {
+  background-color: #1a8cd8;
+}
+
+body.dark-theme .cookie-decline {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #8b98a5;
+  border-color: #38444d;
+}
+
+body.dark-theme .cookie-decline:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+}
+
+body.dark-theme .counter {
+  color:#ffffff;
+}
+
+body.dark-theme .slot.digit span,
+body.dark-theme .slot.sep {
+  color:#ffffff;
+}
+
+body.dark-theme .theme-toggle-sidebar {
+  color: #e7e9ea;
+}
+
+body.dark-theme .theme-toggle-sidebar:hover {
+  color: #1d9bf0;
+}
+/* ===== DARK THEME OVERRIDES ===== */
+body.dark-theme .profile-page {
+  background: #15202b;
+}
+
+body.dark-theme .profile-header {
+  background: rgba(21, 32, 43, 0.9);
+  border-bottom-color: #38444d;
+}
+
+body.dark-theme .profile-back-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-theme .profile-back-btn svg {
+  color: #ffffff;
+}
+
+body.dark-theme .profile-header-info h2 {
+  color: #ffffff;
+}
+
+body.dark-theme .profile-post-count {
+  color: #8b98a5;
+}
+
+body.dark-theme .profile-more-btn svg {
+  color: #ffffff;
+}
+
+body.dark-theme .profile-avatar-container {
+  border-color: #15202b;
+  background: #15202b;
+}
+
+body.dark-theme .profile-action-btn {
+  border-color: #38444d;
+}
+
+body.dark-theme .profile-action-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-theme .profile-action-btn svg {
+  color: #ffffff;
+}
+
+body.dark-theme .profile-edit-btn {
+  border-color: #38444d;
+  color: #ffffff;
+}
+
+body.dark-theme .profile-edit-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-theme .profile-name-section h1 {
+  color: #ffffff;
+}
+
+body.dark-theme .profile-badge {
+  background: #ffffff;
+  color: #0f1419;
+}
+
+body.dark-theme .profile-username {
+  color: #8b98a5;
+}
+
+body.dark-theme .profile-website,
+body.dark-theme .profile-join-date {
+  color: #8b98a5;
+}
+
+body.dark-theme .profile-stat-count {
+  color: #ffffff;
+}
+
+body.dark-theme .profile-stat-label {
+  color: #8b98a5;
+}
+
+body.dark-theme .profile-followed-by {
+  color: #8b98a5;
+}
+
+body.dark-theme .profile-followers-avatars img {
+  border-color: #15202b;
+}
+
+body.dark-theme .profile-tabs {
+  border-bottom-color: #38444d;
+  background: #15202b;
+}
+
+body.dark-theme .profile-tab {
+  color: #8b98a5;
+}
+
+body.dark-theme .profile-tab:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+body.dark-theme .profile-tab.active {
+  color: #ffffff;
+}
+
+body.dark-theme .pinned-label {
+  color: #8b98a5;
+}
+
+body.dark-theme .post {
+  border-bottom-color: #38444d;
+}
+
+body.dark-theme .post:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+body.dark-theme .post-name {
+  color: #ffffff;
+}
+
+body.dark-theme .post-badge {
+  background: #ffffff;
+  color: #0f1419;
+}
+
+body.dark-theme .post-username,
+body.dark-theme .post-time {
+  color: #8b98a5;
+}
+
+body.dark-theme .post-more {
+  color: #8b98a5;
+}
+
+body.dark-theme .post-text {
+  color: #ffffff;
+}
+
+body.dark-theme .post-action {
+  color: #8b98a5;
+}

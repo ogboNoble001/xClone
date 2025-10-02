@@ -32,3 +32,20 @@ if (profileBackBtn && profilePage) {
         profilePage.classList.remove('active');
     });
 }
+
+        // Logout button
+        const logoutBtn = document.getElementById('logoutBtn');
+        if (logoutBtn) {
+                logoutBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        
+                        if (confirm('Are you sure you want to logout?')) {
+                                localStorage.removeItem('authToken');
+                                localStorage.removeItem('username');
+                                localStorage.removeItem('API_URL');
+                                console.log('👋 User logged out');
+                                window.location.href = "/sign_opt/sign_opt.html";
+                        }
+                });
+        }
+        
