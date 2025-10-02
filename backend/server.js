@@ -18,7 +18,7 @@ const app = express();
 const allowedOrigins = [
     "https://startling-manatee-3912f5.netlify.app",
     "https://x-clone-real.vercel.app",
-    "http://localhost:7700"
+
 ];
 
 app.use(cors({
