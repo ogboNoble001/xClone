@@ -23,9 +23,7 @@ if (profileMenuBtn && profilePage) {
         // Refresh icons
         lucide.createIcons();
         
-        // Close sidebar if open
-        if (sidebar) sidebar.classList.remove('active');
-        if (sidebarOverlay) sidebarOverlay.classList.remove('active');
+
     });
 }
 
