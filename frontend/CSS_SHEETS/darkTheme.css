@@ -206,9 +206,15 @@ body.dark-theme .profile-edit-btn:hover {
   background: rgba(255, 255, 255, 0.1);
 }
 
-body.dark-theme .profile-name-section h1 {
+body.dark-theme .profile-name-section{
+  align-self: flex-start;
+}
+
+body.dark-theme .profile-name-section span {
   color: #ffffff;
 }
+
+
 
 body.dark-theme .profile-badge {
   background: #ffffff;

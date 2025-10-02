@@ -27,27 +27,3 @@ function closeSidebar() {
 
 
 
-window.runSidebarAnimations = function() {
-        const username = document.querySelector('.sidebar-subtitle span:first-child');
-        const sectionTitles = document.querySelectorAll('.menu-section-title');
-        const menuItems = document.querySelectorAll('.menu-item');
-        
-        // Only animate if elements exist
-        if (!username) return;
-        
-        // Only animate if not already animated
-        if (!username.classList.contains('animate-username')) {
-                // Animate username
-                username.classList.add('animate-username');
-                
-                // Animate section titles
-                sectionTitles.forEach(title => {
-                        title.classList.add('animate-section-title');
-                });
-                
-                // Animate menu items with stagger
-                menuItems.forEach(item => {
-                        item.classList.add('animate-menu-item');
-                });
-        }
-};
