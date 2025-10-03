@@ -59,6 +59,7 @@ html, body {
 
 .sidebar {
   position: fixed;
+  overflow-y: scroll;
   top: 0;
   left: 0;
   width: 280px;

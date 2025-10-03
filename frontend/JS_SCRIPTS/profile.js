@@ -16,10 +16,17 @@ if (profileMenuBtn && profilePage) {
         document.getElementById('profileUsername').textContent = `@${username}`;
         document.getElementById('postAuthorName').textContent = username;
         document.getElementById('postAuthorUsername').textContent = `@${username}`;
-        
+        const followersContainer = document.getElementById('')
+        const profileFollowing = document.getElementById('profileFollowing')
+      const profileFollowers = document.getElementById('profileFollowers')
         // Show profile page
         profilePage.classList.add('active');
-        
+        const followers = new Odometer(profileFollowers, { duration: 3000 });
+                const following = new Odometer(profileFollowing, { duration: 3000 });
+                
+                followers.set(0);
+                following.set(0);
+                
         // Refresh icons
         lucide.createIcons();
         

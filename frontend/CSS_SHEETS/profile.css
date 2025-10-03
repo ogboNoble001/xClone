@@ -100,7 +100,8 @@
 /* Profile Banner */
 .profile-banner {
   width: 100%;
-  height: 700px;
+  flex: 0 0 auto;
+  height: 100%;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   overflow: hidden;
   display: flex;
@@ -118,15 +119,14 @@
 /* Profile Info Section */
 .profile-info-section {
   padding: 0 1rem;
-  position: relative;
+  
   display: flex;
   flex-direction: column;
 }
 
 .profile-avatar-container {
-  margin-top: -4rem;
-  width: 8rem;
-  height: 8rem;
+  
+  
   border-radius: 50%;
   border: 4px solid #ffffff;
   overflow: hidden;
@@ -134,7 +134,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
+  
 }
 
 .profile-avatar {
@@ -207,7 +207,8 @@
 .profile-name-section {
   display: flex;
   flex-direction: row;
-  gap: 0.5rem;
+  gap: .2em;
+  width: fit-content;
   align-items: center;      /* ← CHANGE THIS */
 
 }
@@ -258,8 +259,8 @@
 
 .profile-website svg,
 .profile-join-date svg {
-  width: 18px;
-  height: 18px;
+  width: 10px;
+  height: 10px;
   flex-shrink: 0;
 }
 
@@ -272,6 +273,31 @@
   text-decoration: underline;
 }
 
+    .followed-by {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: #71767b;
+      margin: 12px 0;
+    }
+    .follower-avatars {
+      display: flex;
+      margin-right: 4px;
+    }
+    .follower-avatar {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid #000;
+      margin-left: -8px;
+    }
+    .follower-avatar:first-child {
+      margin-left: 0;
+    }
+    .avatar-1 { background: #ccc; }
+    .avatar-2 { background: #888; }
+    .avatar-3 { background: #ff6b35; }
 /* Profile Stats */
 .profile-stats {
   display: flex;
@@ -303,31 +329,6 @@
 }
 
 /* Followed By */
-.profile-followed-by {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: 1rem;
-  font-size: 0.85rem;
-  color: #536471;
-  flex-wrap: wrap;
-}
-
-.profile-followers-avatars {
-  display: flex;
-  flex-direction: row;
-  margin-left: -0.5rem;
-}
-
-.profile-followers-avatars img {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  border: 2px solid #ffffff;
-  margin-left: -0.5rem;
-  flex-shrink: 0;
-}
 
 /* Profile Tabs */
 .profile-tabs {
