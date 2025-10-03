@@ -101,7 +101,7 @@
 .profile-banner {
   width: 100%;
   flex: 0 0 auto;
-  height: 100%;
+  height: 170%;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   overflow: hidden;
   display: flex;
@@ -426,7 +426,7 @@
 }
 
 .post-content {
-  flex: 1;
+  
   display: flex;
   flex-direction: column;
 }
@@ -456,7 +456,7 @@
   width: 16px;
   height: 16px;
   color: #1d9bf0;
-  flex-shrink: 0;
+  
 }
 
 .post-badge {
@@ -467,7 +467,7 @@
   border-radius: 2px;
   display: flex;
   align-items: center;
-  flex-shrink: 0;
+ 
 }
 
 .post-username,
