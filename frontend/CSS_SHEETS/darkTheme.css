@@ -48,18 +48,6 @@ body.dark-theme .menu-item:hover {
   color: #1d9bf0;
 }
 
-body.dark-theme .menu-item.active {
-  background-color: rgba(29, 155, 240, 0.1);
-  color: #1d9bf0;
-}
-
-body.dark-theme .menu-item.active .menu-icon {
-  color: #1d9bf0;
-}
-
-body.dark-theme .menu-item.active::after {
-  background-color: #1d9bf0;
-}
 
 body.dark-theme nav.mainNav {
   background-color: #15202b;
@@ -137,6 +125,20 @@ body.dark-theme .cookie-decline:hover {
 body.dark-theme .counter {
   color:#ffffff;
 }
+
+body.dark-theme .menu-item.active {
+  background-color: rgba(29, 155, 240, 0.1);
+  color: #1d9bf0;
+}
+
+body.dark-theme .menu-item.active .menu-icon {
+  color: #1d9bf0;
+}
+
+body.dark-theme .menu-item.active::after {
+  background-color: #1d9bf0;
+}
+
 
 body.dark-theme .slot.digit span,
 body.dark-theme .slot.sep {
@@ -284,6 +286,9 @@ body.dark-theme .post-badge {
   color: #0f1419;
 }
 
+body.dark-theme .follower-avatar  {
+  border: 2px solid #000;
+}
 body.dark-theme .post-username,
 body.dark-theme .post-time {
   color: #8b98a5;
