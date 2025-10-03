@@ -318,7 +318,7 @@ nav.mainNav{
   flex-direction: row;
 }
 .topNav div {
-  padding: .8em .8em .9em .8em;
+  padding: .8em .8em .4em .8em;
   position: relative;
   flex: 0 0 auto;
 }
@@ -334,7 +334,7 @@ nav.mainNav{
   content: "";
   height: 3px;
   width: 0%; 
-  left: 17%;
+  left: 22%;
   bottom: 0;
   border-radius: 37px;
   position: absolute;
