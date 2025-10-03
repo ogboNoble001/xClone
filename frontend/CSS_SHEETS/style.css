@@ -12,6 +12,10 @@
   -ms-overflow-style: none;
 }
 
+button:hover{
+  outline: none;
+}
+
 html, body {
   height: 100%;
   font-family: "Ysabeau Office", sans-serif;
@@ -319,7 +323,7 @@ nav.mainNav{
   flex: 0 0 auto;
 }
 .topNav div span {
-  font-size: larger;
+  font-size: large;
   position: relative;
 }
 .topNav div:not(.active) span {

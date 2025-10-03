@@ -212,7 +212,7 @@
   flex-direction: row;
   gap: .2em;
   width: fit-content;
-  align-items: center;      /* ← CHANGE THIS */
+  align-items: center;      
 
 }
 
@@ -228,7 +228,7 @@
   width: 20px;
   height: 20px;
   color: #1d9bf0;
-  flex-shrink: 0;
+ 
 }
 
 .profile-badge {
@@ -529,10 +529,6 @@
   justify-content: center;
 }
 
-.post-action:hover {
-  background: rgba(29, 155, 240, 0.1);
-  color: #1d9bf0;
-}
 
 .post-action svg {
   width: 18px;
