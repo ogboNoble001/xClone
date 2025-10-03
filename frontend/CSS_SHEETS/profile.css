@@ -1,3 +1,6 @@
+*, button{
+  font-family: "Ysabeau Office", sans-serif;
+}
 /* ===== PROFILE PAGE STYLES ===== */
 .profile-page {
   position: fixed;
@@ -198,7 +201,7 @@
 
 /* Profile Details */
 .profile-details {
-  padding: 1rem 0;
+  
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -537,6 +540,12 @@
   font-size: 0.85rem;
 }
 
+.diff6{
+  gap: .3em;
+}
+.aifs{
+  align-items: flex-start;
+}
 /* Responsive */
 @media (max-width: 768px) {
   .profile-banner {
@@ -548,4 +557,11 @@
     height: 6rem;
     margin-top: -3rem;
   }
+}
+#profilePage.active svg{
+  width: 15px;
+  height: 15px;
+}
+.aic{
+  align-items: center;
 }

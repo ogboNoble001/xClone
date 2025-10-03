@@ -2,11 +2,12 @@
 const profileMenuBtn = document.getElementById('profileMenuBtn');
 const profilePage = document.getElementById('profilePage');
 const profileBackBtn = document.getElementById('profileBackBtn');
-const hasOdometerRun = false 
+let hasOdometerRun = false 
 if (profileMenuBtn && profilePage) {
     profileMenuBtn.addEventListener('click', (e) => {
         e.preventDefault();
-        
+                // Show profile page
+        profilePage.classList.add('active');
         // Get username from localStorage
         const username = localStorage.getItem('username') || 'user';
         
@@ -19,18 +20,17 @@ if (profileMenuBtn && profilePage) {
         if (!hasOdometerRun) {
                 const profileFollowing = document.getElementById('profileFollowing')
       const profileFollowers = document.getElementById('profileFollowers')
-        // Show profile page
-        profilePage.classList.add('active');
+
         const followers = new Odometer(profileFollowers, { duration: 3000 });
                 const following = new Odometer(profileFollowing, { duration: 3000 });
                 
                 followers.set(0);
                 following.set(0);
-        } else {
-                return
-        }
-        
-                
+                hasOdometerRun= true
+        } 
+         else {
+                 return
+         }
         // Refresh icons
         lucide.createIcons();
         
