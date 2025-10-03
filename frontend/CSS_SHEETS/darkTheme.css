@@ -29,10 +29,11 @@ body.dark-theme .sidebar-subtitle {
 
 body.dark-theme .sidebar-close {
   color: #8b98a5;
+  background-color: #1e2732 ;
 }
 
 body.dark-theme .sidebar-close:hover {
-  color: #1d9bf0;
+  color: #8b98a5;
 }
 
 body.dark-theme .menu-section-title {
