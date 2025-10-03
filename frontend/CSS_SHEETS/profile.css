@@ -406,6 +406,7 @@
 /* Post Styles */
 .post {
   display: flex;
+  width: 100%;
   flex-direction: row;
   padding: 1rem;
   border-bottom: 1px solid #CFD9DE;
