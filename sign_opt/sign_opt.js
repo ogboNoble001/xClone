@@ -164,7 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'http://192.168.1.5:5000',
         'http://192.168.1.10:5000',
         'http://localhost:5000',
-        'http://127.0.0.1:5000'
+        "http://127.0.0.1:3000"
     ];
     
     async function tryBackendRequest(endpoint, data) {
