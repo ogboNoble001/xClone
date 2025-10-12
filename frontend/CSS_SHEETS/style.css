@@ -266,6 +266,7 @@ nav.mainNav{
 }
 .ai-c{ display: flex; align-items: center; }
 .as-fe{ margin-top: auto;  }
+.jc{ justify-content: center;}
 .privacy{
   text-decoration: underline;
   text-decoration-thickness: .5px;
@@ -318,7 +319,7 @@ nav.mainNav{
   flex-direction: row;
 }
 .topNav div {
-  padding: .8em .8em .4em .8em;
+  padding: 0em .8em .4em .8em;
   position: relative;
   flex: 0 0 auto;
 }
@@ -512,16 +513,26 @@ nav.mainNav{
   margin-left: auto;
 }
 .headerLogo{
-  padding: .4em;
-  width: 40px;
-  height: 40px;
+  width: 25px;
+  height: 25px;
   margin: 0 auto;
+  margin: 0 .2em inherit;
 }
-.diff7{
+
+.headerLogoSettings{
   
 }
-.diff7 img{
+ .iniT{
   border-radius: 50%;
   width: 30px;
-  height:30px;
+  height: 30px;
+  font-weight: bold;
+  text-align: center;
+  font-size: large;
+ 
+  background-color: #01579B;
+}
+.diff8{
+  padding: .4em .8em;
+  
 }

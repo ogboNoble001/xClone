@@ -191,7 +191,8 @@ window.addEventListener('DOMContentLoaded', () => {
     });
     const iniT= document.querySelectorAll('.iniT')
     iniT.forEach((each)=>{
-        each
+        each.textContent=`${username.charAt(0).toUpperCase()}`
+        each.style.color='white'
     })
 
     setTimeout(() => {
