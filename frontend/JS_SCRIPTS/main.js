@@ -1,18 +1,24 @@
 // THEME INIT
 (function initTheme() {
-    var xIcon = document.querySelector('.xIcon')
+    const xIcons = document.querySelectorAll('.xIcon');
     const savedTheme = localStorage.getItem('theme') || 'dark';
+    
+    xIcons.forEach((xIcon) => {
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark-theme');
+            xIcon.src = '/frontend/res/x-social-media-white-icon.png';
+            localStorage.setItem('theme', 'dark');
+        } else {
+            localStorage.setItem('theme', 'light');
+            xIcon.src = '/frontend/res/file_00000000d1bc6243b622c7897a43e5b3.png';
+        }
+    });
+    
     if (savedTheme === 'dark') {
-        document.body.classList.add('dark-theme')
-        xIcon.src='/frontend/res/x-social-media-white-icon.png'
-        localStorage.setItem('theme', 'dark');
-        const counters= document.querySelectorAll('.counter')
-        counters.forEach((counter) =>  {
-            counter.style.color='#fff1f2'
-        })
-    } else {
-        localStorage.setItem('theme', 'light');
-        xIcon.src='/frontend/res/file_00000000d1bc6243b622c7897a43e5b3.png'
+        const counters = document.querySelectorAll('.counter');
+        counters.forEach((counter) => {
+            counter.style.color = '#fff1f2';
+        });
     }
 })();
 
@@ -27,14 +33,14 @@
     if (acceptBtn) {
         acceptBtn.addEventListener('click', () => {
             localStorage.setItem('cookieConsent', 'accepted');
-            cookieBanner.classList.remove('show');
+            if (cookieBanner) cookieBanner.classList.remove('show');
         });
     }
     const declineBtn = document.getElementById('cookieDecline');
     if (declineBtn) {
         declineBtn.addEventListener('click', () => {
             localStorage.setItem('cookieConsent', 'declined');
-            cookieBanner.classList.remove('show');
+            if (cookieBanner) cookieBanner.classList.remove('show');
         });
     }
 })();
@@ -46,7 +52,6 @@
         'http://localhost:5000',
         "http://127.0.0.1",
         "http://127.0.0.1:3000"
-
     ];
     const token = localStorage.getItem('authToken');
     if (!token) {
@@ -79,7 +84,7 @@
             } catch (err) {
                 console.warn(`⚠️ Attempt ${attempt} failed:`, err.message);
             }
-            await new Promise(res => setTimeout(res, 1000)); // wait 1s before retry
+            await new Promise(res => setTimeout(res, 1000));
         }
         return false;
     }
@@ -102,7 +107,7 @@
 
 // MAIN APP CODE
 window.addEventListener('DOMContentLoaded', () => {
-    const profileName= document.querySelector('#profileName')  
+    const profileName = document.querySelector('#profileName');
     lucide.createIcons();
 
     const username = localStorage.getItem('username');
@@ -111,30 +116,53 @@ window.addEventListener('DOMContentLoaded', () => {
         const sidebarUsername = document.getElementById('sidebarUsername');
         if (usernameDisplay) usernameDisplay.textContent = `@${username}`;
         if (sidebarUsername) sidebarUsername.textContent = `@${username}`;
-        if (sidebarUsername) profileName.textContent= `@${username}`
+        if (profileName) profileName.textContent = `@${username}`;
     }
 
     const themeToggleSidebar = document.getElementById('themeToggleSidebar');
+    const sidebarSunIcon = document.getElementById('sidebarSunIcon');
+    const sidebarMoonIcon = document.getElementById('sidebarMoonIcon');
+    const themeToggleText = document.getElementById('themeToggleText');
+    
     if (themeToggleSidebar) {
         const currentTheme = localStorage.getItem('theme') || 'dark';
         if (currentTheme === 'dark') {
-            sidebarSunIcon.style.display = 'none';
-            sidebarMoonIcon.style.display = 'block';
-            themeToggleText.textContent = 'Light Mode';
+            if (sidebarSunIcon) sidebarSunIcon.style.display = 'none';
+            if (sidebarMoonIcon) sidebarMoonIcon.style.display = 'block';
+            if (themeToggleText) themeToggleText.textContent = 'Light Mode';
         }
+        
         themeToggleSidebar.addEventListener('click', (e) => {
             e.preventDefault();
             document.body.classList.toggle('dark-theme');
-            if (document.body.classList.contains('dark-theme')) {
+            const isDark = document.body.classList.contains('dark-theme');
+            
+            // Update all xIcons
+            const xIcons = document.querySelectorAll('.xIcon');
+            xIcons.forEach((xIcon) => {
+                if (isDark) {
+                    xIcon.src = '/frontend/res/x-social-media-white-icon.png';
+                } else {
+                    xIcon.src = '/frontend/res/file_00000000d1bc6243b622c7897a43e5b3.png';
+                }
+            });
+            
+            // Update counters
+            const counters = document.querySelectorAll('.counter');
+            counters.forEach((counter) => {
+                counter.style.color = isDark ? '#fff1f2' : '';
+            });
+            
+            if (isDark) {
                 localStorage.setItem('theme', 'dark');
-                sidebarSunIcon.style.display = 'none';
-                sidebarMoonIcon.style.display = 'block';
-                themeToggleText.textContent = 'Light Mode';
+                if (sidebarSunIcon) sidebarSunIcon.style.display = 'none';
+                if (sidebarMoonIcon) sidebarMoonIcon.style.display = 'block';
+                if (themeToggleText) themeToggleText.textContent = 'Light Mode';
             } else {
                 localStorage.setItem('theme', 'light');
-                sidebarSunIcon.style.display = 'block';
-                sidebarMoonIcon.style.display = 'none';
-                themeToggleText.textContent = 'Dark Mode';
+                if (sidebarSunIcon) sidebarSunIcon.style.display = 'block';
+                if (sidebarMoonIcon) sidebarMoonIcon.style.display = 'none';
+                if (themeToggleText) themeToggleText.textContent = 'Dark Mode';
             }
             lucide.createIcons();
         });
@@ -161,13 +189,17 @@ window.addEventListener('DOMContentLoaded', () => {
             icn.classList.add('active');
         });
     });
+    const iniT= document.querySelectorAll('.iniT')
+    iniT.forEach((each)=>{
+        each
+    })
 
     setTimeout(() => {
-        splash.style.display = 'none';
-        nav.style.display = 'flex';
-        mainBody.style.display = 'flex';
-        sidebar.style.display = 'block';
-        sidebarOverlay.style.display = 'block';
+        if (splash) splash.style.display = 'none';
+        if (nav) nav.style.display = 'flex';
+        if (mainBody) mainBody.style.display = 'flex';
+        if (sidebar) sidebar.style.display = 'block';
+        if (sidebarOverlay) sidebarOverlay.style.display = 'block';
         console.log("🖥 Main UI visible");
         const apiUrl = localStorage.getItem('API_URL');
         if (apiUrl) console.log(`📡 Using backend: ${apiUrl}`);

@@ -24,8 +24,8 @@ if (profileMenuBtn && profilePage) {
         const followers = new Odometer(profileFollowers, { duration: 3000 });
                 const following = new Odometer(profileFollowing, { duration: 3000 });
                 
-                followers.set(0);
-                following.set(0);
+                followers.set(10);
+                following.set(120);
                 hasOdometerRun= true
         } 
          else {
