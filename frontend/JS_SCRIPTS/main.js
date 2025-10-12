@@ -176,11 +176,19 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const topNavIcns = document.querySelectorAll('.topNav div');
     topNavIcns.forEach(icn => {
+        
         icn.addEventListener('click', () => {
             topNavIcns.forEach(other => other.classList.remove('active'));
+                    icn.scrollIntoView({
+            behavior: 'smooth',
+            inline: 'center',
+            block: 'nearest'
+        });
             icn.classList.add('active');
         });
     });
+   const navItems = document.querySelectorAll('.navItem');
+
 
     const icns = document.querySelectorAll('.icns');
     icns.forEach(icn => {

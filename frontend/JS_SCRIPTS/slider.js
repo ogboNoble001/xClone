@@ -8,6 +8,19 @@ function toggleSidebar() {
                 runSidebarAnimations();
         }
 }
+const settings = document.querySelector('div.iniT')
+settings.addEventListener('click', ()=>{
+    toggleSidebar() 
+    let clickedSettings= true
+    if (clickedSettings == true) {
+            runSidebarAnimations();
+            clickedSettings= false
+    }
+    else {
+            return
+    }
+    runSidebarAnimations();
+})
 
 function openSidebar() {
         const sidebar = document.getElementById('sidebar');
