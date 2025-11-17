@@ -513,8 +513,8 @@ nav.mainNav{
   margin-left: auto;
 }
 .headerLogo{
-  width: 25px;
-  height: 25px;
+  width: 20px;
+  height: 20px;
   margin: 0 auto;
 }
 
@@ -523,8 +523,8 @@ nav.mainNav{
 }
  .iniT{
   border-radius: 50%;
-  width: 30px;
-  height: 30px;
+  width: 25px;
+  height: 25px;
   font-weight: bold;
   text-align: center;
   font-size: large;

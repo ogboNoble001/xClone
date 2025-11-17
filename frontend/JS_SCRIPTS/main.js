@@ -22,11 +22,10 @@
     }
 })();
 
-// COOKIE CONSENT
 (function checkCookieConsent() {
     const cookieConsent = localStorage.getItem('cookieConsent');
     const cookieBanner = document.getElementById('cookieBanner');
-    if (!cookieConsent && cookieBanner) {
+    if ((!cookieConsent || cookieConsent === 'declined') && cookieBanner) {
         setTimeout(() => cookieBanner.classList.add('show'), 1000);
     }
     const acceptBtn = document.getElementById('cookieAccept');
@@ -39,11 +38,18 @@
     const declineBtn = document.getElementById('cookieDecline');
     if (declineBtn) {
         declineBtn.addEventListener('click', () => {
-            localStorage.setItem('cookieConsent', 'declined');
             if (cookieBanner) cookieBanner.classList.remove('show');
         });
     }
+    if (cookieBanner) {
+        document.addEventListener('click', (e) => {
+            if (!cookieBanner.contains(e.target) && cookieBanner.classList.contains('show')) {
+                cookieBanner.classList.remove('show');
+            }
+        });
+    }
 })();
+
 
 // AUTH CHECK WITH RETRIES
 (async function checkAuthentication() {
